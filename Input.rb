@@ -2,7 +2,7 @@ require 'readability'
 require 'open-uri'
 require 'nokogiri'
 
-input = 'https://de.wikipedia.org/wiki/Computerlinguistik'
+input = 'https://en.wikipedia.org/wiki/Computational_linguistics'
 
 if File.file?(input)
   first = Nokogiri::HTML(File.open(input))
@@ -11,6 +11,8 @@ else
   first = Nokogiri::HTML(URI.open(input))
   doc = first.search('p', 'text').map(&:text)
 end
+
+doc = doc.join('').gsub(/\d/, '').gsub('[','').gsub(']','').gsub('(','').gsub(')','')
 
 print doc
 File.write("doc.txt", doc)
