@@ -1,3 +1,4 @@
+require 'readability'
 require 'open-uri'
 require 'nokogiri'
 
