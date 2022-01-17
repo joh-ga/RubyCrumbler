@@ -1,7 +1,6 @@
 # script task: tokenization
 
 require "ruby-spacy"
-require "terminal-table"
 
 # source file
 input = File.open("doc.txt", "r") # probably better to work with file path later
