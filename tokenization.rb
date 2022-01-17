@@ -20,8 +20,8 @@ class Tokenization
     end
 
     # write tokenized content into new output file
-    name = filename.sub(/(?<=.)\..*/, '')
-    File.open("#{name}_tokenization.txt", "w") do |f|
+    # name = filename.sub(/(?<=.)\..*/, '')
+    File.open("tokenization.txt", "w") do |f|
       f.write(row)
     f.write("\n")
     f.write("\n")
