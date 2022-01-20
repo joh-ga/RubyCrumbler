@@ -12,6 +12,20 @@ def initialize()
   @projectdir
 end
 
+#multidir function is automatically called, if a folder is used for input. For each file in the directory the chosen function will be applied.
+def multidir (directory)
+  directory = @projectdir
+  Dir.foreach(directory) do |filename|
+    next if filename == '.' || filename == '..'
+    puts "working on #{filename}"
+    @filename=filename
+    first = Nokogiri::HTML(File.open("#{@projectdir}/#{@filename}"))
+    doc = first.search('p').map(&:text)
+    File.write("#{@projectdir}/#{@filename}.txt", doc)
+    cleantext()
+  end
+end
+
 #use newproject, for creating a new project directory. oldproject will continue an old project, no new folder is created
 def start(input, projectname, new = false)
   @input = input
@@ -49,6 +63,7 @@ def newproject (input, projectname)
   else
     if File.directory?(@input)
       FileUtils.cp_r Dir.glob(@input+'/*.*'), @projectdir
+        multidir(@projectdir)
       else
         first = Nokogiri::HTML(URI.open(@input))
         doc = first.search('p', 'text').map(&:text)
@@ -69,7 +84,7 @@ end
 #output is a txt file with additional _cl for "cleaned" in name
 def cleantext()
   @text2process = File.open("#{@projectdir}/#{@filename}.txt", 'r')
-  @text2process = File.read(  @text2process)
+  @text2process = File.read( @text2process)
   @text2process =   @text2process.gsub('\n','').gsub('\r','').gsub(/\\u[a-f0-9]{4}/i,'').gsub(/https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/,'').gsub(/\d/, '').gsub(/[^\w\s\.\'´`]/,'').gsub(/[\.]{2,}/,' ').gsub(/[ ]{2,}/,' ')
   File.write("#{@projectdir}/#{@filename}_cl.txt", @text2process)
   p @text2process
@@ -338,6 +353,6 @@ end
 
 
 neu = Doctoclean.new()
-neu.start("https://learnbyexample.github.io/learn_ruby_oneliners/multiple-file-input.html", "testdir",true)
-neu.cleantext()
-neu.normalize(true, false)
+neu.start("C:/Users/Laura/Desktop/testordner", "testdir",true)
+#neu.cleantext()
+#neu.normalize(true, false)
