@@ -353,6 +353,6 @@ end
 
 
 neu = Doctoclean.new()
-neu.start("C:/Users/Laura/Desktop/testordner", "testdir",true)
+neu.start("inputdir", "testdir",true)
 #neu.cleantext()
 #neu.normalize(true, false)

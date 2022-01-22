@@ -30,6 +30,6 @@ class Tokenization
   end
 end
 
-fileobject = "doc.txt"
+fileobject = "inputdir/tornados.txt"
 neu = Tokenization.new
 neu.tokenizer(fileobject)
