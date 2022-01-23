@@ -15,6 +15,7 @@ class Doctoclean
     @filename
     @projectdir
     @en = Spacy::Language.new("en_core_web_lg")
+    @builder = Nokogiri::XML::Builder.new
     @stopwords = @en.Defaults.stop_words.to_s.gsub('\'','"').delete('{}" ').gsub('’','\'')
     @stopwords = @stopwords.split(',')
   end
@@ -411,7 +412,7 @@ class Doctoclean
     end
     p rows
 
-    #save to csv and txt
+    #save to csv
     File.open("#{@projectdir}/pos.csv", "w") do |f|
       f.write(headings.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
       f.write(rows.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
@@ -421,8 +422,21 @@ class Doctoclean
     csv << headings
     csv << rows
     end'''
-
+    #save to txt
     File.write("#{@projectdir}/pos.txt", output)
+    #save to xml
+    @builder.new do |xml|
+      xml.root {
+        for r in @rows
+          xml.tokens('token' => (r[0])) {
+            xml.pos r[1]
+            xml.tag r[2]
+          }
+        end
+      }
+    end
+    pos_xml = @builder.to_xml
+    File.write("#{@projectdir}/pos_xml.txt", pos_xml)
   end
 
   def ner()
@@ -440,12 +454,25 @@ class Doctoclean
       output.append(ent.text + ": label:" + ent.label)
     end
 
-    #save to csv & txt
+    #save to csv
     File.open("#{@projectdir}/ner.csv", "w") do |f|
       f.write(headings.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
       f.write(rows.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
     end
+    #save to txt
     File.write("#{@projectdir}/ner.txt", output)
+    #save to xml
+    @builder.new do |xml|
+      xml.root {
+        for r in @rows
+          xml.tokens('token' => (r[0])) {
+            xml.label r[1]
+          }
+        end
+      }
+    end
+    ner_xml = @builder.to_xml
+    File.write("#{@projectdir}/ner_xml.txt", ner_xml)
   end
   end
 
