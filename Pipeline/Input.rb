@@ -1,6 +1,8 @@
 require 'open-uri'
 require 'nokogiri'
 require 'fileutils'
+require "ruby-spacy"
+require 'csv'
 
 #initialize globally used variables
 class Doctoclean
@@ -10,6 +12,9 @@ def initialize()
   @projectname
   @filename
   @projectdir
+  @en = Spacy::Language.new("en_core_web_lg")
+  @stopwords = @en.Defaults.stop_words.to_s.gsub('\'','"').delete('{}" ').gsub('’','\'')
+  @stopwords = @stopwords.split(',')
 end
 
 #multidir function is automatically called, if a folder is used for input. For each file in the directory the chosen function will be applied.
@@ -347,12 +352,106 @@ def contractions()
   }
   @text2process = @text2process.gsub('’','\'')
   contractions.each { |k, v| @text2process.gsub! k, v }
-  end
-
 end
 
+def tokenizer()
+  input = File.open("#{@projectname}/#{@filename}", "r")
+  file = input.read()
+  input.close()
+
+  # tokenization
+  doc = @en.read(file)
+  row = []
+  count = 0
+  doc.each do |token|
+    count += 1
+    row << token.text
+  end
+
+  # write tokenized content into new output file
+  # name = filename.sub(/(?<=.)\..*/, '')
+  File.open("#{@projectdir}/#{@filename}_tok.txt", "w") do |f|
+    f.write(row)
+    f.write("\n")
+    f.write("\n")
+    f.write("Total number of tokens: #{count}")
+  end
+end
+
+def stopwordsclean()
+  text = File.open("#{@projectdir}/#{@filename}_tok.txt", "w")
+  text = File.read(text).gsub(/Total number of tokens: \d+/, '')
+  text = Kernel.eval(text)
+
+  shared = text & @stopwords
+  textosw = text - shared
+  File.write("#{@projectdir}/#{@filename}_nost.txt", textosw)
+end
+
+def add_stopwords(newsw)
+  @stopwords.insert(0, newsw)
+end
+
+def tagger()
+  text = File.open("#{@projectdir}/#{@filename}_tok.txt")
+  text = File.read(text).gsub(/Total number of tokens: \d+/, '')
+  text = Kernel.eval(text).join(" ")
+  doc = @en.read(text)
+
+  #pos: The simple UPOS part-of-speech tag
+  #tag: The detailed part-of-speech tag
+  headings = [["text", "pos", "tag"]]
+  rows = []
+  output = []
+
+  doc.each do |token|
+    rows << [token.text, token.pos, token.tag]
+    output.append(token.text + ": pos:" + token.pos + ", tag:" + token.tag)
+  end
+  p rows
+
+  #save to csv and txt
+  File.open("#{@projectdir}/pos.csv", "w") do |f|
+    f.write(headings.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
+    f.write(rows.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
+  end
+
+  '''CSV.open("pos.csv", "w") do |csv|
+    csv << headings
+    csv << rows
+    end'''
+
+  File.write("#{@projectdir}/pos.txt", output)
+end
+
+def ner()
+  text = File.open("#{@projectdir}/#{@filename}_tok.txt", "r")
+  text = File.read(text).gsub(/Total number of tokens: \d+/, '')
+  text = Kernel.eval(text).join(" ")
+  doc = @en.read(text)
+
+  headings = [['text', 'label']]
+  rows = []
+  output = []
+
+  doc.ents.each do |ent|
+    rows << [ent.text, ent.label]
+    output.append(ent.text + ": label:" + ent.label)
+  end
+
+  #save to csv & txt
+  File.open("#{@projectdir}/ner.csv", "w") do |f|
+    f.write(headings.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
+    f.write(rows.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
+  end
+  File.write("#{@projectdir}/ner.txt", output)
+end
+end
 
 neu = Doctoclean.new()
-neu.start("inputdir", "testdir",true)
+neu.start("C:/Users/Laura/Documents/GitHub/GUI-Application-in-Ruby-NLP-Pipeline/Pipeline/inputdir/tornados.txt", "testdir",false)
 #neu.cleantext()
 #neu.normalize(true, false)
+#neu.tokenizer()
+#neu.tagger()
+#neu.ner()
