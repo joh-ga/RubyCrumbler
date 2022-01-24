@@ -584,7 +584,8 @@ module RubyCrumbler
         }
       }.show
     end
-        def wfileupload
+    
+    def wfileupload
       window('Upload Center', 700, 500) {
         margined true
         vertical_box{
