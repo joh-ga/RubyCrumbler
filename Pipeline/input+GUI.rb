@@ -4,6 +4,7 @@ require 'fileutils'
 require "ruby-spacy"
 require 'glimmer-dsl-libui'
 require 'csv'
+require 'builder'
 #module RubyCrumbler
 #
 class Doctoclean
@@ -15,7 +16,6 @@ class Doctoclean
     @filename
     @projectdir
     @en = Spacy::Language.new("en_core_web_lg")
-    @builder = Nokogiri::XML::Builder.new
     @stopwords = @en.Defaults.stop_words.to_s.gsub('\'','"').delete('{}" ').gsub('’','\'')
     @stopwords = @stopwords.split(',')
     @doc
@@ -358,7 +358,7 @@ class Doctoclean
   end
 
   def tokenizer()
-    input = File.open("#{@projectname}/#{@filename}", "r")
+    input = File.open("#{@projectname}/#{@filename}_cl_n.txt", "r")
     file = input.read()
     input.close()
 
@@ -396,6 +396,7 @@ class Doctoclean
   end
 
   def tagger()
+    builder = Nokogiri::XML::Builder.new
     text = File.open("#{@projectdir}/#{@filename}_tok.txt")
     text = File.read(text).gsub(/Total number of tokens: \d+/, '')
     text = Kernel.eval(text).join(" ")
@@ -426,7 +427,7 @@ class Doctoclean
     #save to txt
     File.write("#{@projectdir}/pos.txt", output)
     #save to xml
-    @builder.new do |xml|
+    builder.new do |xml|
       xml.root {
         for r in @rows
           xml.tokens('token' => (r[0])) {
@@ -436,11 +437,12 @@ class Doctoclean
         end
       }
     end
-    pos_xml = @builder.to_xml
+    pos_xml = builder.to_xml
     File.write("#{@projectdir}/pos.xml", pos_xml)
   end
 
   def ner()
+    builder = Nokogiri::XML::Builder.new
     text = File.open("#{@projectdir}/#{@filename}_tok.txt", "r")
     text = File.read(text).gsub(/Total number of tokens: \d+/, '')
     text = Kernel.eval(text).join(" ")
@@ -463,7 +465,7 @@ class Doctoclean
     #save to txt
     File.write("#{@projectdir}/ner.txt", output)
     #save to xml
-    @builder.new do |xml|
+    builder.new do |xml|
       xml.root {
         for r in @rows
           xml.tokens('token' => (r[0])) {
@@ -472,7 +474,7 @@ class Doctoclean
         end
       }
     end
-    ner_xml = @builder.to_xml
+    ner_xml = builder.to_xml
     File.write("#{@projectdir}/ner.xml", ner_xml)
   end
   end
@@ -740,11 +742,11 @@ end
 
 
 #CrumblerGUI.new.launch
-#neu = Doctoclean.new()
-#neu.newproject("C:/Users/Laura/Documents/GitHub/GUI-Application-in-Ruby-NLP-Pipeline/Pipeline/inputdir/tornados.txt", "testdir")
-#neu.cleantext()
-#neu.normalize(true, false)
-#neu.tokenizer()
-#neu.tagger()
-#neu.ner()
+neu = Doctoclean.new()
+neu.newproject("C:/Users/Laura/Documents/GitHub/GUI-Application-in-Ruby-NLP-Pipeline/Pipeline/inputdir/tornados.txt", "testdir")
+neu.cleantext()
+neu.normalize(true, false)
+neu.tokenizer()
+neu.tagger()
+neu.ner()
 
