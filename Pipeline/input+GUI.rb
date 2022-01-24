@@ -403,19 +403,19 @@ class Doctoclean
     #pos: The simple UPOS part-of-speech tag
     #tag: The detailed part-of-speech tag
     headings = [["text", "pos", "tag"]]
-    rows = []
+    @rows = []
     output = []
 
     doc.each do |token|
-      rows << [token.text, token.pos, token.tag]
+      @rows << [token.text, token.pos, token.tag]
       output.append(token.text + ": pos:" + token.pos + ", tag:" + token.tag)
     end
-    p rows
+    p @rows
 
     #save to csv
     File.open("#{@projectdir}/pos.csv", "w") do |f|
       f.write(headings.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
-      f.write(rows.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
+      f.write(@rows.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
     end
 
     '''CSV.open("pos.csv", "w") do |csv|
@@ -446,18 +446,18 @@ class Doctoclean
     doc = @en.read(text)
 
     headings = [['text', 'label']]
-    rows = []
+    @rows = []
     output = []
 
     doc.ents.each do |ent|
-      rows << [ent.text, ent.label]
+      @rows << [ent.text, ent.label]
       output.append(ent.text + ": label:" + ent.label)
     end
 
     #save to csv
     File.open("#{@projectdir}/ner.csv", "w") do |f|
       f.write(headings.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
-      f.write(rows.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
+      f.write(@rows.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
     end
     #save to txt
     File.write("#{@projectdir}/ner.txt", output)
