@@ -1,7 +1,0 @@
-Folder Overview 
-
-The GUI-related scripts are stored in this folder.
-
-Scripts:
-gui_crumbler.rb --> contains complete GUI design
-gui_windowAbout.rb --> an example file of a new window filled with the "About" text of the mockup
