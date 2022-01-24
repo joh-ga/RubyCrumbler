@@ -7,7 +7,7 @@ require 'csv'
 require 'builder'
 #module RubyCrumbler
 #
-class Doctoclean
+class Doctoclean #PipelineFeatures evtl als Name fuer die Klasse
   #initialize globally used variables
   def initialize()
     @input
@@ -480,24 +480,141 @@ class Doctoclean
   end
 
 
-class OtherStuff
-    # here place the necessary functions for buttons, progress bar, file upload overview
-    # connection to pipeline feature functions that are saved in another script
-    # we need only two scripts, right? one for the gui and one for the functions
-    # i dont know
+class OtherGUIWindows
+  #this class contains all other GUI window except the main one
+  include Glimmer
 
-   def initialize
-     super
-   end
+  def wabout
+    window('About Ruby Crumbler', 700, 500) {
+      margined true
+      area {
+        text {
+          default_font family: 'Helvetica', size: 13, weight: :normal, italic: :normal, stretch: :normal
 
-   def new_window
-      # method that opens new window as e.g. in the help menu --> about and documentation
-   end
+          string {
+            font family: 'Helvetica', size: 14, weight: :bold, italic: :normal, stretch: :normal
+            "Ruby Crumbler Version 0.0.1\n\n"
+          }
+
+          string(
+            "Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.\n" \
+              "some-email@address.com\n" \
+              "March 31, 2022\n\n" \
+              "            This project is open source on "
+          )
+          string{
+            underline :single
+            # need to include a hyperlink with respective GitHub Repo
+            #"https://github.com/joh-ga/GUI-Application-in-Ruby-NLP-Pipeline"
+            "GitHub"
+          }
+        }
+        image(File.expand_path('icons/github.png', __dir__), x: 0, y: 85, width: 45, height: 45)
+      }
+    }.show
+  end
+
+  def wdocumentation
+    window('Documentation', 700, 500) {
+      margined true
+      area {
+        text {
+          default_font family: 'Helvetica', size: 13, weight: :normal, italic: :normal, stretch: :normal
+
+          string {
+            font family: 'Helvetica', size: 14, weight: :bold, italic: :normal, stretch: :normal
+            "Description of features\n\n"
+          }
+
+          string(
+            "Please find below all the necessary information about the individual features.\n\n"
+          )
+          string{
+            font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal
+            underline :single
+            "Pre-Processing\n"
+          }
+          string{
+            font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal
+            "Data cleaning: "
+          }
+          string(
+            "This includes ..\n"
+          )
+          string{
+            font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal
+            "Normalization: "
+          }
+          string(
+            "This includes converting..\n\n"
+          )
+          string{
+            font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal
+            underline :single
+            "Natural Language Processings – Tasks \n"
+          }
+          string{
+            font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal
+            "Tokenization: "
+          }
+          string(
+            "This includes ..\n"
+          )
+          string{
+            font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal
+            "Stopword removal: "
+          }
+          string(
+            "This includes ..\n"
+          )
+          string{
+            font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal
+            "Stemming: "
+          }
+          string(
+            "This includes ..\n"
+          )
+          string{
+            font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal
+            "Lemmatization: "
+          }
+          string(
+            "This includes ..\n"
+          )
+          string{
+            font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal
+            "Part-of-Speech Tagging: "
+          }
+          string(
+            "This includes ..\n"
+          )
+          string{
+            font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal
+            "Named Entity Recognition: "
+          }
+          string(
+            "This includes ..\n\n"
+          )
+          string{
+            font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal
+            "Notes\n"
+          }
+          string(
+            "More information and the source code are available on "
+          )
+          string{
+            underline :single
+            "GitHub"
+          }
+        }
+      }
+    }.show
+  end
 end
 
 
   class CrumblerGUI
-    # this class contains the whole GUI
+    # this class contains the main GUI window
        include Glimmer
 
 
@@ -543,17 +660,13 @@ end
       menu('Help') {
         menu_item('About'){
           on_clicked do
-            window('About'){
-              # link to new window
-            }.show
+            OtherGUIWindows.new.wabout
           end
         }
 
         menu_item('Documentation'){
           on_clicked do
-            window('Documentation'){
-              # link to new window
-            }.show
+            OtherGUIWindows.new.wdocumentation
           end
         }
       }
@@ -741,12 +854,12 @@ end
 end
 
 
-#CrumblerGUI.new.launch
-neu = Doctoclean.new()
-neu.newproject("C:/Users/Laura/Documents/GitHub/GUI-Application-in-Ruby-NLP-Pipeline/Pipeline/inputdir/tornados.txt", "testdir")
-neu.cleantext()
-neu.normalize(true, false)
-neu.tokenizer()
-neu.tagger()
-neu.ner()
+CrumblerGUI.new.launch
+# neu = Doctoclean.new()
+# neu.newproject("C:/Users/Laura/Documents/GitHub/GUI-Application-in-Ruby-NLP-Pipeline/Pipeline/inputdir/tornados.txt", "testdir")
+# neu.cleantext()
+# neu.normalize(true, false)
+# neu.tokenizer()
+# neu.tagger()
+# neu.ner()
 
