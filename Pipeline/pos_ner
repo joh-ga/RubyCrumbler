@@ -53,7 +53,7 @@ class PosTagging
       }
     end
     pos_xml = @builder.to_xml
-    File.write("pos_xml.txt", pos_xml)
+    File.write("pos.xml", pos_xml)
 
   end
 end
@@ -99,7 +99,7 @@ class NER
       }
     end
     ner_xml = @builder.to_xml
-    File.write("ner_xml.txt", ner_xml)
+    File.write("ner.xml", ner_xml)
   end
 end
 

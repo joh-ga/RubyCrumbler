@@ -436,7 +436,7 @@ class Doctoclean
       }
     end
     pos_xml = @builder.to_xml
-    File.write("#{@projectdir}/pos_xml.txt", pos_xml)
+    File.write("#{@projectdir}/pos.xml", pos_xml)
   end
 
   def ner()
@@ -472,7 +472,7 @@ class Doctoclean
       }
     end
     ner_xml = @builder.to_xml
-    File.write("#{@projectdir}/ner_xml.txt", ner_xml)
+    File.write("#{@projectdir}/ner.xml", ner_xml)
   end
   end
 
