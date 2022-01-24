@@ -610,6 +610,52 @@ class OtherGUIWindows
       }
     }.show
   end
+  
+  def wfileupload
+    window('Upload Center', 700, 500) {
+      margined true
+      vertical_box{
+        area {
+          text {
+            default_font family: 'Helvetica', size: 13, weight: :normal, italic: :normal, stretch: :normal
+
+            string{
+              font family: 'Helvetica', size: 14, weight: :bold, italic: :normal, stretch: :normal
+              "Upload Center\n\n"
+            }
+
+            string(
+              "Choose a file(s) or a directory, or specify a URL whose text content should be used to upload.\n" \
+              "Note: Total file size may not exceed 50MB. File type must be TXT." \
+          )
+          }
+        }
+        group("File Upload"){
+          button('Choose file(s)') {
+            on_clicked do
+              msg_box('Information', 'You clicked the button')
+            end
+          }
+        }
+        group("Directory Upload"){
+          button('Choose directory') {
+            on_clicked do
+              msg_box('Information', 'You clicked the button')
+            end
+          }
+        }
+        group("URL Upload"){
+        }
+        horizontal_separator { stretchy false }
+        button('Upload') {
+          on_clicked do
+            msg_box('Information', 'You clicked the button')
+          end
+        }
+
+      }
+    }.show
+  end  
 end
 
 
@@ -625,6 +671,7 @@ end
       menu('File') {
         menu_item('Load file(s)') {
           on_clicked do
+            # OtherGUIWindows.new.wfileupload
             file = open_file
             @input = file
             @projectname = File.basename(@input, ".*")
@@ -637,15 +684,17 @@ end
 
         menu_item('Load directory') {
           on_clicked do
-            file = save_file
-            puts file unless file.nil?
+            OtherGUIWindows.new.wfileupload
+            # file = save_file
+            # puts file unless file.nil?
           end
         }
 
         menu_item('Load text from URL') {
           on_clicked do
-            file = save_file
-            puts file unless file.nil?
+            OtherGUIWindows.new.wfileupload
+            # file = save_file
+            # puts file unless file.nil?
           end
         }
 
