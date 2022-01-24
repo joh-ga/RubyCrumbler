@@ -18,6 +18,7 @@ class Doctoclean
     @builder = Nokogiri::XML::Builder.new
     @stopwords = @en.Defaults.stop_words.to_s.gsub('\'','"').delete('{}" ').gsub('’','\'')
     @stopwords = @stopwords.split(',')
+    @doc
   end
 
   #multidir function is automatically called, if a folder is used for input. For each file in the directory the chosen function will be applied.
@@ -738,9 +739,9 @@ end
 end
 
 
-CrumblerGUI.new.launch
+#CrumblerGUI.new.launch
 #neu = Doctoclean.new()
-#neu.start("C:/Users/Laura/Documents/GitHub/GUI-Application-in-Ruby-NLP-Pipeline/Pipeline/inputdir/tornados.txt", "testdir",false)
+#neu.newproject("C:/Users/Laura/Documents/GitHub/GUI-Application-in-Ruby-NLP-Pipeline/Pipeline/inputdir/tornados.txt", "testdir")
 #neu.cleantext()
 #neu.normalize(true, false)
 #neu.tokenizer()
