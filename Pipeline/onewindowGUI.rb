@@ -7,7 +7,7 @@ require 'csv'
 require 'builder'
 require 'tk'
 module RubyCrumbler
-  #
+
   class PipelineFeatures
     #initialize globally used variables
     def initialize()
@@ -484,7 +484,7 @@ end
 class CrumblerGUI
   include RubyCrumbler
 
-  #this class contains all other GUI window except the main one
+  #this class contains all other GUI windows except the main one
   include Glimmer
 
   def wabout
@@ -625,19 +625,21 @@ class CrumblerGUI
     menu('Help') {
       menu_item('About'){
         on_clicked do
-          OtherGUIWindows.new.wabout
+          #OtherGUIWindows.new.wabout
+          wabout.new
         end
       }
 
       menu_item('Documentation'){
         on_clicked do
-          OtherGUIWindows.new.wdocumentation
+          #OtherGUIWindows.new.wdocumentation
+          wdocumentation.new
         end
       }
     }
 
     ### START of main window
-    window('Ruby Crumbler',500, 400) {
+    window('Ruby Crumbler', 400, 500) {
 
       margined true
 
@@ -771,12 +773,15 @@ class CrumblerGUI
           }
 
           vertical_box {
+            #stretchy false
             group('Upload Center') {
-              stretchy false
+              #stretchy false
 
               vertical_box {
-                button("Upload from file") {
-                  stretchy false
+                label("Choose a file(s) or a directory, or specify a URL whose text content should be used to upload.\n" \
+                "Note: Total file size may not exceed 50MB. File type must be TXT.") { stretchy false}
+                button("Upload from file(s)") {
+                  #stretchy false
 
                   on_clicked do
                     file = open_file
@@ -790,7 +795,7 @@ class CrumblerGUI
 
                 vertical_box {
                   button("Upload file(s) from directory") {
-                    stretchy false
+                    #stretchy false
 
                       on_clicked do
                         dir = Tk.chooseDirectory
@@ -803,40 +808,34 @@ class CrumblerGUI
                     }
                 }
 
-                # Warum ist hier so ein hässlicher Abstand in der GUI?
-                #
                 vertical_box {
-                  label('Enter the URL:'){stretchy false}
-                        @entry = entry {
-                          stretchy false
+                  label('Enter URL:'){
+                  }
+                  @entry = entry {
+                    on_changed do
+                      @url = @entry.text
+                    end
+                  }
+                  @button = button('Upload text from website'){
 
-                          on_changed do
-                            @url = @entry.text
-                          end
-                        }
-                        @button = button('Upload text from website'){
-                          stretchy false
-
-                          on_clicked do
-                            @input = @url
-                            @projectname = File.basename(@input, ".*")
-                            @doc = PipelineFeatures.new
-                            puts @input unless @input.nil?
-                            @doc.newproject(@input, @projectname)
-                          end
-                        }
-                      }
-
+                    on_clicked do
+                      @input = @url
+                      @projectname = File.basename(@input, ".*")
+                      @doc = PipelineFeatures.new
+                      puts @input unless @input.nil?
+                      @doc.newproject(@input, @projectname)
+                    end
+                  }
+                }
               }
             }
-
           }
-
         }
 
         horizontal_separator { stretchy false }
 
         vertical_box {
+          stretchy false
           group() {
             stretchy false
 
