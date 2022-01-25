@@ -91,8 +91,10 @@ module RubyCrumbler
 
     #clean raw text file from project folder from code, markup, special symbols (latin characters, currency symbols, emojis etc.), urls, digits and additional spaces
     #output is a txt file with additional _cl for "cleaned" in name
+    #
+    # The file.open line is universal for using the newest (last processed) file in directory
     def cleantext()
-      @text2process = File.open("#{@projectdir}/#{@filename}.txt", 'r')
+      @text2process = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
       @text2process = File.read( @text2process)
       @text2process =   @text2process.gsub('\n','').gsub('\r','').gsub(/\\u[a-f0-9]{4}/i,'').gsub(/https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/,'').gsub(/\d/, '').gsub(/[^\w\s\.\'´`]/,'').gsub(/[\.]{2,}/,' ').gsub(/[ ]{2,}/,' ')
       File.write("#{@projectdir}/#{@filename}_cl.txt", @text2process)
@@ -101,10 +103,7 @@ module RubyCrumbler
 
     #normalize text (from cleaned text file or raw text file) by choosing lowercasing and/or seperating contractions (both optional)
     def normalize(contractions=false, low=false)
-      if File.exist?("#{@projectdir}/#{@filename}_cl.txt")
-        @text2process = File.open("#{@projectdir}/#{@filename}_cl.txt", 'r')
-      else @text2process = File.open("#{@projectdir}/#{@filename}.txt", 'r')
-      end
+      @text2process = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
       @text2process = File.read(@text2process)
       if low == true
         @text2process = @text2process.downcase
@@ -359,7 +358,7 @@ module RubyCrumbler
     end
 
     def tokenizer()
-      input = File.open("#{@projectname}/#{@filename}_cl_n.txt", "r")
+      input = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
       file = input.read()
       input.close()
 
@@ -383,7 +382,7 @@ module RubyCrumbler
     end
 
     def stopwordsclean()
-      text = File.open("#{@projectdir}/#{@filename}_tok.txt", "w")
+      text = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
       text = File.read(text).gsub(/Total number of tokens: \d+/, '')
       text = Kernel.eval(text)
 
@@ -398,7 +397,7 @@ module RubyCrumbler
 
     def tagger()
       builder = Nokogiri::XML::Builder.new
-      text = File.open("#{@projectdir}/#{@filename}_tok.txt")
+      text = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
       text = File.read(text).gsub(/Total number of tokens: \d+/, '')
       text = Kernel.eval(text).join(" ")
       doc = @en.read(text)
@@ -444,7 +443,7 @@ module RubyCrumbler
 
     def ner()
       builder = Nokogiri::XML::Builder.new
-      text = File.open("#{@projectdir}/#{@filename}_tok.txt", "r")
+      text = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
       text = File.read(text).gsub(/Total number of tokens: \d+/, '')
       text = Kernel.eval(text).join(" ")
       doc = @en.read(text)

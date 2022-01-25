@@ -97,10 +97,10 @@ end
 
 #normalize text (from cleaned text file or raw text file) by choosing lowercasing and/or seperating contractions (both optional)
 def normalize(contractions=false, low=false)
-  if File.exist?("#{@projectdir}/#{@filename}_cl.txt")
-    @text2process = File.open("#{@projectdir}/#{@filename}_cl.txt", 'r')
-    else @text2process = File.open("#{@projectdir}/#{@filename}.txt", 'r')
-  end
+  #if File.exist?("#{@projectdir}/#{@filename}_cl.txt")
+  @text2process = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
+    #else @text2process = File.open("#{@projectdir}/#{@filename}.txt", 'r')
+  #end
   @text2process = File.read(@text2process)
   if low == true
     @text2process = @text2process.downcase
@@ -355,7 +355,7 @@ def contractions()
 end
 
 def tokenizer()
-  input = File.open("#{@projectname}/#{@filename}", "r")
+  input = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
   file = input.read()
   input.close()
 
@@ -379,7 +379,7 @@ def tokenizer()
 end
 
 def stopwordsclean()
-  text = File.open("#{@projectdir}/#{@filename}_tok.txt", "w")
+  text = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'w')
   text = File.read(text).gsub(/Total number of tokens: \d+/, '')
   text = Kernel.eval(text)
 
@@ -393,7 +393,7 @@ def add_stopwords(newsw)
 end
 
 def tagger()
-  text = File.open("#{@projectdir}/#{@filename}_tok.txt")
+  text = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
   text = File.read(text).gsub(/Total number of tokens: \d+/, '')
   text = Kernel.eval(text).join(" ")
   doc = @en.read(text)
@@ -425,7 +425,7 @@ def tagger()
 end
 
 def ner()
-  text = File.open("#{@projectdir}/#{@filename}_tok.txt", "r")
+  text = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
   text = File.read(text).gsub(/Total number of tokens: \d+/, '')
   text = Kernel.eval(text).join(" ")
   doc = @en.read(text)
@@ -449,9 +449,9 @@ end
 end
 
 neu = Doctoclean.new()
-neu.start("C:/Users/Laura/Documents/GitHub/GUI-Application-in-Ruby-NLP-Pipeline/Pipeline/inputdir/tornados.txt", "testdir",false)
-#neu.cleantext()
-#neu.normalize(true, false)
-#neu.tokenizer()
-#neu.tagger()
-#neu.ner()
+neu.start("inputdir", "testdir",true)
+neu.cleantext()
+neu.normalize(true, false)
+neu.tokenizer()
+neu.tagger()
+neu.ner()
