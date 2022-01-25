@@ -7,7 +7,7 @@ require 'csv'
 
 module RubyCrumbler
 
-  class Doctoclean #PipelineFeatures evtl als Name für die Klasse
+  class NLPpipeline
     #initialize globally used variables
     def initialize()
       @input
