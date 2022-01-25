@@ -5,6 +5,7 @@ require "ruby-spacy"
 require 'glimmer-dsl-libui'
 require 'csv'
 require 'builder'
+require 'tk'
 #module RubyCrumbler
 #
 class Doctoclean #PipelineFeatures evtl als Name fuer die Klasse
@@ -684,7 +685,14 @@ end
 
         menu_item('Load directory') {
           on_clicked do
-            OtherGUIWindows.new.wfileupload
+            TkRoot.new.withdraw # Get rid of the root window.
+            dir = Tk.chooseDirectory
+            @input = dir
+            @projectname = File.basename(@input, ".*")
+            @projectname = "#{@projectname}_process"
+            @doc = Doctoclean.new
+            @doc.newproject(@input, @projectname)
+            #OtherGUIWindows.new.wfileupload
             # file = save_file
             # puts file unless file.nil?
           end
