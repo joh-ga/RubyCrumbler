@@ -5,6 +5,7 @@ require "ruby-spacy"
 require 'glimmer-dsl-libui'
 require 'csv'
 require 'builder'
+require 'tk'
 #module RubyCrumbler
 #
 class Doctoclean #PipelineFeatures evtl als Name fuer die Klasse
@@ -669,34 +670,28 @@ end
       ### START of menu bar
       # menu bar number one
       menu('File') {
-        menu_item('Load file(s)') {
+        menu_item('Upload Center') {
           on_clicked do
-            # OtherGUIWindows.new.wfileupload
-            file = open_file
-            @input = file
-            @projectname = File.basename(@input, ".*")
-            @doc = Doctoclean.new
-            puts @input unless file.nil?
-            @doc.newproject(@input, @projectname)
+            OtherGUIWindows.new.wfileupload
+
+            # code lines for loading file
+            #file = open_file
+            #@input = file
+            #@projectname = File.basename(@input, ".*")
+            #@doc = Doctoclean.new
+            #puts @input unless file.nil?
+            #@doc.newproject(@input, @projectname)
             #puts "ich funktioniere auch"
+
+            # code lines for choosing directory
+            # @input = dir
+            # @projectname = File.basename(@input, ".*")
+            # @projectname = "#{@projectname}_process"
+            # @doc = Doctoclean.new
+            # @doc.newproject(@input, @projectname)
           end
         }
 
-        menu_item('Load directory') {
-          on_clicked do
-            OtherGUIWindows.new.wfileupload
-            # file = save_file
-            # puts file unless file.nil?
-          end
-        }
-
-        menu_item('Load text from URL') {
-          on_clicked do
-            OtherGUIWindows.new.wfileupload
-            # file = save_file
-            # puts file unless file.nil?
-          end
-        }
 
         quit_menu_item {
           on_clicked do

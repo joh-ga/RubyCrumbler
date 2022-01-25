@@ -645,23 +645,25 @@ module RubyCrumbler
       ### START of menu bar
       # menu bar number one
       menu('File') {
-        menu_item('Load file(s)') {
+        menu_item('Upload Center') {
           on_clicked do
+            OtherGUIWindows.new.wfileupload
+
+            # code lines for loading file
             #file = open_file
-            #puts file unless file.nil?
-            OtherGUIWindows.new.wfileupload
-          end
-        }
+            #@input = file
+            #@projectname = File.basename(@input, ".*")
+            #@doc = Doctoclean.new
+            #puts @input unless file.nil?
+            #@doc.newproject(@input, @projectname)
+            #puts "ich funktioniere auch"
 
-        menu_item('Load directory') {
-          on_clicked do
-            OtherGUIWindows.new.wfileupload
-          end
-        }
-
-        menu_item('Load text from URL') {
-          on_clicked do
-            OtherGUIWindows.new.wfileupload
+            # code lines for choosing directory
+            # @input = dir
+            # @projectname = File.basename(@input, ".*")
+            # @projectname = "#{@projectname}_process"
+            # @doc = Doctoclean.new
+            # @doc.newproject(@input, @projectname)
           end
         }
 
