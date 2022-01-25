@@ -639,7 +639,7 @@ class CrumblerGUI
     }
 
     ### START of main window
-    window('Ruby Crumbler', 400, 500) {
+    window('Ruby Crumbler', 600, 800) {
 
       margined true
 
@@ -812,6 +812,7 @@ class CrumblerGUI
                   label('Enter URL:'){
                   }
                   @entry = entry {
+                    stretchy false
                     on_changed do
                       @url = @entry.text
                     end
