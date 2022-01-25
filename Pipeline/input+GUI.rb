@@ -482,8 +482,9 @@ class Doctoclean #PipelineFeatures evtl als Name fuer die Klasse
 
 
 class OtherGUIWindows
-  #this class contains all other GUI window except the main one
+  # this class contains all other GUI windows except the main one
   include Glimmer
+  attr_accessor :url
 
   def wabout
     window('About Ruby Crumbler', 700, 500) {
@@ -646,6 +647,15 @@ class OtherGUIWindows
           }
         }
         group("URL Upload"){
+          vertical_box {
+            form{
+              stretchy false
+              entry{
+                label 'Enter URL: '
+                text <=> [self, :url]
+              }
+            }
+          }
         }
         horizontal_separator { stretchy false }
         button('Upload') {

@@ -444,7 +444,7 @@ module RubyCrumbler
       @builder.new do |xml|
         xml.root {
           for r in @rows
-            xml.tokens('token' => (r[0])) {
+            xml.tokens('token' => (r[0])){
               xml.label r[1]
             }
           end
@@ -457,6 +457,7 @@ module RubyCrumbler
 
   class OtherGUIWindows
     include Glimmer
+    attr_accessor :url
 
     def wabout
       window('About Ruby Crumbler', 700, 500) {
@@ -619,6 +620,15 @@ module RubyCrumbler
             }
           }
           group("URL Upload"){
+            vertical_box {
+              form{
+                stretchy false
+                entry{
+                  label 'Enter URL: '
+                  text <=> [self, :url]
+                }
+              }
+            }
           }
           horizontal_separator { stretchy false }
           button('Upload') {
