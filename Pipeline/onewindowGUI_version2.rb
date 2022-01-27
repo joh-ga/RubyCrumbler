@@ -21,18 +21,22 @@ module RubyCrumbler
       @stopwords = @en.Defaults.stop_words.to_s.gsub('\'','"').delete('{}" ').gsub('’','\'')
       @stopwords = @stopwords.split(',')
       @doc
+      @filenumber
     end
 
     #multidir function is automatically called, if a folder is used for input. For each file in the directory the chosen function will be applied.
     def multidir (directory)
       directory = @projectdir
+      @filenumber = Dir.glob(File.join(directory, '**', '*')).select { |file| File.file?(file) }.count
+      print @filenumber
       Dir.foreach(directory) do |filename|
         next if filename == '.' || filename == '..'
         puts "working on #{filename}"
-        @filename=filename
-        first = Nokogiri::HTML(File.open("#{@projectdir}/#{@filename}"))
+        @filenamein=filename
+        @filename=File.basename(filename, ".*")
+        first = Nokogiri::HTML(File.open("#{@projectdir}/#{@filenamein}"))
         doc = first.search('p').map(&:text)
-        File.write("#{@projectdir}/#{@filename}.txt", doc)
+        File.write("#{@projectdir}/#{@filename}", doc)
       end
     end
 
@@ -69,7 +73,7 @@ module RubyCrumbler
         FileUtils.cp(@input, @projectdir)
         first = Nokogiri::HTML(File.open(@input))
         doc = first.search('p').map(&:text)
-        File.write("#{@projectdir}/#{@filename}.txt", doc)
+        File.write("#{@projectdir}/#{@filename}", doc)
       else
         if File.directory?(@input)
           FileUtils.cp_r Dir.glob(@input+'/*.*'), @projectdir
@@ -77,7 +81,7 @@ module RubyCrumbler
         else
           first = Nokogiri::HTML(URI.open(@input))
           doc = first.search('p', 'text').map(&:text)
-          File.write("#{@projectdir}/#{@filename}.txt", doc)
+          File.write("#{@projectdir}/#{@filename}", doc)
         end
       end
     end
@@ -95,16 +99,30 @@ module RubyCrumbler
     #
     # The file.open line is universal for using the newest (last processed) file in directory
     def cleantext()
-      @text2process = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
-      @text2process = File.read( @text2process)
-      @text2process = @text2process.gsub('\n','').gsub('\r','').gsub(/\\u[a-f0-9]{4}/i,'').gsub(/https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/,'').gsub(/\d/, '').gsub(/[^\w\s\.\'´`]/,'').gsub(/[\.]{2,}/,' ').gsub(/[ ]{2,}/,' ')
-      File.write("#{@projectdir}/#{@filename}_cl.txt", @text2process)
-      p @text2process
+      Dir.foreach(@projectdir) do |filename|
+        next if filename == '.' or filename == '..'
+        puts "working on #{filename}"
+        @filename = File.basename(filename, ".*")
+        @text2process = File.open(Dir.glob(@projectdir+"/#{@filename}").max_by {|f| File.mtime(f)}, 'r')
+        #@text2process = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
+        @text2process = File.read( @text2process)
+        @text2process = @text2process.gsub('\n','').gsub('\r','').gsub(/\\u[a-f0-9]{4}/i,'').gsub(/https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/,'').gsub(/\d/, '').gsub(/[^\w\s\.\'´`]/,'').gsub(/[\.]{2,}/,' ').gsub(/[ ]{2,}/,' ')
+        File.write("#{@projectdir}/#{@filename}_cl.txt", @text2process)
+        p @text2process
+
+      end
     end
+
 
     #normalize text (from cleaned text file or raw text file) by choosing lowercasing and/or seperating contractions (both optional)
     def normalize(contractions=false, low=false)
-      @text2process = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
+      Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
+        @filename = File.basename(file, ".*")
+        print "ich bin file #{file}"
+        print "ich bin filename #{@filename}"
+        puts "working on #{@filename}"
+        @file2process = file
+        @text2process = File.open(@file2process)
       @text2process = File.read(@text2process)
       if low == true
         @text2process = @text2process.downcase
@@ -112,9 +130,10 @@ module RubyCrumbler
       if contractions == true
         contractions()
       end
-      File.write("#{@projectdir}/#{@filename}_cl_n.txt",@text2process)
+      File.write("#{@projectdir}/#{@filename}_n.txt",@text2process)
       p @text2process
-    end
+      end
+      end
 
     #ambigous contractions: the contraction dictionary will, when sth like "you'd" occure chose "you would" over "you had".
     def contractions()
@@ -591,11 +610,11 @@ class CrumblerGUI
                   end
                 }
 
-                checkbox('Normalization') {
+                @norm = checkbox('Normalization') {
                   stretchy false
 
                   on_toggled do |c|
-                    checked = c.checked?
+                    @normchecked = @norm.checked?
                     # link to the respective pipeline feature
                   end
                 }
@@ -777,6 +796,9 @@ class CrumblerGUI
                   if @clcbchecked == true
                     @doc.cleantext()
                     #msg_box('Information', 'You clicked the button')
+                  end
+                  if @normchecked == true
+                    @doc.normalize()
                   end
                 end
               }
