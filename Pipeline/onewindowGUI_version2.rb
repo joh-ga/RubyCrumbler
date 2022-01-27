@@ -28,6 +28,7 @@ module RubyCrumbler
     def multidir (directory)
       directory = @projectdir
       @filenumber = Dir.glob(File.join(directory, '**', '*')).select { |file| File.file?(file) }.count
+      #filenumber is later important for opening the x recent files in the methods
       print @filenumber
       Dir.foreach(directory) do |filename|
         next if filename == '.' || filename == '..'
@@ -115,11 +116,11 @@ module RubyCrumbler
 
 
     #normalize text (from cleaned text file or raw text file) by choosing lowercasing and/or seperating contractions (both optional)
+    #The 5 first lines of the methods open the last processed files (cleantext or just input) and normalize them
+    # it's only important, if you process more than 1 file at a time, otherwise it would just normalize the most recent file or every file in the processdir
     def normalize(contractions=false, low=false)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
-        print "ich bin file #{file}"
-        print "ich bin filename #{@filename}"
         puts "working on #{@filename}"
         @file2process = file
         @text2process = File.open(@file2process)
