@@ -6,6 +6,7 @@ require 'glimmer-dsl-libui'
 require 'csv'
 require 'builder'
 require 'tk'
+require "terminal-table"
 
 module RubyCrumbler
 
@@ -74,6 +75,7 @@ module RubyCrumbler
         FileUtils.cp(@input, @projectdir)
         first = Nokogiri::HTML(File.open(@input))
         doc = first.search('p').map(&:text)
+        @filenumber = 1
         File.write("#{@projectdir}/#{@filename}", doc)
       else
         if File.directory?(@input)
@@ -82,7 +84,8 @@ module RubyCrumbler
         else
           first = Nokogiri::HTML(URI.open(@input))
           doc = first.search('p', 'text').map(&:text)
-          File.write("#{@projectdir}/#{@filename}", doc)
+          @filenumber = 1
+          File.write("#{@projectdir}/#{@filename}.txt", doc)
         end
       end
     end
@@ -104,7 +107,7 @@ module RubyCrumbler
         next if filename == '.' or filename == '..'
         puts "working on #{filename}"
         @filename = File.basename(filename, ".*")
-        @text2process = File.open(Dir.glob(@projectdir+"/#{@filename}").max_by {|f| File.mtime(f)}, 'r')
+        @text2process = File.open(Dir.glob(@projectdir+"/#{@filename}.*").max_by {|f| File.mtime(f)}, 'r')
         #@text2process = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
         @text2process = File.read( @text2process)
         @text2process = @text2process.gsub('\n','').gsub('\r','').gsub(/\\u[a-f0-9]{4}/i,'').gsub(/https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/,'').gsub(/\d/, '').gsub(/[^\w\s\.\'´`]/,'').gsub(/[\.]{2,}/,' ').gsub(/[ ]{2,}/,' ')
@@ -379,12 +382,18 @@ module RubyCrumbler
     end
 
     def tokenizer()
-      input = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
-      file = input.read
-      input.close
+      Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
+        @filename = File.basename(file, ".*")
+        puts "working on #{@filename}"
+        @file2process = file
+        @text2process = File.open(@file2process)
+        @text2process = File.read(@text2process)
+        #input = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
+        #file = input.read
+        #input.close
 
       # tokenization
-      doc = @en.read(file)
+      doc = @en.read(@text2process)
       row = []
       count = 0
       doc.each do |token|
@@ -396,35 +405,78 @@ module RubyCrumbler
       # name = filename.sub(/(?<=.)\..*/, '')
       File.open("#{@projectdir}/#{@filename}_tok.txt", "w") do |f|
         f.write(row)
-        f.write("\n")
-        f.write("\n")
-        f.write("Total number of tokens: #{count}")
+        #f.write("\n")
+        #f.write("\n")
+        #f.write("Total number of tokens: #{count}")
+        puts ("Total number of tokens: #{count}")
       end
-    end
+      end
+      end
 
     def stopwordsclean()
-      text = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
-      text = File.read(text).gsub(/Total number of tokens: \d+/, '')
-      text = Kernel.eval(text)
+      Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
+        @filename = File.basename(file, ".*")
+        puts "working on #{@filename}"
+        @file2process = file
+        @text2process = File.open(@file2process)
+        @text2process = File.read(@text2process)#.gsub(/Total number of tokens: \d+/, '')
+        @text2process = Kernel.eval(@text2process)
 
-      shared = text & @stopwords
-      textosw = text - shared
+
+      shared = @text2process & @stopwords
+      textosw = @text2process - shared
       File.write("#{@projectdir}/#{@filename}_nost.txt", textosw)
-    end
+      end
+      end
 
     def add_stopwords(newsw)
       @stopwords.insert(0, newsw)
     end
 
-    def tagger()
-      builder = Nokogiri::XML::Builder.new
-      text = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
-      text = File.read(text).gsub(/Total number of tokens: \d+/, '')
-      text = Kernel.eval(text).join(" ")
-      doc = @en.read(text)
+    def lemmatizer()
+      Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
+        @filename = File.basename(file, ".*")
+        puts "working on #{@filename}"
+        @file2process = file
+        @text2process = File.open(@file2process)
+        @text2process = File.read(@text2process)
+        @text2process = Kernel.eval(@text2process)
+        @text2process = @text2process.join(', ').gsub(',','')
 
+        # lemmatization
+        doc = @en.read(@text2process)
+        rows = []
+        output = []
+        headings = ["text", "lemma"]
+
+        doc.each do |token|
+          rows << [token.text, token.lemma]
+          output.append(token.text + ": lemma:" + token.lemma)
+        end
+
+        #output in Terminal:
+        table = Terminal::Table.new rows: rows, headings: headings
+        puts table
+
+        #  save to txt
+        File.write("#{@projectdir}/#{@filename}_lem.txt", output)
+      end
+      end
+
+
+    def tagger()
+      Dir.glob(@projectdir+"/*.*").reject{|file| file.end_with?("lem.txt")}.max_by(@filenumber){|f| File.mtime(f)}.each do |file|
+        @filename = File.basename(file, ".*")
+          puts "working on POS #{file}"
+          @file2process = file
+          @text2process = File.open(@file2process)
+          @text2process = File.read(@text2process)
+          @text2process = Kernel.eval(@text2process)
+          @text2process = @text2process.join(' ').gsub(',','')#.gsub(/Total number of tokens: \d+/, '')
+          doc = @en.read(@text2process)
       #pos: The simple UPOS part-of-speech tag
       #tag: The detailed part-of-speech tag
+      builder = Nokogiri::XML::Builder.new
       headings = [["text", "pos", "tag"]]
       @rows = []
       output = []
@@ -436,7 +488,7 @@ module RubyCrumbler
       p @rows
 
       #save to csv
-      File.open("#{@projectdir}/pos.csv", "w") do |f|
+      File.open("#{@projectdir}/#{@filename}_pos.csv", "w") do |f|
         f.write(headings.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
         f.write(@rows.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
       end
@@ -446,7 +498,7 @@ module RubyCrumbler
     csv << rows
     end'''
       #save to txt
-      File.write("#{@projectdir}/pos.txt", output)
+      File.write("#{@projectdir}/#{@filename}_pos.txt", output)
       #save to xml
       builder.new do |xml|
         xml.root {
@@ -459,15 +511,25 @@ module RubyCrumbler
         }
       end
       pos_xml = builder.to_xml
-      File.write("#{@projectdir}/pos.xml", pos_xml)
-    end
+      File.write("#{@projectdir}/#{@filename}_pos.xml", pos_xml)
+      end
+      end
 
     def ner()
-      builder = Nokogiri::XML::Builder.new
-      text = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
-      text = File.read(text).gsub(/Total number of tokens: \d+/, '')
-      text = Kernel.eval(text).join(" ")
-      doc = @en.read(text)
+      Dir.glob(@projectdir+"/*.*").reject{|file| file.end_with?("lem.txt") ||file.end_with?("pos.txt")||file.end_with?("pos.csv") ||file.end_with?("pos.xml")}.max_by(@filenumber){|f| File.mtime(f)}.each do |file|
+        @filename = File.basename(file, ".*")
+        puts "working on NER #{file}"
+        @file2process = file
+        @text2process = File.open(@file2process)
+        @text2process = File.read(@text2process)
+        @text2process = @text2process
+        @text2process = Kernel.eval(@text2process).join(' ')#.gsub(/Total number of tokens: \d+/, '')
+        doc = @en.read(@text2process)
+        builder = Nokogiri::XML::Builder.new
+        #text = File.open(Dir.glob(@projectdir+'/*tok.*').max_by {|f| File.mtime(f)}, 'r')
+        #text = File.read(text)#.gsub(/Total number of tokens: \d+/, '')
+        #text = Kernel.eval(text).join(' ')
+
 
       headings = [['text', 'label']]
       @rows = []
@@ -479,12 +541,12 @@ module RubyCrumbler
       end
 
       #save to csv
-      File.open("#{@projectdir}/ner.csv", "w") do |f|
+      File.open("#{@projectdir}/#{@filename}_ner.csv", "w") do |f|
         f.write(headings.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
         f.write(@rows.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
       end
       #save to txt
-      File.write("#{@projectdir}/ner.txt", output)
+      File.write("#{@projectdir}/#{@filename}_ner.txt", output)
       #save to xml
       builder.new do |xml|
         xml.root {
@@ -496,9 +558,11 @@ module RubyCrumbler
         }
       end
       ner_xml = builder.to_xml
-      File.write("#{@projectdir}/ner.xml", ner_xml)
+      File.write("#{@projectdir}/#{@filename}_ner.xml", ner_xml)
     end
-  end
+      end
+
+end
 end
 
 class OtherGUIWindows
@@ -643,56 +707,56 @@ class CrumblerGUI
 
               vertical_box {
 
-                checkbox('Tokenization') {
+                @tok = checkbox('Tokenization') {
                   stretchy false
 
                   on_toggled do |c|
-                    checked = c.checked?
+                    @tokchecked = @tok.checked?
                     # link to the respective pipeline feature
                   end
                 }
 
-                checkbox('Stopword removal') {
+                @sr = checkbox('Stopword removal') {
                   stretchy false
 
                   on_toggled do |c|
-                    checked = c.checked?
+                    @srchecked = @sr.checked?
                     # link to the respective pipeline feature
                   end
                 }
 
-                checkbox('Stemming') {
+                @stem = checkbox('Stemming') {
                   stretchy false
 
                   on_toggled do |c|
-                    checked = c.checked?
+                    @stemchecked = @stem.checked?
                     # link to the respective pipeline feature
                   end
                 }
 
-                checkbox('Lemmatization') {
+                @lem = checkbox('Lemmatization') {
                   stretchy false
 
                   on_toggled do |c|
-                    checked = c.checked?
+                    @lemchecked = @lem.checked?
                     # link to the respective pipeline feature
                   end
                 }
 
-                checkbox('Part-of-Speech Tagging') {
+                @pos = checkbox('Part-of-Speech Tagging') {
                   stretchy false
 
                   on_toggled do |c|
-                    checked = c.checked?
+                    @poschecked = @pos.checked?
                     # link to the respective pipeline feature
                   end
                 }
 
-                checkbox('Named Entity Recognition') {
+                @ner = checkbox('Named Entity Recognition') {
                   stretchy false
 
                   on_toggled do |c|
-                    checked = c.checked?
+                    @nerchecked = @ner.checked?
                     # link to the respective pipeline feature
                   end
                 }
@@ -801,6 +865,24 @@ class CrumblerGUI
                   if @normchecked == true
                     @doc.normalize()
                   end
+                  if @tokchecked == true
+                    @doc.tokenizer()
+                  end
+                  if @srchecked == true
+                    @doc.stopwordsclean()
+                  end
+                  if @lemchecked == true
+                    @doc.lemmatizer()
+                  end
+                  #if @stemchecked == true
+                  #  @doc.()
+                  #end
+                  if @poschecked == true
+                    @doc.tagger()
+                  end
+                  if @nerchecked == true
+                    @doc.ner()
+                  end
                 end
               }
               button('Cancel') {
@@ -822,6 +904,7 @@ class CrumblerGUI
     }.show
   end
 end
+
 
 
 CrumblerGUI.new.launch
