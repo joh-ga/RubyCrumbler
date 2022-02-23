@@ -886,35 +886,59 @@ class CrumblerGUI
                   if @clcbchecked == true
                     @doc.cleantext()
                     @progressbar.value += 100.0/@count
+                    if @progressbar.value == 100.0
+                      @label.text = "Text processing finished!"
+                    end
                     #msg_box('Information', 'You clicked the button')
                   end
                   if @normchecked == true
                     @doc.normalize()
                     @progressbar.value += 100.0/@count
+                    if @progressbar.value == 100.0
+                      @label.text = "Text processing finished!"
+                    end
                   end
                   if @tokchecked == true
                     @doc.tokenizer()
                     @progressbar.value += 100.0/@count
+                    if @progressbar.value == 100.0
+                      @label.text = "Text processing finished!"
+                    end
                   end
                   if @srchecked == true
                     @doc.stopwordsclean()
                     @progressbar.value += 100.0/@count
+                    if @progressbar.value == 100.0
+                      @label.text = "Text processing finished!"
+                    end
                   end
                   if @lemchecked == true
                     @doc.lemmatizer()
                     @progressbar.value += 100.0/@count
+                    if @progressbar.value == 100.0
+                      @label.text = "Text processing finished!"
+                    end
                   end
                   #if @stemchecked == true
                   #  @doc.()
                   #  @processbar.value += 100/@count
+                  #                if @progressbar.value == 100.0
+                  #                   @label.text = "Text processing finished!"
+                  #                 end
                   #end
                   if @poschecked == true
                     @doc.tagger()
                     @progressbar.value += 100.0/@count
+                    if @progressbar.value == 100.0
+                      @label.text = "Text processing finished!"
+                    end
                   end
                   if @nerchecked == true
                     @doc.ner()
                     @progressbar.value += 100.0/@count
+                    if @progressbar.value == 100.0
+                      @label.text = "Text processing finished!"
+                    end
                   end
                 end
               }
@@ -928,6 +952,10 @@ class CrumblerGUI
 
               label('Status – Progress bar') { stretchy false }
               @progressbar = progress_bar {
+                stretchy false
+
+              }
+              @label = label("") {
                 stretchy false
               }
             }
