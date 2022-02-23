@@ -636,13 +636,13 @@ class CrumblerGUI
     }
     @count=0
     ### START of main window
-    window('Ruby Crumbler', 600, 800) {
+    window('Ruby Crumbler', 300, 800) {
 
       margined true
 
-      on_closing do
-        puts 'Bye Bye'
-      end
+      # on_closing do
+      #   puts 'Bye Bye'
+      # end
 
       vertical_box {
         horizontal_box {
@@ -651,9 +651,12 @@ class CrumblerGUI
             group('Pre-Processing') {
               stretchy false
 
-              #Den checkboxen muss man wohl individuelle Namen geben, damit man
+              # Den checkboxen muss man wohl individuelle Namen geben, damit man
               # die einzelnen methods aufrufen kann
               vertical_box {
+
+                label("Select all or respective feature. See the documentation for more information about each feature.\n") { stretchy false}
+
                 @clcb = checkbox('Data cleaning') {
                   stretchy false
 
@@ -708,10 +711,10 @@ class CrumblerGUI
               }
             }
             group('Natural Language Processing – Tasks') {
-              stretchy false
+              #stretchy true
 
               vertical_box {
-
+                label("Select all or respective feature. See the documentation for more information about each feature.\n") { stretchy false}
                 @tok = checkbox('Tokenization') {
                   stretchy false
 
@@ -805,7 +808,6 @@ class CrumblerGUI
           }
 
           vertical_box {
-            #stretchy false
             group('Upload Center') {
               #stretchy false
 
