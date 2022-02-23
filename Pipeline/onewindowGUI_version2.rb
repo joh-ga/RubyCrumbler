@@ -42,17 +42,6 @@ module RubyCrumbler
       end
     end
 
-    #use newproject, for creating a new project directory. oldproject will continue an old project, no new folder is created
-    #def start(input, projectname, new = false)
-    #  @input = input
-    #  @filename=File.basename(@input)
-    #  @projectname = projectname
-    #  if new == true
-    #    newproject(input, projectname)
-    #  else
-    #    oldproject(input, projectname)
-    #  end
-    #end
 
     #create a new folder and copy chosen file to it OR copy all files in chosen directory to it OR write file from website into it
     #use txt-, xml- or html-files
@@ -90,13 +79,6 @@ module RubyCrumbler
       end
     end
 
-    #Use old project folder to continue the data processing
-    #def oldproject(input, projectname)
-    #    @input = input
-    #  @projectname = projectname
-    #  @projectdir = "#{@projectname}"
-    #  @filename=File.basename(@input)
-    #end
 
     #clean raw text file from project folder from code, markup, special symbols (latin characters, currency symbols, emojis etc.), urls, digits and additional spaces
     #output is a txt file with additional _cl for "cleaned" in name
@@ -127,7 +109,8 @@ module RubyCrumbler
         puts "working on #{@filename}"
         @file2process = file
         @text2process = File.open(@file2process)
-      @text2process = File.read(@text2process)
+        @text2process = File.read(@text2process)
+        @text2process = @text2process.gsub('.','').gsub(',','').gsub('!','').gsub('?','').gsub(':','').gsub(';','').gsub('(','').gsub(')','').gsub('[','').gsub(']','').gsub('"','').gsub('„','').gsub('»'=>'', '«'=>'','›'=>'','‹'=>'','–'=>'')
       if low == true
         @text2process = @text2process.downcase
       end
