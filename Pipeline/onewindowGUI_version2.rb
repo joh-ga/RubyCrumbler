@@ -883,24 +883,24 @@ class CrumblerGUI
                 on_clicked do
                   if @clcbchecked == true
                     @doc.cleantext()
-                    @progressbar.value += 100/@count
+                    @progressbar.value += 100.0/@count
                     #msg_box('Information', 'You clicked the button')
                   end
                   if @normchecked == true
                     @doc.normalize()
-                    @progressbar.value += 100/@count
+                    @progressbar.value += 100.0/@count
                   end
                   if @tokchecked == true
                     @doc.tokenizer()
-                    @progressbar.value += 100/@count
+                    @progressbar.value += 100.0/@count
                   end
                   if @srchecked == true
                     @doc.stopwordsclean()
-                    @progressbar.value += 100/@count
+                    @progressbar.value += 100.0/@count
                   end
                   if @lemchecked == true
                     @doc.lemmatizer()
-                    @progressbar.value += 100/@count
+                    @progressbar.value += 100.0/@count
                   end
                   #if @stemchecked == true
                   #  @doc.()
@@ -908,11 +908,11 @@ class CrumblerGUI
                   #end
                   if @poschecked == true
                     @doc.tagger()
-                    @progressbar.value += 100/@count
+                    @progressbar.value += 100.0/@count
                   end
                   if @nerchecked == true
                     @doc.ner()
-                    @progressbar.value += 100/@count
+                    @progressbar.value += 100.0/@count
                   end
                 end
               }
