@@ -653,6 +653,9 @@ class CrumblerGUI
               #Den checkboxen muss man wohl individuelle Namen geben, damit man
               # die einzelnen methods aufrufen kann
               vertical_box {
+
+                label("Select all or respective feature. See the documentation for more information about each feature.") { stretchy false}
+
                 @clcb = checkbox('Data cleaning') {
                   stretchy false
 
@@ -702,7 +705,7 @@ class CrumblerGUI
               stretchy false
 
               vertical_box {
-
+                label("Select all or respective feature. See the documentation for more information about each feature.") { stretchy false}
                 @tok = checkbox('Tokenization') {
                   stretchy false
 
