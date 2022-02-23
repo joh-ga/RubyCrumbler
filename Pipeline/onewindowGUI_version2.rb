@@ -905,6 +905,4 @@ class CrumblerGUI
   end
 end
 
-
-
 CrumblerGUI.new.launch
