@@ -635,33 +635,32 @@ class CrumblerGUI
     }
 
     ### START of main window
-    window('Ruby Crumbler', 600, 800) {
+    window('Ruby Crumbler', 400, 800) {
 
       margined true
 
-      on_closing do
-        puts 'Bye Bye'
-      end
+      # on_closing do
+      #   puts 'Bye Bye'
+      # end
 
       vertical_box {
         horizontal_box {
 
           vertical_box {
             group('Pre-Processing') {
-              stretchy false
+              #stretchy false
 
-              #Den checkboxen muss man wohl individuelle Namen geben, damit man
+              # Den checkboxen muss man wohl individuelle Namen geben, damit man
               # die einzelnen methods aufrufen kann
               vertical_box {
 
-                label("Select all or respective feature. See the documentation for more information about each feature.") { stretchy false}
+                label("Select all or respective feature. See the documentation for more information about each feature.\n") { stretchy false}
 
                 @clcb = checkbox('Data cleaning') {
                   stretchy false
 
                   on_toggled do |c|
                     @clcbchecked = @clcb.checked?
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -670,7 +669,6 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @normchecked = @norm.checked?
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -679,7 +677,6 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @normchecked = @norm.checked?
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -702,16 +699,15 @@ class CrumblerGUI
             }
 
             group('Natural Language Processing – Tasks') {
-              stretchy false
+              #stretchy true
 
               vertical_box {
-                label("Select all or respective feature. See the documentation for more information about each feature.") { stretchy false}
+                label("Select all or respective feature. See the documentation for more information about each feature.\n") { stretchy false}
                 @tok = checkbox('Tokenization') {
                   stretchy false
 
                   on_toggled do |c|
                     @tokchecked = @tok.checked?
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -720,7 +716,6 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @srchecked = @sr.checked?
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -729,7 +724,6 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @stemchecked = @stem.checked?
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -738,7 +732,6 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @lemchecked = @lem.checked?
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -747,7 +740,6 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @poschecked = @pos.checked?
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -756,7 +748,6 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @nerchecked = @ner.checked?
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -781,7 +772,6 @@ class CrumblerGUI
           }
 
           vertical_box {
-            #stretchy false
             group('Upload Center') {
               #stretchy false
 
