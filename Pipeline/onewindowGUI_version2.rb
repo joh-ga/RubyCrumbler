@@ -1,12 +1,12 @@
 require 'open-uri'
 require 'nokogiri'
 require 'fileutils'
-require "ruby-spacy"
+require 'ruby-spacy'
 require 'glimmer-dsl-libui'
 require 'csv'
 require 'builder'
 require 'tk'
-require "terminal-table"
+require 'terminal-table'
 
 module RubyCrumbler
 
@@ -658,7 +658,7 @@ class CrumblerGUI
                   end
                 }
 
-                @norm = checkbox('Normalization') {
+                @norm = checkbox('Normalization (lowercase)') {
                   stretchy false
 
                   on_toggled do |c|
@@ -667,21 +667,30 @@ class CrumblerGUI
                   end
                 }
 
-                button('Choose all') {
+                @norm = checkbox('Normalization (contractions)') {
                   stretchy false
 
-                  on_clicked do
-                    msg_box('Information', 'You clicked the button')
+                  on_toggled do |c|
+                    @normchecked = @norm.checked?
+                    # link to the respective pipeline feature
                   end
                 }
 
-                button('Reset') {
-                  stretchy false
-
-                  on_clicked do
-                    msg_box('Information', 'You clicked the button')
-                  end
-                }
+                # button('Choose all') {
+                #   stretchy false
+                #
+                #   on_clicked do
+                #     msg_box('Information', 'You clicked the button')
+                #   end
+                # }
+                #
+                # button('Reset') {
+                #   stretchy false
+                #
+                #   on_clicked do
+                #     msg_box('Information', 'You clicked the button')
+                #   end
+                # }
               }
             }
 
@@ -744,21 +753,21 @@ class CrumblerGUI
                   end
                 }
 
-                button('Choose all') {
-                  stretchy false
-
-                  on_clicked do
-                    msg_box('Information', 'You clicked the button')
-                  end
-                }
-
-                button('Reset') {
-                  stretchy false
-
-                  on_clicked do
-                    msg_box('Information', 'You clicked the button')
-                  end
-                }
+                # button('Choose all') {
+                #   stretchy false
+                #
+                #   on_clicked do
+                #     msg_box('Information', 'You clicked the button')
+                #   end
+                # }
+                #
+                # button('Reset') {
+                #   stretchy false
+                #
+                #   on_clicked do
+                #     msg_box('Information', 'You clicked the button')
+                #   end
+                # }
 
               }
             }
