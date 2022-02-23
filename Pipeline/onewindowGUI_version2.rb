@@ -635,7 +635,7 @@ class CrumblerGUI
     }
 
     ### START of main window
-    window('Ruby Crumbler', 400, 800) {
+    window('Ruby Crumbler', 300, 800) {
 
       margined true
 
@@ -648,7 +648,7 @@ class CrumblerGUI
 
           vertical_box {
             group('Pre-Processing') {
-              #stretchy false
+              stretchy false
 
               # Den checkboxen muss man wohl individuelle Namen geben, damit man
               # die einzelnen methods aufrufen kann
