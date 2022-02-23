@@ -110,8 +110,9 @@ module RubyCrumbler
         @file2process = file
         @text2process = File.open(@file2process)
         @text2process = File.read(@text2process)
-        @text2process = @text2process.gsub('.','').gsub(',','').gsub('!','').gsub('?','').gsub(':','').gsub(';','').gsub('(','').gsub(')','').gsub('[','').gsub(']','').gsub('"','').gsub('„','').gsub('»'=>'', '«'=>'','›'=>'','‹'=>'','–'=>'')
-      if low == true
+        @text2process = @text2process.gsub('.','').gsub(',','').gsub('!','').gsub('?','').gsub(':','').gsub(';','').gsub('(','').gsub(')','').gsub('[','').gsub(']','').gsub('"','').gsub('„','').gsub('»','').gsub('«','').gsub('›','').gsub('‹','').gsub('–','')
+        puts @text2process
+        if low == true
         @text2process = @text2process.downcase
       end
       if contractions == true
@@ -124,7 +125,7 @@ module RubyCrumbler
 
     #ambigous contractions: the contraction dictionary will, when sth like "you'd" occure chose "you would" over "you had".
     def contractions()
-      contractions = {
+      @contractions = {
         "ain't"=> "are not",
         "aren't"=> "are not",
         "Ain't"=> "Are not",
@@ -361,7 +362,7 @@ module RubyCrumbler
         "You've"=> "You have"
       }
       @text2process = @text2process.gsub('’','\'')
-      contractions.each { |k, v| @text2process.gsub! k, v }
+      @contractions.each { |k, v| @text2process=@text2process.gsub k, v }
     end
 
     def tokenizer()
@@ -614,7 +615,7 @@ class CrumblerGUI
   include RubyCrumbler
   include Glimmer
   require 'ruby-progressbar'
-  progress_bar = ProgressBar.create
+  progress_bar = ProgressBar.create()
   def launch
 
     ### START of menu bar (Maybe two separate Menu fields?)
@@ -665,31 +666,28 @@ class CrumblerGUI
                     if @clcb.checked == true
                       @count +=1
                     end
-                    # link to the respective pipeline feature
                   end
                 }
 
-                @norm = checkbox('Normalization (lowercase)') {
+                @normlow = checkbox('Normalization (lowercase)') {
                   stretchy false
 
                   on_toggled do |c|
-                    @normchecked = @norm.checked?
-                    if @norm.checked == true
+                    @normlowchecked = @normlow.checked?
+                    if @normlow.checked == true
                       @count +=1
                       end
-                    # link to the respective pipeline feature
                   end
                 }
 
-                @norm2 = checkbox('Normalization (contractions)') {
+                @normcont = checkbox('Normalization (contractions)') {
                   stretchy false
 
                   on_toggled do |c|
-                    @normchecked = @norm2.checked?
-                    if @clcb.checked == true
+                    @normcontchecked = @normcont.checked?
+                    if @normcont.checked == true
                       @count +=1
                       end
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -723,7 +721,6 @@ class CrumblerGUI
                     if @tok.checked? == true
                       @count +=1
                     end
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -735,7 +732,6 @@ class CrumblerGUI
                     if @sr.checked == true
                       @count +=1
                       end
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -747,7 +743,6 @@ class CrumblerGUI
                     if @stem.checked == true
                       @count +=1
                       end
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -759,7 +754,6 @@ class CrumblerGUI
                     if @lem.checked == true
                       @count +=1
                       end
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -771,7 +765,6 @@ class CrumblerGUI
                     if @pos.checked == true
                       @count +=1
                       end
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -783,7 +776,6 @@ class CrumblerGUI
                     if @ner.checked == true
                       @count +=1
                       end
-                    # link to the respective pipeline feature
                   end
                 }
 
@@ -885,59 +877,87 @@ class CrumblerGUI
                 on_clicked do
                   if @clcbchecked == true
                     @doc.cleantext()
-                    @progressbar.value += 100.0/@count
-                    if @progressbar.value == 100.0
+                    @progressbar.value += (100/@count)
+                    if @progressbar.value > 92
+                      @progressbar.value = 100
+                    end
+                    if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
                     #msg_box('Information', 'You clicked the button')
                   end
-                  if @normchecked == true
-                    @doc.normalize()
-                    @progressbar.value += 100.0/@count
-                    if @progressbar.value == 100.0
-                      @label.text = "Text processing finished!"
+                  if @normlowchecked == true || @normcontchecked == true
+                    @doc.normalize(@normcontchecked, @normlowchecked)
+                    if @normlowchecked == true && @normcontchecked == true
+                      @progressbar.value += (100/@count).round(-1)
+                    end
+                    if @progressbar.value > 92
+                      @progressbar.value = 100
+                      end
+                    @progressbar.value += (100/@count)
+                      if @progressbar.value > 92
+                        @progressbar.value = 100
+                        end
+                    if @progressbar.value == 100
+                    @label.text = "Text processing finished!"
                     end
                   end
+
                   if @tokchecked == true
                     @doc.tokenizer()
-                    @progressbar.value += 100.0/@count
-                    if @progressbar.value == 100.0
+                    @progressbar.value += (100/@count)
+                    if @progressbar.value > 92
+                      @progressbar.value = 100
+                    end
+                    if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
                   end
                   if @srchecked == true
                     @doc.stopwordsclean()
-                    @progressbar.value += 100.0/@count
-                    if @progressbar.value == 100.0
+                    @progressbar.value += (100/@count)
+                    if @progressbar.value > 92
+                      @progressbar.value = 100
+                    end
+                    if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
                   end
                   if @lemchecked == true
                     @doc.lemmatizer()
-                    @progressbar.value += 100.0/@count
-                    if @progressbar.value == 100.0
+                    @progressbar.value += (100/@count)
+                    if @progressbar.value > 92
+                      @progressbar.value = 100
+                    end
+                    if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
                   end
                   #if @stemchecked == true
                   #  @doc.()
-                  #  @processbar.value += 100/@count
-                  #                if @progressbar.value == 100.0
+                  #  @processbar.value += 2520/@count
+                  #                if @progressbar.value == 2520
                   #                   @label.text = "Text processing finished!"
                   #                 end
                   #end
                   if @poschecked == true
                     @doc.tagger()
-                    @progressbar.value += 100.0/@count
-                    if @progressbar.value == 100.0
+                    @progressbar.value += (100/@count)
+                    if @progressbar.value > 92
+                      @progressbar.value = 100
+                    end
+                    if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
                   end
                   if @nerchecked == true
                     @doc.ner()
-                    @progressbar.value += 100.0/@count
-                    if @progressbar.value == 100.0
-                      @label.text = "Text processing finished!"
+                    @progressbar.value += (100/@count)
+                    if @progressbar.value > 92
+                      @progressbar.value = 100
+                    end
+                    if @progressbar.value == 100
+                     @label.text = "Text processing finished!"
                     end
                   end
                 end
