@@ -613,7 +613,8 @@ class CrumblerGUI
   # this class contains the main GUI window
   include RubyCrumbler
   include Glimmer
-
+  require 'ruby-progressbar'
+  progress_bar = ProgressBar.create
   def launch
 
     ### START of menu bar (Maybe two separate Menu fields?)
@@ -633,7 +634,7 @@ class CrumblerGUI
         end
       }
     }
-
+    @count=0
     ### START of main window
     window('Ruby Crumbler', 600, 800) {
 
@@ -658,6 +659,9 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @clcbchecked = @clcb.checked?
+                    if @clcb.checked == true
+                      @count +=1
+                    end
                     # link to the respective pipeline feature
                   end
                 }
@@ -667,15 +671,21 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @normchecked = @norm.checked?
+                    if @norm.checked == true
+                      @count +=1
+                      end
                     # link to the respective pipeline feature
                   end
                 }
 
-                @norm = checkbox('Normalization (contractions)') {
+                @norm2 = checkbox('Normalization (contractions)') {
                   stretchy false
 
                   on_toggled do |c|
-                    @normchecked = @norm.checked?
+                    @normchecked = @norm2.checked?
+                    if @clcb.checked == true
+                      @count +=1
+                      end
                     # link to the respective pipeline feature
                   end
                 }
@@ -697,7 +707,6 @@ class CrumblerGUI
                 # }
               }
             }
-
             group('Natural Language Processing – Tasks') {
               stretchy false
 
@@ -708,6 +717,9 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @tokchecked = @tok.checked?
+                    if @tok.checked? == true
+                      @count +=1
+                    end
                     # link to the respective pipeline feature
                   end
                 }
@@ -717,6 +729,9 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @srchecked = @sr.checked?
+                    if @sr.checked == true
+                      @count +=1
+                      end
                     # link to the respective pipeline feature
                   end
                 }
@@ -726,6 +741,9 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @stemchecked = @stem.checked?
+                    if @stem.checked == true
+                      @count +=1
+                      end
                     # link to the respective pipeline feature
                   end
                 }
@@ -735,6 +753,9 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @lemchecked = @lem.checked?
+                    if @lem.checked == true
+                      @count +=1
+                      end
                     # link to the respective pipeline feature
                   end
                 }
@@ -744,6 +765,9 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @poschecked = @pos.checked?
+                    if @pos.checked == true
+                      @count +=1
+                      end
                     # link to the respective pipeline feature
                   end
                 }
@@ -753,6 +777,9 @@ class CrumblerGUI
 
                   on_toggled do |c|
                     @nerchecked = @ner.checked?
+                    if @ner.checked == true
+                      @count +=1
+                      end
                     # link to the respective pipeline feature
                   end
                 }
@@ -856,28 +883,36 @@ class CrumblerGUI
                 on_clicked do
                   if @clcbchecked == true
                     @doc.cleantext()
+                    @progressbar.value += 100/@count
                     #msg_box('Information', 'You clicked the button')
                   end
                   if @normchecked == true
                     @doc.normalize()
+                    @progressbar.value += 100/@count
                   end
                   if @tokchecked == true
                     @doc.tokenizer()
+                    @progressbar.value += 100/@count
                   end
                   if @srchecked == true
                     @doc.stopwordsclean()
+                    @progressbar.value += 100/@count
                   end
                   if @lemchecked == true
                     @doc.lemmatizer()
+                    @progressbar.value += 100/@count
                   end
                   #if @stemchecked == true
                   #  @doc.()
+                  #  @processbar.value += 100/@count
                   #end
                   if @poschecked == true
                     @doc.tagger()
+                    @progressbar.value += 100/@count
                   end
                   if @nerchecked == true
                     @doc.ner()
+                    @progressbar.value += 100/@count
                   end
                 end
               }
