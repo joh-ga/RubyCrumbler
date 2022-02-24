@@ -590,6 +590,8 @@ class OtherGUIWindows
           string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Pre-Processing\n" }
           string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Data cleaning: " }
           string("This includes removing redundant whitespaces, punctuation (redundant dots), special symbols (e.g. line break, new line), hash tags, HTML tags, and URLs.\n")
+          string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization: " }
+          string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation mark, question mark).\n")
           string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (lowercase): " }
           string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation mark, question mark) as well as converting the text into lowercase.\n")
           string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (contractions): " }
@@ -608,7 +610,7 @@ class OtherGUIWindows
           string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Named Entity Recognition: " }
           string("This includes labeling the so-called named entities in the data such as persons, organizations, and places.\n\n\n")
           string{ font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal; "Information about the File Naming Convention\n\n"}
-          string("To enable a quick identification and location of your converted document depending on the feature applied, the following file naming convention is used in RubyCrumbler.\nAbbreviations are added to the source file name to indicate the features that have been applied to the document. The suffix of the new file name indicates the ouput file for the corresponding feature. For example, the file named “myfirsttext_cl_nlow_tok.txt” is the output file of the tokenization step.\n\nAbbreviations of the features:\n • Data cleaning = cl\n • Normalization (lowercase) = nlow\n • Normalization (contractions) = nctr\n • Tokenization = tok\n • Stopword Removal = stpw\n • Stemming = stem\n • Lemmatization = lemm\n • Part-of-Speech Tagging = pos\n • Named Entity Recognition = ner\n\nFor each feature step the output format is TXT. POS tagging and NER are also saved in CSV and XML output format.\n\n\n")
+          string("To enable a quick identification and location of your converted document depending on the feature applied, the following file naming convention is used in RubyCrumbler.\nAbbreviations are added to the source file name to indicate the features that have been applied to the document. The suffix of the new file name indicates the ouput file for the corresponding feature. For example, the file named “myfirsttext_cl_nlow_tok.txt” is the output file of the tokenization step.\n\nAbbreviations of the features:\n • Data cleaning = cl\n • Normalization (lowercase) = nl\n • Normalization (contractions) = nc\n • Tokenization = tok\n • Stopword Removal = stpw\n • Stemming = stem\n • Lemmatization = lem\n • Part-of-Speech Tagging = pos\n • Named Entity Recognition = ner\n\nFor each feature step the output format is TXT. POS tagging and NER are also saved in CSV and XML output format.\n\n\n")
           string{ font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal; "Notes\n\n" }
 
           string("More information and the source code are available on ")
@@ -673,6 +675,17 @@ class CrumblerGUI
                   on_toggled do |c|
                     @clcbchecked = @clcb.checked?
                     if @clcb.checked == true
+                      @count +=1
+                    end
+                  end
+                }
+                # muss noch die nur norm funktion eingetragen werden
+                @normlow = checkbox('Normalization') {
+                  stretchy false
+
+                  on_toggled do |c|
+                    @normlowchecked = @normlow.checked?
+                    if @normlow.checked == true
                       @count +=1
                     end
                   end
