@@ -556,14 +556,22 @@ class OtherGUIWindows
   def wabout
     window('About Ruby Crumbler', 700, 500) {
       margined true
+      vertical_box {
       area {
         text {
           default_font family: 'Helvetica', size: 13, weight: :normal, italic: :normal, stretch: :normal
           string { font family: 'Helvetica', size: 14, weight: :bold, italic: :normal, stretch: :normal; "Ruby Crumbler Version 0.0.1\n\n" }
           string("Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.\nsome-email@address.com\nMarch 31, 2022\n\nThis project is open source on ")
           # string("Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.\nsome-email@address.com\nMarch 31, 2022\n\n            This project is open source on ")
-          string{ underline :single; "https://github.com/joh-ga/GUI-Application-in-Ruby-NLP-Pipeline" }
+          string{ underline :single; "GitHub" }
           # need to include a hyperlink with respective GitHub Repo # "GitHub"
+        }
+      }
+        button('Copy GitHub link') {
+          stretchy true
+          on_clicked do
+            msg_box('Please copy the following link.', 'https://github.com/joh-ga/GUI-Application-in-Ruby-NLP-Pipeline')
+          end
         }
         # image(File.expand_path('icons/github.png', __dir__), x: 0, y: 85, width: 45, height: 45) --> slow performance
       }
@@ -573,6 +581,7 @@ class OtherGUIWindows
   def wdocumentation
     window('Documentation', 400, 600) {
       margined true
+      vertical_box {
       area {
         text {
           default_font family: 'Helvetica', size: 12, weight: :normal, italic: :normal, stretch: :normal
@@ -603,8 +612,9 @@ class OtherGUIWindows
           string{ font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal; "Notes\n\n" }
 
           string("More information and the source code are available on ")
-          string{ underline :single; "https://github.com/joh-ga/GUI-Application-in-Ruby-NLP-Pipeline" } # "GitHub"
+          string{ underline :single; "https://github.com/joh-ga/GUI-Application-in-Ruby-NLP-Pipeline" }
         }
+      }
       }
     }.show
   end
@@ -625,14 +635,12 @@ class CrumblerGUI
       menu_item('About'){
         on_clicked do
           OtherGUIWindows.new.wabout
-          #wabout.new
         end
       }
 
       menu_item('Documentation'){
         on_clicked do
           OtherGUIWindows.new.wdocumentation
-          #wdocumentation.new
         end
       }
     }
