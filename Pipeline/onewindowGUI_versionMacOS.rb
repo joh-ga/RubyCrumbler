@@ -555,6 +555,11 @@ class OtherGUIWindows
 
   def wabout
     window('About Ruby Crumbler', 700, 500) {
+
+      on_closing do
+        wabout.quit #exit #
+      end
+
       margined true
       vertical_box {
       area {
