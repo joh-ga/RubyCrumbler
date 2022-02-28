@@ -1,4 +1,4 @@
-# GUI-Application-in-Ruby-NLP-Pipeline
+# RubyCrumbler
 In this repository, a GUI application for Ruby users is developed, that provides typical tasks of a common Natural Language Processing (NLP) pipeline.
 
 
