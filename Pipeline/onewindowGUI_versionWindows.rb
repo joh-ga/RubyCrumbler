@@ -112,7 +112,7 @@ module RubyCrumbler
         @text2process = File.read(@text2process)
         @text2process = @text2process.gsub('.','').gsub(',','').gsub('!','').gsub('?','').gsub(':','').gsub(';','').gsub('(','').gsub(')','').gsub('[','').gsub(']','').gsub('"','').gsub('„','').gsub('»','').gsub('«','').gsub('›','').gsub('‹','').gsub('–','')
         puts @text2process
-        if low == true
+      if low == true
         @text2process = @text2process.downcase
       end
       if contractions == true
@@ -553,6 +553,7 @@ class OtherGUIWindows
   include Glimmer
   # this class contains the only-text-GUI windows, e.g. About and Documentation
 
+
   def wabout
     window('About Ruby Crumbler', 700, 500) {
       margined true
@@ -567,10 +568,10 @@ class OtherGUIWindows
           # need to include a hyperlink with respective GitHub Repo # "GitHub"
         }
       }
-        button('Copy GitHub link') {
+        button('Open GitHub link') {
           stretchy true
           on_clicked do
-            msg_box('Please copy the following link.', 'https://github.com/joh-ga/GUI-Application-in-Ruby-NLP-Pipeline')
+            `start https://github.com/joh-ga/GUI-Application-in-Ruby-NLP-Pipeline`
           end
         }
         # image(File.expand_path('icons/github.png', __dir__), x: 0, y: 85, width: 45, height: 45) --> slow performance
@@ -640,8 +641,25 @@ class CrumblerGUI
     menu('Help') {
       menu_item('About'){
         on_clicked do
-          OtherGUIWindows.new.wabout
-        end
+          root = TkRoot.new { title "About" }
+          TkLabel.new(root) do
+            width 60
+            heigh 7
+            text 'Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.
+                  some-email@address.com
+                   March 31, 2022
+
+                   This project is open source on Github'
+            pack { padx 10 ; pady 15; side 'left' }
+            btn_OK = TkButton.new(root) do
+              text "Go to Github repository"
+              bg 'white'
+              command (proc {`start https://github.com/joh-ga/GUI-Application-in-Ruby-NLP-Pipeline`})
+              pack("side" => "left",  "padx"=> "140", "pady"=> "12")
+          end
+          Tk.mainloop
+          end
+          end
       }
 
 
@@ -652,11 +670,12 @@ class CrumblerGUI
       }
     }
     @count=0
+    @fincount = 0
     ### START of main window
     window('Ruby Crumbler') {
 
-      width(100)
-      height(400)
+      width(30)
+      height(40)
       #content_size 300, 800 #mac
       #content_size 0.1, 600 #windows
       #fullscreen false
@@ -691,12 +710,12 @@ class CrumblerGUI
                   end
                 }
                 # muss noch die nur norm funktion eingetragen werden
-                @normlow = checkbox('Normalization') {
+                @norm = checkbox('Normalization') {
                   stretchy false
 
                   on_toggled do |c|
-                    @normlowchecked = @normlow.checked?
-                    if @normlow.checked == true
+                    @normchecked = @norm.checked?
+                    if @norm.checked == true
                       @count +=1
                     end
                   end
@@ -912,27 +931,37 @@ class CrumblerGUI
                 on_clicked do
                   if @clcbchecked == true
                     @doc.cleantext()
-                    @progressbar.value += (100/@count)
-                    if @progressbar.value > 92
-                      @progressbar.value = 100
-                    end
+                    @fincount += 1
+                    @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
                     #msg_box('Information', 'You clicked the button')
                   end
+
+                  if @normchecked == true
+                    @doc.normalize(false, false)
+                    @fincount += 1
+                    @progressbar.value = (@fincount*100/@count)
+                    if @progressbar.value == 100
+                      @label.text = "Text processing finished!"
+                    end
+                  if @progressbar.value == 100
+                    @label.text = "Text processing finished!"
+                  end
+                  end
+
                   if @normlowchecked == true || @normcontchecked == true
                     @doc.normalize(@normcontchecked, @normlowchecked)
                     if @normlowchecked == true && @normcontchecked == true
-                      @progressbar.value += (100/@count).round(-1)
-                    end
-                    if @progressbar.value > 92
-                      @progressbar.value = 100
+                      @fincount += 1
+                      @progressbar.value = (@fincount*100/@count)
+                      if @progressbar.value == 100
+                        @label.text = "Text processing finished!"
                       end
-                    @progressbar.value += (100/@count)
-                      if @progressbar.value > 92
-                        @progressbar.value = 100
-                        end
+                    end
+                    @fincount += 1
+                    @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
                     @label.text = "Text processing finished!"
                     end
@@ -940,34 +969,31 @@ class CrumblerGUI
 
                   if @tokchecked == true
                     @doc.tokenizer()
-                    @progressbar.value += (100/@count)
-                    if @progressbar.value > 92
-                      @progressbar.value = 100
-                    end
+                    @fincount += 1
+                    @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
                   end
+
                   if @srchecked == true
                     @doc.stopwordsclean()
-                    @progressbar.value += (100/@count)
-                    if @progressbar.value > 92
-                      @progressbar.value = 100
-                    end
+                    @fincount += 1
+                    @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
                       @label.text = "Text processing finished!"
-                    end
+                      end
                   end
+
                   if @lemchecked == true
                     @doc.lemmatizer()
-                    @progressbar.value += (100/@count)
-                    if @progressbar.value > 92
-                      @progressbar.value = 100
-                    end
+                    @fincount += 1
+                    @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
                   end
+
                   #if @stemchecked == true
                   #  @doc.()
                   #  @processbar.value += 2520/@count
@@ -975,24 +1001,22 @@ class CrumblerGUI
                   #                   @label.text = "Text processing finished!"
                   #                 end
                   #end
+                  #
                   if @poschecked == true
                     @doc.tagger()
-                    @progressbar.value += (100/@count)
-                    if @progressbar.value > 92
-                      @progressbar.value = 100
-                    end
+                    @fincount += 1
+                    @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
                   end
+
                   if @nerchecked == true
                     @doc.ner()
-                    @progressbar.value += (100/@count)
-                    if @progressbar.value > 92
-                      @progressbar.value = 100
-                    end
+                    @fincount += 1
+                    @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
-                     @label.text = "Text processing finished!"
+                      @label.text = "Text processing finished!"
                     end
                   end
                 end
@@ -1020,5 +1044,6 @@ class CrumblerGUI
     }.show
   end
 end
+
 
 CrumblerGUI.new.launch
