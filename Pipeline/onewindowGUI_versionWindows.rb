@@ -553,33 +553,32 @@ class OtherGUIWindows
   include Glimmer
   # this class contains the only-text-GUI windows, e.g. About and Documentation
 
-
   def wabout
     window('About Ruby Crumbler', 700, 500) {
+      #@closing = 0
+      on_closing do
+        #Glimmer::LibUI.control_destroy(window)
+        #@closing.exit
+      end
+
       margined true
+
       vertical_box {
-      area {
-        text {
-          default_font family: 'Helvetica', size: 13, weight: :normal, italic: :normal, stretch: :normal
-          string { font family: 'Helvetica', size: 14, weight: :bold, italic: :normal, stretch: :normal; "Ruby Crumbler Version 0.0.1\n\n" }
-          string("Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.\nsome-email@address.com\nMarch 31, 2022\n\nThis project is open source on ")
-          # string("Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.\nsome-email@address.com\nMarch 31, 2022\n\n            This project is open source on ")
-          string{ underline :single; "GitHub" }
-          # need to include a hyperlink with respective GitHub Repo # "GitHub"
+        area {
+          text {
+            default_font family: 'Helvetica', size: 13, weight: :normal, italic: :normal, stretch: :normal
+            string { font family: 'Helvetica', size: 14, weight: :bold, italic: :normal, stretch: :normal; "Ruby Crumbler Version 0.0.1\n\n" }
+            string("Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.\nsome-email@address.com\nMarch 31, 2022\n\nThis project is open source on GitHub.")
+          }
+          # image(File.expand_path('icons/github.png', __dir__), x: 0, y: 85, width: 45, height: 45)
         }
-      }
-        button('Open GitHub link') {
+        button('Go to GitHub Repository') {
           stretchy true
           on_clicked do
-            `start https://github.com/joh-ga/GUI-Application-in-Ruby-NLP-Pipeline`
+            system("open","https://github.com/joh-ga/RubyCrumbler")
           end
         }
-        # image(File.expand_path('icons/github.png', __dir__), x: 0, y: 85, width: 45, height: 45) --> slow performance
       }
-      on_closing do
-        #puts 'bye bye'
-        #wabout.destroy
-      end
     }.show
   end
 
@@ -619,7 +618,7 @@ class OtherGUIWindows
           string{ font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal; "Notes\n\n" }
 
           string("More information and the source code are available on ")
-          string{ underline :single; "https://github.com/joh-ga/GUI-Application-in-Ruby-NLP-Pipeline" }
+          string{ underline :single; "https://github.com/joh-ga/RubyCrumbler" }
         }
       }
       }
@@ -640,6 +639,7 @@ class CrumblerGUI
     # menu bar number one
     menu('Help') {
       menu_item('About'){
+        #OtherGUIWindows.new.wabout
         on_clicked do
           root = TkRoot.new { title "About" }
           TkLabel.new(root) do
@@ -654,7 +654,7 @@ class CrumblerGUI
             btn_OK = TkButton.new(root) do
               text "Go to Github repository"
               bg 'white'
-              command (proc {`start https://github.com/joh-ga/GUI-Application-in-Ruby-NLP-Pipeline`})
+              command (proc {`start https://github.com/joh-ga/RubyCrumbler`})
               pack("side" => "left",  "padx"=> "140", "pady"=> "12")
           end
           Tk.mainloop
