@@ -1,4 +1,4 @@
-# RubyCrumbler
+![alt text](https://github.com/joh-ga/RubyCrumbler/blob/da4da6070519a356d8a6d6348ba0321fc7053e45/Pipeline/icons/rubycrumbler-logo2.png)
 In this repository, a GUI application for Ruby users is developed, that provides typical tasks of a common Natural Language Processing (NLP) pipeline.
 
 
