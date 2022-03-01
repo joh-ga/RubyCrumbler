@@ -575,7 +575,7 @@ class OtherGUIWindows
         button('Go to GitHub Repository') {
           stretchy true
           on_clicked do
-            system("open","https://github.com/joh-ga/RubyCrumbler")
+            `start https://github.com/joh-ga/RubyCrumbler`
           end
         }
       }
@@ -639,26 +639,28 @@ class CrumblerGUI
     # menu bar number one
     menu('Help') {
       menu_item('About'){
-        #OtherGUIWindows.new.wabout
         on_clicked do
-          root = TkRoot.new { title "About" }
-          TkLabel.new(root) do
-            width 60
-            heigh 7
-            text 'Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.
-                  some-email@address.com
-                   March 31, 2022
-
-                   This project is open source on Github'
-            pack { padx 10 ; pady 15; side 'left' }
-            btn_OK = TkButton.new(root) do
-              text "Go to Github repository"
-              bg 'white'
-              command (proc {`start https://github.com/joh-ga/RubyCrumbler`})
-              pack("side" => "left",  "padx"=> "140", "pady"=> "12")
-          end
-          Tk.mainloop
-          end
+            OtherGUIWindows.new.wabout
+            
+        # Version with tk:
+        #   root = TkRoot.new { title "About" }
+        #   TkLabel.new(root) do
+        #     width 60
+        #     heigh 7
+        #     text 'Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.
+        #           some-email@address.com
+        #            March 31, 2022
+        #
+        #            This project is open source on Github'
+        #     pack { padx 10 ; pady 15; side 'left' }
+        #     btn_OK = TkButton.new(root) do
+        #       text "Go to Github repository"
+        #       bg 'white'
+        #       command (proc {`start https://github.com/joh-ga/RubyCrumbler`})
+        #       pack("side" => "left",  "padx"=> "140", "pady"=> "12")
+        #   end
+        #   Tk.mainloop
+        #   end
           end
       }
 
