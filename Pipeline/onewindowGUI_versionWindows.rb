@@ -640,28 +640,51 @@ class CrumblerGUI
     menu('Help') {
       menu_item('About'){
         on_clicked do
-            OtherGUIWindows.new.wabout
-            
-        # Version with tk:
-        #   root = TkRoot.new { title "About" }
-        #   TkLabel.new(root) do
-        #     width 60
-        #     heigh 7
-        #     text 'Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.
-        #           some-email@address.com
-        #            March 31, 2022
-        #
-        #            This project is open source on Github'
-        #     pack { padx 10 ; pady 15; side 'left' }
-        #     btn_OK = TkButton.new(root) do
-        #       text "Go to Github repository"
-        #       bg 'white'
-        #       command (proc {`start https://github.com/joh-ga/RubyCrumbler`})
-        #       pack("side" => "left",  "padx"=> "140", "pady"=> "12")
-        #   end
-        #   Tk.mainloop
-        #   end
-          end
+          ## Solution with Glimmer-dsl-libui window
+          OtherGUIWindows.new.wabout
+
+          ## Solution with tk library
+          # Version with tk:
+          #   root = TkRoot.new { title "About" }
+          #   TkLabel.new(root) do
+          #     width 60
+          #     heigh 7
+          #     text 'Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.
+          #           some-email@address.com
+          #            March 31, 2022
+          #
+          #            This project is open source on Github'
+          #     pack { padx 10 ; pady 15; side 'left' }
+          #     btn_OK = TkButton.new(root) do
+          #       text "Go to Github repository"
+          #       bg 'white'
+          #       command (proc {`start https://github.com/joh-ga/RubyCrumbler`})
+          #       pack("side" => "left",  "padx"=> "140", "pady"=> "12")
+          #   end
+          #   Tk.mainloop
+          #   end
+
+          ## Solution with LibUI library (text is still missing, only button included)
+          # LibUI.init
+          # windowAbout = LibUI.new_window('About Ruby Crumbler', 300, 200, 1)
+          # button = LibUI.new_button('Go to GitHub Repository')
+          #
+          # LibUI.button_on_clicked(button) do
+          #   system("open","https://github.com/joh-ga/RubyCrumbler")
+          # end
+          #
+          # LibUI.window_on_closing(windowAbout) do
+          #   puts 'Bye Bye'
+          #   LibUI.control_destroy(windowAbout)
+          #   0 #---> wir muessen den Part aus der Libui Lib in Glimmer schreiben aber wie?
+          # end
+          #
+          # LibUI.window_set_child(windowAbout, button)
+          # LibUI.control_show(windowAbout)
+          #
+          # LibUI.main
+          # LibUI.quit
+        end
       }
 
 
