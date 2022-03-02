@@ -575,7 +575,7 @@ class CrumblerGUI
                   string { font family: 'Helvetica', size: 14, weight: :bold, italic: :normal, stretch: :normal; "Ruby Crumbler Version 0.0.1\n\n" }
                   string("Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.\nsome-email@address.com\nMarch 31, 2022\n\nThis project is open source on GitHub.")
                 }
-                # image(File.expand_path('icons/github.png', __dir__), x: 0, y: 85, width: 45, height: 45)
+                # image(File.expand_path('img/github.png', __dir__), x: 0, y: 85, width: 45, height: 45)
               }
               button('Go to GitHub Repository') {
                 stretchy true

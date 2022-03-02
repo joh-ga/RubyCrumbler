@@ -511,7 +511,7 @@ class OtherGUIWindows
             "GitHub"
           }
         }
-        image(File.expand_path('icons/github.png', __dir__), x: 0, y: 85, width: 45, height: 45)
+        image(File.expand_path('img/github.png', __dir__), x: 0, y: 85, width: 45, height: 45)
       }
     }.show
   end
