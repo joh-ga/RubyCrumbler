@@ -112,13 +112,17 @@ module RubyCrumbler
         @text2process = File.read(@text2process)
         @text2process = @text2process.gsub('.','').gsub(',','').gsub('!','').gsub('?','').gsub(':','').gsub(';','').gsub('(','').gsub(')','').gsub('[','').gsub(']','').gsub('"','').gsub('„','').gsub('»','').gsub('«','').gsub('›','').gsub('‹','').gsub('–','')
         puts @text2process
+        lc =''
+          cons=''
         if low == true
+          lc ='l'
           @text2process = @text2process.downcase
         end
         if contractions == true
+          cons ='c'
           contractions()
         end
-        File.write("#{@projectdir}/#{@filename}_n.txt",@text2process)
+        File.write("#{@projectdir}/#{@filename}_n#{lc}#{cons}.txt",@text2process)
         p @text2process
       end
     end
@@ -892,20 +896,18 @@ class CrumblerGUI
                     #msg_box('Information', 'You clicked the button')
                   end
 
-                  if @normchecked == true
-                    @doc.normalize(false, false)
-                    @fincount += 1
-                    @progressbar.value = (@fincount*100/@count)
-                    if @progressbar.value == 100
-                      @label.text = "Text processing finished!"
-                    end
-                    if @progressbar.value == 100
-                      @label.text = "Text processing finished!"
-                    end
+                if @normchecked == true && !@normlowchecked && !@normcontchecked
+                  @doc.normalize(false, false)
+                  @fincount += 1
+                  @progressbar.value = (@fincount*100/@count)
+                  if @progressbar.value == 100
+                    @label.text = "Text processing finished!"
                   end
-
+                  else
                   if @normlowchecked == true || @normcontchecked == true
                     @doc.normalize(@normcontchecked, @normlowchecked)
+                    if @normchecked == true
+                      @fincount += 1
                     if @normlowchecked == true && @normcontchecked == true
                       @fincount += 1
                       @progressbar.value = (@fincount*100/@count)
@@ -913,11 +915,13 @@ class CrumblerGUI
                         @label.text = "Text processing finished!"
                       end
                     end
+                      end
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
+                  end
                   end
 
                   if @tokchecked == true
