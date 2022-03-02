@@ -604,11 +604,11 @@ class CrumblerGUI
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Data cleaning: " }
                   string("This includes removing redundant whitespaces, punctuation (redundant dots), special symbols (e.g., line break, new line), hash tags, HTML tags, and URLs.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization: " }
-                  string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation mark, question mark).\n")
+                  string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark).\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (lowercase): " }
-                  string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation mark, question mark) as well as converting the text into lowercase.\n")
+                  string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting the text into lowercase.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (contractions): " }
-                  string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation mark, question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not).\n\n")
+                  string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not).\n\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Natural Language Processings – Tasks \n" }
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Tokenization: " }
                   string("This includes splitting the pre-processed data into individual characters or tokens.\n")
