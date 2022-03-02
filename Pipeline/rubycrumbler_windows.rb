@@ -564,7 +564,7 @@ class CrumblerGUI
     menu('Help') {
       menu_item('About'){
         on_clicked do
-          window('About Ruby Crumbler', 700, 500) {
+          window('About RubyCrumbler', 700, 500) {
             on_closing do
               window.destroy
               1
@@ -574,7 +574,7 @@ class CrumblerGUI
               area {
                 text {
                   default_font family: 'Helvetica', size: 13, weight: :normal, italic: :normal, stretch: :normal
-                  string { font family: 'Helvetica', size: 14, weight: :bold, italic: :normal, stretch: :normal; "Ruby Crumbler Version 0.0.1\n\n" }
+                  string { font family: 'Helvetica', size: 14, weight: :bold, italic: :normal, stretch: :normal; "RubyCrumbler Version 0.0.1\n\n" }
                   string("Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.\nsome-email@address.com\nMarch 31, 2022\n\nThis project is open source on GitHub.")
                 }
                 # image(File.expand_path('img/github.png', __dir__), x: 0, y: 85, width: 45, height: 45)
@@ -643,7 +643,7 @@ class CrumblerGUI
     @fincount = 0
 
     ### START of main window
-    window('Ruby Crumbler') {
+    window('RubyCrumbler') {
 
       width(30)
       height(40)
