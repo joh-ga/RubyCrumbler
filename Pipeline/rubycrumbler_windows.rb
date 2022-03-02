@@ -112,13 +112,17 @@ module RubyCrumbler
         @text2process = File.read(@text2process)
         @text2process = @text2process.gsub('.','').gsub(',','').gsub('!','').gsub('?','').gsub(':','').gsub(';','').gsub('(','').gsub(')','').gsub('[','').gsub(']','').gsub('"','').gsub('„','').gsub('»','').gsub('«','').gsub('›','').gsub('‹','').gsub('–','')
         puts @text2process
+        lc =''
+        cons=''
         if low == true
+          lc ='l'
           @text2process = @text2process.downcase
         end
         if contractions == true
+          cons ='c'
           contractions()
         end
-        File.write("#{@projectdir}/#{@filename}_n.txt",@text2process)
+        File.write("#{@projectdir}/#{@filename}_n#{lc}#{cons}.txt",@text2process)
         p @text2process
       end
     end
@@ -576,7 +580,7 @@ class CrumblerGUI
                 # image(File.expand_path('icons/github.png', __dir__), x: 0, y: 85, width: 45, height: 45)
               }
               button('Go to GitHub Repository') {
-                stretchy true
+                stretchy false
                 on_clicked do
                   `start https://github.com/joh-ga/RubyCrumbler`
                 end
@@ -836,6 +840,7 @@ class CrumblerGUI
                     @doc = PipelineFeatures.new
                     puts @input unless file.nil?
                     @doc.newproject(@input, @projectname)
+                    msg_box('Notification', 'You file has been successfully uploaded.')
                   end
                 }
 
@@ -906,31 +911,31 @@ class CrumblerGUI
                     #msg_box('Information', 'You clicked the button')
                   end
 
-                  if @normchecked == true
+                  if @normchecked == true && !@normlowchecked && !@normcontchecked
                     @doc.normalize(false, false)
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
-                    if @progressbar.value == 100
-                      @label.text = "Text processing finished!"
-                    end
-                  end
-
-                  if @normlowchecked == true || @normcontchecked == true
-                    @doc.normalize(@normcontchecked, @normlowchecked)
-                    if @normlowchecked == true && @normcontchecked == true
+                  else
+                    if @normlowchecked == true || @normcontchecked == true
+                      @doc.normalize(@normcontchecked, @normlowchecked)
+                      if @normchecked == true
+                        @fincount += 1
+                        if @normlowchecked == true && @normcontchecked == true
+                          @fincount += 1
+                          @progressbar.value = (@fincount*100/@count)
+                          if @progressbar.value == 100
+                            @label.text = "Text processing finished!"
+                          end
+                        end
+                      end
                       @fincount += 1
                       @progressbar.value = (@fincount*100/@count)
                       if @progressbar.value == 100
                         @label.text = "Text processing finished!"
                       end
-                    end
-                    @fincount += 1
-                    @progressbar.value = (@fincount*100/@count)
-                    if @progressbar.value == 100
-                      @label.text = "Text processing finished!"
                     end
                   end
 

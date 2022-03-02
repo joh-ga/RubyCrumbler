@@ -827,6 +827,7 @@ class CrumblerGUI
                     @doc = PipelineFeatures.new
                     puts @input unless file.nil?
                     @doc.newproject(@input, @projectname)
+                    msg_box('Notification', 'You file has been successfully uploaded.')
                   end
                 }
 
