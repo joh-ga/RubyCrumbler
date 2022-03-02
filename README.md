@@ -14,7 +14,7 @@ wenn User skript nutzt statt release dann<br>
 ## GUI
 Hier vorschau vom main window der finalen GUI (Screenshot in Mac, Windows, Linux) einfügen
 
-### Description of features
+### Description of Features
 ***Pre-Processing***<br>
 **Data Cleaning:** This includes removing redundant whitespaces, punctuation (redundant dots), special symbols (e.g., line break, new line), hash tags, HTML tags, and URLs.<br>
 **Normalization:** This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark).<br>
