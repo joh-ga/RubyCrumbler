@@ -1,10 +1,8 @@
 ![alt text](https://github.com/joh-ga/RubyCrumbler/blob/13828a0252549dff68a03cd30bcacc94fa5a6496/Pipeline/icons/rubycrumbler-logo.png)<br>
-Ready to crumble your text with RubyCrumbler for common NLP tasks?<br>
-This repository is home of RubyCrumbler, a simple script to download, that provides a GUI desktop application written completely in Ruby to apply typical Natural Language Processing (NLP) tasks on your text files.
+Ready to crumble your text for common NLP tasks? This repository is home of RubyCrumbler, a simple script to download, that provides a GUI desktop application written in Ruby to apply common Natural Language Processing (NLP) tasks on your text files.
 
 Hier jenachdem dann noch einfügen das entweder als Skript oder als release datei heruntergeladen werden kann.<br>
 Sprachen; Englisch und dann evtl Deutsch<br>
-Pipeline Funktionen weiter unten beschrieben
 
 ## Requirements
 wenn User skript nutzt statt release dann<br>
@@ -14,7 +12,7 @@ wenn User skript nutzt statt release dann<br>
 ## GUI
 Hier vorschau vom main window der finalen GUI (Screenshot in Mac, Windows, Linux) einfügen
 
-### Description of Features
+## Description of Features
 ***Pre-Processing***<br>
 **Data Cleaning:** This includes removing redundant whitespaces, punctuation (redundant dots), special symbols (e.g., line break, new line), hash tags, HTML tags, and URLs.<br>
 **Normalization:** This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark).<br>
@@ -29,7 +27,7 @@ Hier vorschau vom main window der finalen GUI (Screenshot in Mac, Windows, Linux
 **Part-of-Speech Tagging (POS):** This includes identifying and labeling the parts of speech of text data.<br>
 **Named Entity Recognition (NER):** This includes labeling the so-called named entities in the data such as persons, organizations, and places.<br>
 
-### File Naming Convention
+## File Naming Convention
 To enable a quick identification and location of your converted document depending on the feature applied, the following file naming convention is used.<br>
 Abbreviations are added to the source file name to indicate the features that have been applied to the document. The suffix of the new file name indicates the ouput file for the corresponding feature. For example, the file named “myfirsttext_cl_nlc_tok.txt” is the output file of the tokenization step.<br><br>
 **Overview of the feature abbreviations:**
@@ -44,8 +42,9 @@ Abbreviations are added to the source file name to indicate the features that ha
 * Part-of-Speech Tagging = pos
 * Named Entity Recognition = ner
 
+For each feature step the output format is TXT. POS tagging and NER are also saved in CSV and XML output format.
 
-### Pipeline of RubyCrumbler
+## Pipeline Structure of RubyCrumbler
 The program is built based on the following pipeline structure.<br>
 ![alt text](https://github.com/joh-ga/RubyCrumbler/blob/ca6c0fb394cb192a6b1c4a035a6f308d1610b2d4/Pipeline/icons/rubycrumbler-pipeline.png)<br>
 
