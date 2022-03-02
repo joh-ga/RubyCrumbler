@@ -600,18 +600,18 @@ class CrumblerGUI
                   string("Please find below all the necessary information about the individual features.\n\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Pre-Processing\n" }
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Data cleaning: " }
-                  string("This includes removing redundant whitespaces, punctuation (redundant dots), special symbols (e.g. line break, new line), hash tags, HTML tags, and URLs.\n")
+                  string("This includes removing redundant whitespaces, punctuation (redundant dots), special symbols (e.g., line break, new line), hash tags, HTML tags, and URLs.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization: " }
                   string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation mark, question mark).\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (lowercase): " }
                   string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation mark, question mark) as well as converting the text into lowercase.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (contractions): " }
-                  string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation mark, question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g. do not).\n\n")
+                  string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation mark, question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not).\n\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Natural Language Processings – Tasks \n" }
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Tokenization: " }
                   string("This includes splitting the pre-processed data into individual characters or tokens.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Stopword removal: " }
-                  string("Stopwords are words that do not carry much meaning but are important gramatically as, for example, “to” or “but”. This feature includes the removal of stopwords.\n")
+                  string("Stopwords are words that do not carry much meaning but are important grammatically as, for example, “to” or “but”. This feature includes the removal of stopwords.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Stemming: " }
                   string("This includes the reduction of a word to its stem (a character sequence shared by related words) by clipping inflectional and partially derivational suffixes. A word’s stem therefore does not necessarily have to be a semantically meaningful word. Word stems and lemmatized base forms may overlap. Examples: computing - compute, sung - sung, obviously - obvious.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Lemmatization: " }
