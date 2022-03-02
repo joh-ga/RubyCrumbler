@@ -562,7 +562,7 @@ class CrumblerGUI
     menu('Help') {
       menu_item('About'){
         on_clicked do
-          window('About RubyCrumbler', 700, 500) {
+          window('About RubyCrumbler', 700, 500, has_menubar = false) {
             on_closing do
               window.destroy
               1
@@ -590,7 +590,7 @@ class CrumblerGUI
 
       menu_item('Documentation'){
         on_clicked do
-          window('Documentation', 400, 600) {
+          window('Documentation', 400, 600, has_menubar = false) {
             on_closing do
               window.destroy
               1

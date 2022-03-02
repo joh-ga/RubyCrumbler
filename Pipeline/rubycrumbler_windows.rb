@@ -564,7 +564,7 @@ class CrumblerGUI
     menu('Help') {
       menu_item('About'){
         on_clicked do
-          window('About RubyCrumbler', 700, 500) {
+          window('About RubyCrumbler', 700, 500, has_menubar = false) {
             on_closing do
               window.destroy
               1
@@ -592,7 +592,7 @@ class CrumblerGUI
 
       menu_item('Documentation'){
         on_clicked do
-          window('Documentation', 400, 600) {
+          window('Documentation', 1400, 800, has_menubar = false) {
             on_closing do
               window.destroy
               1
@@ -601,34 +601,34 @@ class CrumblerGUI
             vertical_box {
               area {
                 text {
-                  default_font family: 'Helvetica', size: 12, weight: :normal, italic: :normal, stretch: :normal
-                  string { font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal; "Description of Features\n\n"}
+                  default_font family: 'Helvetica', size: 10, weight: :normal, italic: :normal, stretch: :normal
+                  string { font family: 'Helvetica', size: 11, weight: :bold, italic: :normal, stretch: :normal; "Description of Features\n\n"}
                   string("Please find below all the necessary information about the individual features.\n\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Pre-Processing\n" }
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Data cleaning: " }
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Pre-Processing\n" }
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Data cleaning: " }
                   string("This includes removing redundant whitespaces, punctuation (redundant dots), special symbols (e.g., line break, new line), hash tags, HTML tags, and URLs.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization: " }
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Normalization: " }
                   string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark).\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (lowercase): " }
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Normalization (lowercase): " }
                   string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting the text into lowercase.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (contractions): " }
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Normalization (contractions): " }
                   string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not).\n\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Natural Language Processings – Tasks \n" }
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Tokenization: " }
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Natural Language Processings – Tasks \n" }
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Tokenization: " }
                   string("This includes splitting the pre-processed data into individual characters or tokens.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Stopword removal: " }
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Stopword removal: " }
                   string("Stopwords are words that do not carry much meaning but are important grammatically as, for example, “to” or “but”. This feature includes the removal of stopwords.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Stemming: " }
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Stemming: " }
                   string("This includes the reduction of a word to its stem (a character sequence shared by related words) by clipping inflectional and partially derivational suffixes. A word’s stem therefore does not necessarily have to be a semantically meaningful word. Word stems and lemmatized base forms may overlap. Examples: computing - compute, sung - sung, obviously - obvious.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Lemmatization: " }
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Lemmatization: " }
                   string("This includes reduction of a word to its semantic base form according to POS classification. Lemmatized base forms and word stems may overlap. Examples: computing - compute, sung - sing, obviously - obviously.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Part-of-Speech Tagging: " }
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Part-of-Speech Tagging: " }
                   string("This includes identifying and labeling the parts of speech of text data.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Named Entity Recognition: " }
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Named Entity Recognition: " }
                   string("This includes labeling the so-called named entities in the data such as persons, organizations, and places.\n\n\n")
-                  string{ font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal; "Information about the File Naming Convention\n\n"}
+                  string{ font family: 'Helvetica', size: 11, weight: :bold, italic: :normal, stretch: :normal; "Information about the File Naming Convention\n\n"}
                   string("To enable a quick identification and location of your converted document depending on the feature applied, the following file naming convention is used in RubyCrumbler.\nAbbreviations are added to the source file name to indicate the features that have been applied to the document. The suffix of the new file name indicates the ouput file for the corresponding feature. For example, the file named “myfirsttext_cl_nlc_tok.txt” is the output file of the tokenization step.\n\nAbbreviations of the features:\n • Data cleaning = cl\n • Normalization = n\n • Normalization (lowercase) = l\n • Normalization (contractions) = c\n • Tokenization = tok\n • Stopword Removal = stpw\n • Stemming = stem\n • Lemmatization = lem\n • Part-of-Speech Tagging = pos\n • Named Entity Recognition = ner\n\nFor each feature step the output format is TXT. POS tagging and NER are also saved in CSV and XML output format.\n\n\n")
-                  string{ font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal; "Notes\n\n" }
+                  string{ font family: 'Helvetica', size: 11, weight: :bold, italic: :normal, stretch: :normal; "Notes\n\n" }
 
                   string("More information and the source code are available on ")
                   string{ underline :single; "https://github.com/joh-ga/RubyCrumbler" }
@@ -643,18 +643,14 @@ class CrumblerGUI
     @fincount = 0
 
     ### START of main window
-    window('RubyCrumbler') {
+    window('RubyCrumbler', 30, 40) {
 
-      width(30)
-      height(40)
-      #content_size 300, 800 #mac
-      #content_size 0.1, 600 #windows
+      #width(30)
+      #height(40)
+      #content_size 0.1, 600
       #fullscreen false
       margined true
 
-      # on_closing do
-      #   puts 'Bye Bye'
-      # end
 
       vertical_box {
         horizontal_box { ###evtl. auch zu vertical ändern###
