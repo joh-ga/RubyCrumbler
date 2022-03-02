@@ -4,7 +4,7 @@ In this repository, a GUI application for Ruby users is developed, that provides
 
 
 ### Structure of NLP Pipeline
-![alt text](https://github.com/joh-ga/GUI-Application-in-Ruby-NLP-Pipeline/blob/9020838284bd398c5077b655ca225bbc2434c291/pipeline-structure.png)
+![alt text](https://github.com/joh-ga/RubyCrumbler/blob/ca6c0fb394cb192a6b1c4a035a6f308d1610b2d4/Pipeline/icons/rubycrumbler-pipeline.png)
 
 ## Requirements
 
