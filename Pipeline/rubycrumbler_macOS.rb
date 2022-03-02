@@ -827,7 +827,7 @@ class CrumblerGUI
                     @doc = PipelineFeatures.new
                     puts @input unless file.nil?
                     @doc.newproject(@input, @projectname)
-                    msg_box('Notification', 'You file has been successfully uploaded.')
+                    msg_box('Notification', 'Upload successfully completed.')
                   end
                 }
 
@@ -842,6 +842,7 @@ class CrumblerGUI
                       @projectname = "#{@projectname}_process"
                       @doc = PipelineFeatures.new
                       @doc.newproject(@input, @projectname)
+                      msg_box('Notification', 'Upload successfully completed.')
                     end
                   }
                 }
@@ -863,6 +864,7 @@ class CrumblerGUI
                       @doc = PipelineFeatures.new
                       puts @input unless @input.nil?
                       @doc.newproject(@input, @projectname)
+                      msg_box('Notification', 'Upload successfully completed.')
                     end
                   }
                 }
@@ -885,7 +887,7 @@ class CrumblerGUI
                 #hier geht die action ab
                 # if entsprechende checkbox
                 # dann @doc und passende methode aufrufen
-                #
+
                 on_clicked do
                   if @clcbchecked == true
                     @doc.cleantext()
@@ -894,7 +896,6 @@ class CrumblerGUI
                     if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
-                    #msg_box('Information', 'You clicked the button')
                   end
 
                 if @normchecked == true && !@normlowchecked && !@normcontchecked
