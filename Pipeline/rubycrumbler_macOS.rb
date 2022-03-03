@@ -1001,6 +1001,16 @@ class CrumblerGUI
               @label = label("") {
                 stretchy false
               }
+
+              button('New Project') {
+
+                on_clicked do
+                  window.destroy
+                  Kernel.exec("ruby rubycrumbler_macOS.rb restart")
+                  #IO.popen("start cmd /C ruby.exe #{$0} #{ARGV.join(' ')}")
+                  #sleep 2
+                end
+              }
             }
           }
         }

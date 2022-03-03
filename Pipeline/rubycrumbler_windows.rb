@@ -559,7 +559,6 @@ class CrumblerGUI
   require 'ruby-progressbar'
   progress_bar = ProgressBar.create()
   def launch
-
     ### START of menu bar
     menu('Help') {
       menu_item('About'){
@@ -1010,8 +1009,17 @@ class CrumblerGUI
               @label = label("") {
                 stretchy false
               }
+              button('New Project') {
+
+                on_clicked do
+                  window.destroy
+                  Kernel.exec("ruby rubycrumbler_windows.rb -restart")
+                  #IO.popen("start cmd /C ruby.exe #{$0} #{ARGV.join(' ')}")
+                  #sleep 2
+                end
+              }
             }
-          }
+            }
         }
       }
     }.show
