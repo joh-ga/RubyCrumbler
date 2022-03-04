@@ -661,7 +661,7 @@ class CrumblerGUI
               # die einzelnen methods aufrufen kann
               vertical_box {
 
-                label("Select all or respective feature. See the documentation for more information about each feature.\n") { stretchy false}
+                label("Select all or respective features. See the documentation for more information about each feature.\n") { stretchy false}
 
                 @clcb = checkbox('Data cleaning') {
                   stretchy false
@@ -728,7 +728,7 @@ class CrumblerGUI
               #stretchy true
 
               vertical_box {
-                label("Select all or respective feature. See the documentation for more information about each feature.\n") { stretchy false}
+                label("Select all or respective features. See the documentation for more information about each feature.\n") { stretchy false}
                 @tok = checkbox('Tokenization') {
                   stretchy false
 
