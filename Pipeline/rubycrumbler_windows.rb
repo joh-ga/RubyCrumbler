@@ -413,7 +413,7 @@ module RubyCrumbler
 
         shared = @text2process & @stopwords
         textosw = @text2process - shared
-        File.write("#{@projectdir}/#{@filename}_nost.txt", textosw)
+        File.write("#{@projectdir}/#{@filename}_sw.txt", textosw)
       end
     end
 
@@ -480,11 +480,6 @@ module RubyCrumbler
           f.write(headings.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
           f.write(@rows.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
         end
-
-        '''CSV.open("pos.csv", "w") do |csv|
-    csv << headings
-    csv << rows
-    end'''
         #save to txt
         File.write("#{@projectdir}/#{@filename}_pos.txt", output)
         #save to xml
@@ -591,7 +586,7 @@ class CrumblerGUI
 
       menu_item('Documentation'){
         on_clicked do
-          window('Documentation', 1400, 800, has_menubar = false) {
+          window('Documentation', 1500, 775, has_menubar = false) {
             on_closing do
               window.destroy
               1
@@ -600,34 +595,34 @@ class CrumblerGUI
             vertical_box {
               area {
                 text {
-                  default_font family: 'Helvetica', size: 10, weight: :normal, italic: :normal, stretch: :normal
-                  string { font family: 'Helvetica', size: 11, weight: :bold, italic: :normal, stretch: :normal; "Description of Features\n\n"}
+                  default_font family: 'Helvetica', size: 9, weight: :normal, italic: :normal, stretch: :normal
+                  string { font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Description of Features\n\n"}
                   string("Please find below all the necessary information about the individual features.\n\n")
-                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Pre-Processing\n" }
-                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Data cleaning: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Pre-Processing\n" }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Data cleaning: " }
                   string("This includes removing redundant whitespaces, punctuation (redundant dots), special symbols (e.g., line break, new line), hash tags, HTML tags, and URLs.\n")
-                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Normalization: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Normalization: " }
                   string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark).\n")
-                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Normalization (lowercase): " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Normalization (lowercase): " }
                   string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting the text into lowercase.\n")
-                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Normalization (contractions): " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Normalization (contractions): " }
                   string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not).\n\n")
-                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Natural Language Processings – Tasks \n" }
-                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Tokenization: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Natural Language Processings – Tasks \n" }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Tokenization: " }
                   string("This includes splitting the pre-processed data into individual characters or tokens.\n")
-                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Stopword removal: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Stopword removal: " }
                   string("Stopwords are words that do not carry much meaning but are important grammatically as, for example, “to” or “but”. This feature includes the removal of stopwords.\n")
-                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Stemming: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Stemming: " }
                   string("This includes the reduction of a word to its stem (a character sequence shared by related words) by clipping inflectional and partially derivational suffixes. A word’s stem therefore does not necessarily have to be a semantically meaningful word. Word stems and lemmatized base forms may overlap. Examples: computing - compute, sung - sung, obviously - obvious.\n")
-                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Lemmatization: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Lemmatization: " }
                   string("This includes reduction of a word to its semantic base form according to POS classification. Lemmatized base forms and word stems may overlap. Examples: computing - compute, sung - sing, obviously - obviously.\n")
-                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Part-of-Speech Tagging: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Part-of-Speech Tagging: " }
                   string("This includes identifying and labeling the parts of speech of text data.\n")
-                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Named Entity Recognition: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Named Entity Recognition: " }
                   string("This includes labeling the so-called named entities in the data such as persons, organizations, and places.\n\n\n")
-                  string{ font family: 'Helvetica', size: 11, weight: :bold, italic: :normal, stretch: :normal; "Information about the File Naming Convention\n\n"}
-                  string("To enable a quick identification and location of your converted document depending on the feature applied, the following file naming convention is used in RubyCrumbler.\nAbbreviations are added to the source file name to indicate the features that have been applied to the document. The suffix of the new file name indicates the ouput file for the corresponding feature. For example, the file named “myfirsttext_cl_nlc_tok.txt” is the output file of the tokenization step.\n\nAbbreviations of the features:\n • Data cleaning = cl\n • Normalization = n\n • Normalization (lowercase) = l\n • Normalization (contractions) = c\n • Tokenization = tok\n • Stopword Removal = stpw\n • Stemming = stem\n • Lemmatization = lem\n • Part-of-Speech Tagging = pos\n • Named Entity Recognition = ner\n\nFor each feature step the output format is TXT. POS tagging and NER are also saved in CSV and XML output format.\n\n\n")
-                  string{ font family: 'Helvetica', size: 11, weight: :bold, italic: :normal, stretch: :normal; "Notes\n\n" }
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Information about the File Naming Convention\n\n"}
+                  string("To enable a quick identification and location of your converted document depending on the feature applied, the following file naming convention is used in RubyCrumbler.\nAbbreviations are added to the source file name to indicate the features that have been applied to the document. The suffix of the new file name indicates the ouput file for the corresponding feature. For example, the file named “myfirsttext_cl_nlc_tok.txt” is the output file of the tokenization step.\n\nAbbreviations of the features:\n • Data cleaning = cl\n • Normalization = n\n • Normalization (lowercase) = l\n • Normalization (contractions) = c\n • Tokenization = tok\n • Stopword Removal = sw\n • Stemming = stem\n • Lemmatization = lem\n • Part-of-Speech Tagging = pos\n • Named Entity Recognition = ner\n\nFor each feature step the output format is TXT. POS tagging and NER are additionally saved in CSV and XML output format.\n\n\n")
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Notes\n\n" }
                   string("More information and the source code are available on GitHub.")
                 }
               }
@@ -891,46 +886,103 @@ class CrumblerGUI
         vertical_box {
           stretchy false
           group() {
-            stretchy false
+              stretchy false
 
-            vertical_box {
-              button('Run') {
-                stretchy false
+              vertical_box {
+                button('Run') {
+                  stretchy false
 
-                #hier geht die action ab
-                # if entsprechende checkbox
-                # dann @doc und passende methode aufrufen
+                  #hier geht die action ab
+                  # if entsprechende checkbox
+                  # dann @doc und passende methode aufrufen
 
-                on_clicked do
-                  if @clcbchecked == true
-                    @doc.cleantext()
-                    @fincount += 1
-                    @progressbar.value = (@fincount*100/@count)
-                    if @progressbar.value == 100
-                      @label.text = "Text processing finished!"
+                  on_clicked do
+                    if @clcbchecked == true
+                      @doc.cleantext()
+                      @fincount += 1
+                      @progressbar.value = (@fincount*100/@count)
+                      if @progressbar.value == 100
+                        @label.text = "Text processing finished!"
+                      end
                     end
-                  end
 
-                  if @normchecked == true && !@normlowchecked && !@normcontchecked
-                    @doc.normalize(false, false)
-                    @fincount += 1
-                    @progressbar.value = (@fincount*100/@count)
-                    if @progressbar.value == 100
-                      @label.text = "Text processing finished!"
-                    end
-                  else
-                    if @normlowchecked == true || @normcontchecked == true
-                      @doc.normalize(@normcontchecked, @normlowchecked)
-                      if @normchecked == true
-                        @fincount += 1
+                    if @normchecked == true && !@normlowchecked && !@normcontchecked
+                      @doc.normalize(false, false)
+                      @fincount += 1
+                      @progressbar.value = (@fincount*100/@count)
+                      if @progressbar.value == 100
+                        @label.text = "Text processing finished!"
+                      end
+                    else
+                      if @normlowchecked == true || @normcontchecked == true
+                        @doc.normalize(@normcontchecked, @normlowchecked)
                         if @normlowchecked == true && @normcontchecked == true
                           @fincount += 1
-                          @progressbar.value = (@fincount*100/@count)
-                          if @progressbar.value == 100
-                            @label.text = "Text processing finished!"
+                          if @normchecked == true
+                            @fincount += 1
+                            if @normlowchecked == true && @normcontchecked == true && !@normchecked
+                              @fincount += 1
+                              @progressbar.value = (@fincount*100/@count)
+                              if @progressbar.value == 100
+                                @label.text = "Text processing finished!"
+                              end
+                            end
                           end
                         end
+                        @fincount += 1
+                        @progressbar.value = (@fincount*100/@count)
+                        if @progressbar.value == 100
+                          @label.text = "Text processing finished!"
+                        end
                       end
+                    end
+
+                    if @tokchecked == true
+                      @doc.tokenizer()
+                      @fincount += 1
+                      @progressbar.value = (@fincount*100/@count)
+                      if @progressbar.value == 100
+                        @label.text = "Text processing finished!"
+                      end
+                    end
+
+                    if @srchecked == true
+                      @doc.stopwordsclean()
+                      @fincount += 1
+                      @progressbar.value = (@fincount*100/@count)
+                      if @progressbar.value == 100
+                        @label.text = "Text processing finished!"
+                      end
+                    end
+
+                    if @lemchecked == true
+                      @doc.lemmatizer()
+                      @fincount += 1
+                      @progressbar.value = (@fincount*100/@count)
+                      if @progressbar.value == 100
+                        @label.text = "Text processing finished!"
+                      end
+                    end
+
+                    #if @stemchecked == true
+                    #  @doc.()
+                    #  @processbar.value += 2520/@count
+                    #                if @progressbar.value == 2520
+                    #                   @label.text = "Text processing finished!"
+                    #                 end
+                    #end
+                    #
+                    if @poschecked == true
+                      @doc.tagger()
+                      @fincount += 1
+                      @progressbar.value = (@fincount*100/@count)
+                      if @progressbar.value == 100
+                        @label.text = "Text processing finished!"
+                      end
+                    end
+
+                    if @nerchecked == true
+                      @doc.ner()
                       @fincount += 1
                       @progressbar.value = (@fincount*100/@count)
                       if @progressbar.value == 100
@@ -938,87 +990,33 @@ class CrumblerGUI
                       end
                     end
                   end
+                }
+                button('Cancel') {
+                  stretchy false
 
-                  if @tokchecked == true
-                    @doc.tokenizer()
-                    @fincount += 1
-                    @progressbar.value = (@fincount*100/@count)
-                    if @progressbar.value == 100
-                      @label.text = "Text processing finished!"
-                    end
+                  on_clicked do
+                    msg_box('Information', 'You clicked the button')
                   end
+                }
 
-                  if @srchecked == true
-                    @doc.stopwordsclean()
-                    @fincount += 1
-                    @progressbar.value = (@fincount*100/@count)
-                    if @progressbar.value == 100
-                      @label.text = "Text processing finished!"
-                    end
+                label('Status – Progress bar') { stretchy false }
+                @progressbar = progress_bar {
+                  stretchy false
+
+                }
+                @label = label("") {
+                  stretchy false
+                }
+                button('New Project') {
+
+                  on_clicked do
+                    window.destroy
+                    Kernel.exec("ruby rubycrumbler_windows.rb -restart")
+                    #IO.popen("start cmd /C ruby.exe #{$0} #{ARGV.join(' ')}")
+                    #sleep 2
                   end
-
-                  if @lemchecked == true
-                    @doc.lemmatizer()
-                    @fincount += 1
-                    @progressbar.value = (@fincount*100/@count)
-                    if @progressbar.value == 100
-                      @label.text = "Text processing finished!"
-                    end
-                  end
-
-                  #if @stemchecked == true
-                  #  @doc.()
-                  #  @processbar.value += 2520/@count
-                  #                if @progressbar.value == 2520
-                  #                   @label.text = "Text processing finished!"
-                  #                 end
-                  #end
-                  #
-                  if @poschecked == true
-                    @doc.tagger()
-                    @fincount += 1
-                    @progressbar.value = (@fincount*100/@count)
-                    if @progressbar.value == 100
-                      @label.text = "Text processing finished!"
-                    end
-                  end
-
-                  if @nerchecked == true
-                    @doc.ner()
-                    @fincount += 1
-                    @progressbar.value = (@fincount*100/@count)
-                    if @progressbar.value == 100
-                      @label.text = "Text processing finished!"
-                    end
-                  end
-                end
+                }
               }
-              button('Cancel') {
-                stretchy false
-
-                on_clicked do
-                  msg_box('Information', 'You clicked the button')
-                end
-              }
-
-              label('Status – Progress bar') { stretchy false }
-              @progressbar = progress_bar {
-                stretchy false
-
-              }
-              @label = label("") {
-                stretchy false
-              }
-              button('New Project') {
-
-                on_clicked do
-                  window.destroy
-                  Kernel.exec("ruby rubycrumbler_windows.rb -restart")
-                  #IO.popen("start cmd /C ruby.exe #{$0} #{ARGV.join(' ')}")
-                  #sleep 2
-                end
-              }
-            }
             }
         }
       }
