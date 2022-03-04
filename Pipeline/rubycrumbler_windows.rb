@@ -827,15 +827,20 @@ class CrumblerGUI
                 button("Upload from file(s)") {
                   stretchy false ###changed###
 
+
                   on_clicked do
                     file = open_file
+                    if file == nil
+                      msg_box('ERROR: No File selected.')
+                      else
                     @input = file
                     @projectname = File.basename(@input, ".*")
                     @doc = PipelineFeatures.new
                     puts @input unless file.nil?
                     @doc.newproject(@input, @projectname)
                     msg_box('Notification', 'Upload successfully completed.')
-                  end
+                    end
+                    end
                 }
 
                 vertical_box {
@@ -847,6 +852,10 @@ class CrumblerGUI
                       @input = dir
                       @projectname = File.basename(@input, ".*")
                       @projectname = "#{@projectname}_process"
+                      if @projectname == "_process"
+                        msg_box('ERROR: No Folder selected.')
+                        fileutils.rm_rf("_process")
+                      end
                       @doc = PipelineFeatures.new
                       @doc.newproject(@input, @projectname)
                       msg_box('Notification', 'Upload successfully completed.')
@@ -868,12 +877,16 @@ class CrumblerGUI
 
                     on_clicked do
                       @input = @url
+                      if @input == nil
+                        msg_box('ERROR: No URL selected.')
+                      else
                       @projectname = File.basename(@input, ".*")
                       @doc = PipelineFeatures.new
                       puts @input unless @input.nil?
                       @doc.newproject(@input, @projectname)
                       msg_box('Notification', 'Upload successfully completed.')
-                    end
+                      end
+                      end
                   }
                 }
               }
