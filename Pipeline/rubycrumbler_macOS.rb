@@ -1006,7 +1006,7 @@ class CrumblerGUI
 
                 on_clicked do
                   window.destroy
-                  Kernel.exec("ruby rubycrumbler_macOS.rb restart")
+                  Kernel.exec("ruby rubycrumbler_macOS.rb")
                   #IO.popen("start cmd /C ruby.exe #{$0} #{ARGV.join(' ')}")
                   #sleep 2
                 end
