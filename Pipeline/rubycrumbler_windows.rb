@@ -853,13 +853,13 @@ class CrumblerGUI
                       @projectname = File.basename(@input, ".*")
                       @projectname = "#{@projectname}_process"
                       if @projectname == "_process"
-                        msg_box('ERROR: No Folder selected.')
-                        fileutils.rm_rf("_process")
-                      end
+                       msg_box('ERROR: No Folder selected.')
+                       else
                       @doc = PipelineFeatures.new
                       @doc.newproject(@input, @projectname)
                       msg_box('Notification', 'Upload successfully completed.')
-                    end
+                      end
+                      end
                   }
                 }
 

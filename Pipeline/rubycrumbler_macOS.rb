@@ -846,7 +846,6 @@ class CrumblerGUI
                       @projectname = "#{@projectname}_process"
                       if @projectname == "_process"
                         msg_box('ERROR: No Folder selected.')
-                        fileutils.rm_rf("_process")
                       end
                       @doc = PipelineFeatures.new
                       @doc.newproject(@input, @projectname)
