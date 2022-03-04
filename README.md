@@ -37,13 +37,13 @@ Abbreviations are added to the source file name to indicate the features that ha
 * Normalization (lowercase) = l
 * Normalization (contractions) = c
 * Tokenization = tok
-* Stopword Removal = stpw
+* Stopword Removal = sw
 * Stemming = stem
 * Lemmatization = lem
 * Part-of-Speech Tagging = pos
 * Named Entity Recognition = ner
 
-For each feature step the output format is TXT. POS tagging and NER are also saved in CSV and XML output format.
+For each feature step the output format is TXT. POS tagging and NER are additionally saved in CSV and XML output format.
 
 ## Pipeline Structure of RubyCrumbler
 The program is built based on the following pipeline structure.<br>
