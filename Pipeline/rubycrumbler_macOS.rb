@@ -846,10 +846,11 @@ class CrumblerGUI
                       @projectname = "#{@projectname}_process"
                       if @projectname == "_process"
                         msg_box('ERROR: No Folder selected.')
+                      else
+                        @doc = PipelineFeatures.new
+                        @doc.newproject(@input, @projectname)
+                        msg_box('Notification', 'Upload successfully completed.')
                       end
-                      @doc = PipelineFeatures.new
-                      @doc.newproject(@input, @projectname)
-                      msg_box('Notification', 'Upload successfully completed.')
                     end
                   }
                 }
@@ -875,7 +876,8 @@ class CrumblerGUI
                       puts @input unless @input.nil?
                       @doc.newproject(@input, @projectname)
                       msg_box('Notification', 'Upload successfully completed.')
-                    end
+                      end
+                      end
                   }
                 }
               }
