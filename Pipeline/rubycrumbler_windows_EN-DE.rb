@@ -38,6 +38,9 @@ module RubyCrumbler
         @filename=File.basename(filename, ".*")
         first = Nokogiri::HTML(File.open("#{@projectdir}/#{@filenamein}"))
         doc = first.search('p').map(&:text)
+        #encode doc to correct encoding fpr german special characters
+        doc = doc.join("").encode("iso-8859-1").force_encoding("utf-8")
+        doc = doc.gsub(/\n/, '')
         File.write("#{@projectdir}/#{@filename}", doc)
       end
     end
@@ -65,6 +68,9 @@ module RubyCrumbler
         first = Nokogiri::HTML(File.open(@input))
         doc = first.search('p').map(&:text)
         @filenumber = 1
+        #encode doc to correct encoding fpr german special characters
+        doc = doc.join("").encode("iso-8859-1").force_encoding("utf-8")
+        doc = doc.gsub(/\n/, '')
         File.write("#{@projectdir}/#{@filename}", doc)
       else
         if File.directory?(@input)
@@ -74,6 +80,9 @@ module RubyCrumbler
           first = Nokogiri::HTML(URI.open(@input))
           doc = first.search('p', 'text').map(&:text)
           @filenumber = 1
+          #encode doc to correct encoding fpr german special characters
+          doc = doc.join("").encode("iso-8859-1").force_encoding("utf-8")
+          doc = doc.gsub(/\n/, '')
           File.write("#{@projectdir}/#{@filename}.txt", doc)
         end
       end
@@ -91,8 +100,9 @@ module RubyCrumbler
         @filename = File.basename(filename, ".*")
         @text2process = File.open(Dir.glob(@projectdir+"/#{@filename}.*").max_by {|f| File.mtime(f)}, 'r')
         #@text2process = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
-        @text2process = File.read( @text2process)
-        @text2process = @text2process.gsub('\n','').gsub('\r','').gsub(/\\u[a-f0-9]{4}/i,'').gsub(/https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/,'').gsub(/\d/, '').gsub(/[^\w\s\.\'´`]/,'').gsub(/[\.]{2,}/,' ').gsub(/[ ]{2,}/,' ')
+        @text2process = File.read( @text2process, :encoding => 'iso-8859-1')
+        @text2process.force_encoding("utf-8")
+        @text2process = @text2process.gsub('\n','').gsub('\r','').gsub(/\\u[a-f0-9]{4}/i,'').gsub(/https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/,'').gsub(/\d/, '').gsub(/[^\w\s\.\'´`äÄöÖüÜß]/,'').gsub(/[\.]{2,}/,' ').gsub(/[ ]{2,}/,' ')
         File.write("#{@projectdir}/#{@filename}_cl.txt", @text2process)
         p @text2process
 
@@ -109,7 +119,8 @@ module RubyCrumbler
         puts "working on #{@filename}"
         @file2process = file
         @text2process = File.open(@file2process)
-        @text2process = File.read(@text2process)
+        @text2process = File.read( @text2process, :encoding => 'iso-8859-1')
+        @text2process.force_encoding("utf-8")
         @text2process = @text2process.gsub('.','').gsub(',','').gsub('!','').gsub('?','').gsub(':','').gsub(';','').gsub('(','').gsub(')','').gsub('[','').gsub(']','').gsub('"','').gsub('„','').gsub('»','').gsub('«','').gsub('›','').gsub('‹','').gsub('–','')
         puts @text2process
         lc =''
@@ -375,7 +386,8 @@ module RubyCrumbler
         puts "working on #{@filename}"
         @file2process = file
         @text2process = File.open(@file2process)
-        @text2process = File.read(@text2process)
+        @text2process = File.read( @text2process, :encoding => 'iso-8859-1')
+        @text2process.force_encoding("utf-8")
         #input = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
         #file = input.read
         #input.close
@@ -407,7 +419,9 @@ module RubyCrumbler
         puts "working on #{@filename}"
         @file2process = file
         @text2process = File.open(@file2process)
-        @text2process = File.read(@text2process)#.gsub(/Total number of tokens: \d+/, '')
+        @text2process = File.read( @text2process, :encoding => 'iso-8859-1')
+        @text2process.force_encoding("utf-8")
+        #.gsub(/Total number of tokens: \d+/, '')
         @text2process = Kernel.eval(@text2process)
 
 
@@ -417,9 +431,9 @@ module RubyCrumbler
       end
     end
 
-    def add_stopwords(newsw)
-      @stopwords.insert(0, newsw)
-    end
+    #def add_stopwords(newsw)
+    #  @stopwords.insert(0, newsw)
+    #end
 
     def lemmatizer()
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
@@ -427,7 +441,8 @@ module RubyCrumbler
         puts "working on #{@filename}"
         @file2process = file
         @text2process = File.open(@file2process)
-        @text2process = File.read(@text2process)
+        @text2process = File.read( @text2process, :encoding => 'iso-8859-1')
+        @text2process.force_encoding("utf-8")
         @text2process = Kernel.eval(@text2process)
         @text2process = @text2process.join(', ').gsub(',','')
 
@@ -458,7 +473,8 @@ module RubyCrumbler
         puts "working on POS #{file}"
         @file2process = file
         @text2process = File.open(@file2process)
-        @text2process = File.read(@text2process)
+        @text2process = File.read( @text2process, :encoding => 'iso-8859-1')
+        @text2process.force_encoding("utf-8")
         @text2process = Kernel.eval(@text2process)
         @text2process = @text2process.join(' ').gsub(',','')#.gsub(/Total number of tokens: \d+/, '')
         doc = @en.read(@text2process)
@@ -504,7 +520,8 @@ module RubyCrumbler
         puts "working on NER #{file}"
         @file2process = file
         @text2process = File.open(@file2process)
-        @text2process = File.read(@text2process)
+        @text2process = File.read( @text2process, :encoding => 'iso-8859-1')
+        @text2process.force_encoding("utf-8")
         @text2process = @text2process
         @text2process = Kernel.eval(@text2process).join(' ')#.gsub(/Total number of tokens: \d+/, '')
         doc = @en.read(@text2process)
