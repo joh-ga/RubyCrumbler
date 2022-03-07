@@ -570,6 +570,7 @@ class CrumblerGUI
   include Glimmer
   require 'ruby-progressbar'
   progress_bar = ProgressBar.create()
+  attr_accessor :checked
   def launch
     ### START of menu bar
     menu('Help') {
@@ -1021,7 +1022,21 @@ class CrumblerGUI
                 stretchy false
 
                 on_clicked do
-                  msg_box('Information', 'You clicked the button')
+                  # set function count variables to zero, untoggle the checkboxes (they have to be ticked off and on again to choose the step)
+                  @count = 0
+                  @fincount = 0
+                  @clcbchecked = false
+                  @normchecked = false
+                  @normlowchecked = false
+                  @normcontchecked = false
+                  @tokchecked = false
+                  @srchecked = false
+                  @srchecked = false
+                  @stemchecked = false
+                  @lemchecked = false
+                  @poschecked = false
+                  @nerchecked = false
+                  msg_box('Choose new file and Pipeline steps again (untoggle and toggle the checkboxes again')
                 end
               }
 
@@ -1036,8 +1051,8 @@ class CrumblerGUI
               button('New Project') {
 
                 on_clicked do
-                  window.destroy
-                  Kernel.exec("ruby rubycrumbler_windows_EN-DE.rb -restart")
+                  Kernel.at_exit{Kernel.exec("ruby rubycrumbler_windows_EN-DE.rb")}
+                  Kernel.exit
                   #IO.popen("start cmd /C ruby.exe #{$0} #{ARGV.join(' ')}")
                   #sleep 2
                 end
