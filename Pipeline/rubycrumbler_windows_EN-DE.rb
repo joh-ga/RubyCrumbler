@@ -1051,10 +1051,11 @@ class CrumblerGUI
               button('New Project') {
 
                 on_clicked do
-                  window.destroy
-                  Kernel.exec("ruby rubycrumbler_windows_EN-DE.rb") #-restart
-                  #IO.popen("start cmd /C ruby.exe #{$0} #{ARGV.join(' ')}")
-                  #sleep 2
+                  pid = Process.spawn("ruby rubycrumbler_windows_EN-DE.rb", :new_pgroup => true)
+                  Process.detach(pid)
+                  parent = Process.ppid
+                  system "taskkill /PID #{parent} /F"
+                  exit
                 end
               }
             }
