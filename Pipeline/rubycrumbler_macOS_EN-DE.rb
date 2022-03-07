@@ -648,6 +648,7 @@ class CrumblerGUI
 
       vertical_box {
         horizontal_box {
+          stretchy false
 
           vertical_box {
 
@@ -728,7 +729,7 @@ class CrumblerGUI
                   end
                 }
 
-                label("Enter URL:") { stretchy false }
+                label("\nEnter URL:") { stretchy false }
                 @entry = entry {
                   stretchy false
                   on_changed do
@@ -764,7 +765,7 @@ class CrumblerGUI
               vertical_box {
 
                 label("Select all or respective features.\n" \
-                "Note: See the documentation for more information about each feature.\n") { stretchy false}
+                "Note: See the documentation for more information about each feature.") { stretchy false}
 
                 @clcb = checkbox('Data cleaning') {
                   stretchy false
@@ -817,7 +818,7 @@ class CrumblerGUI
 
               vertical_box {
                 label("Select all or respective features.\n" \
-                "Note: See the documentation for more information about each feature.\n") { stretchy false}
+                "Note: See the documentation for more information about each feature.") { stretchy false}
 
                 @tok = checkbox('Tokenization') {
                   stretchy false
@@ -889,7 +890,7 @@ class CrumblerGUI
           }
         }
 
-        vertical_separator { stretchy false }
+        horizontal_separator { stretchy false }
 
         horizontal_box {
         stretchy false
