@@ -640,7 +640,7 @@ class CrumblerGUI
     @count=0
     @fincount = 0
 
-    ### START of main window
+    ### START of main window 300 800
     window('RubyCrumbler', 300, 800) {
 
       margined true
@@ -651,7 +651,7 @@ class CrumblerGUI
           vertical_box {
 
             group('Language of Text Input') {
-              #stretchy false
+              stretchy false
               vertical_box {
                 label("Please specify the language in which your input text data is written.\n" \
                 "Note: This information is mandatory to run the program.\n") { stretchy false}
@@ -760,7 +760,7 @@ class CrumblerGUI
 
           vertical_box{
             group('Pre-Processing') {
-              #stretchy false
+              stretchy false
 
               # Den checkboxen muss man wohl individuelle Namen geben, damit man
               # die einzelnen methods aufrufen kann
@@ -816,7 +816,7 @@ class CrumblerGUI
             }
 
             group('Natural Language Processing – Tasks') {
-              #stretchy false
+              stretchy false
 
               vertical_box {
                 label("Select all or respective features.\n" \
@@ -893,8 +893,9 @@ class CrumblerGUI
 
         vertical_separator { stretchy false }
 
-        vertical_box {
-          stretchy false
+
+        horizontal_box {
+        stretchy false
           group() {
             #stretchy false
 
