@@ -656,18 +656,30 @@ class CrumblerGUI
                 label("Please specify the language in which your input text data is written.\n" \
                 "Note: This information is mandatory to run the program.\n") { stretchy false}
 
-                checkbox('English'){
+                ## Example with language checkboxes
+                # checkbox('English'){
+                #   stretchy false
+                #   on_toggled do |c|
+                #     checked = c.checked?
+                #     c.text = "I am the checkbox (#{checked})"
+                #   end
+                # }
+                # checkbox('German'){
+                #   stretchy false
+                #   on_toggled do |c|
+                #     checked = c.checked?
+                #     c.text = "I am the checkbox (#{checked})"
+                #   end
+                # }
+
+                ## Example with language dropdown menu
+                combobox {
                   stretchy false
-                  on_toggled do |c|
-                    checked = c.checked?
-                    c.text = "I am the checkbox (#{checked})"
-                  end
-                }
-                checkbox('German'){
-                  stretchy false
-                  on_toggled do |c|
-                    checked = c.checked?
-                    c.text = "I am the checkbox (#{checked})"
+                  items 'English', 'German' # also accepts a single array argument
+
+                  on_selected do |c|
+                    # code einfuegen
+                    puts "New combobox selection: #{c.selected}"
                   end
                 }
               }
