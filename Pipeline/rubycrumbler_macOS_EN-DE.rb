@@ -640,10 +640,11 @@ class CrumblerGUI
     @count=0
     @fincount = 0
 
-    ### START of main window 300 800
+    ### START of main window
     window('RubyCrumbler', 300, 800) {
 
-      margined true
+      margined(true)
+      #fullscreen(true) #opens GUI always directly in fullscreen
 
       vertical_box {
         horizontal_box {
@@ -727,7 +728,7 @@ class CrumblerGUI
                   end
                 }
 
-                label('Enter URL:') { stretchy false }
+                label("Enter URL:") { stretchy false }
                 @entry = entry {
                   stretchy false
                   on_changed do
@@ -817,6 +818,7 @@ class CrumblerGUI
               vertical_box {
                 label("Select all or respective features.\n" \
                 "Note: See the documentation for more information about each feature.\n") { stretchy false}
+
                 @tok = checkbox('Tokenization') {
                   stretchy false
 

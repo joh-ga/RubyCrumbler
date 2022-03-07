@@ -641,14 +641,10 @@ class CrumblerGUI
     @fincount = 0
 
     ### START of main window
-    window('RubyCrumbler', 300, 800)  {
+    window('RubyCrumbler', 300, 800){
       # eure alten Werte (30,40)
-      #width(30)
-      #height(40)
-      #content_size 0.1, 600
-      #fullscreen false
-      margined true
-
+      margined(true)
+      #fullscreen(true) #opens GUI always directly in fullscreen
 
       vertical_box {
         horizontal_box {
