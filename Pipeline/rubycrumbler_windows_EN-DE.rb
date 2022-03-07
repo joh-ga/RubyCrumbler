@@ -695,9 +695,9 @@ class CrumblerGUI
 
               vertical_box {
                 label("Choose a file(s) or a directory, or specify a URL whose text content should be used to upload.\n" \
-                "Note: Total file size may not exceed 50MB. File type must be TXT.") { stretchy false}
+                "Note: Total file size may not exceed 50MB. File type must be TXT.\n") { stretchy false }
                 button("Upload from file(s)") {
-                  #stretchy false
+                  stretchy false
 
                   on_clicked do
                     file = open_file
@@ -714,50 +714,46 @@ class CrumblerGUI
                   end
                 }
 
-                vertical_box {
-                  button("Upload file(s) from directory") {
-                    #stretchy false
+                button("Upload file(s) from directory") {
+                  stretchy false
 
-                    on_clicked do
-                      dir = Tk.chooseDirectory
-                      @input = dir
-                      @projectname = File.basename(@input, ".*")
-                      @projectname = "#{@projectname}_process"
-                      if @projectname == "_process"
-                        msg_box('ERROR: No Folder selected.')
-                      else
-                        @doc = PipelineFeatures.new
-                        @doc.newproject(@input, @projectname)
-                        msg_box('Notification', 'Upload successfully completed.')
-                      end
+                  on_clicked do
+                    dir = Tk.chooseDirectory
+                    @input = dir
+                    @projectname = File.basename(@input, ".*")
+                    @projectname = "#{@projectname}_process"
+                    if @projectname == "_process"
+                      msg_box('ERROR: No Folder selected.')
+                    else
+                      @doc = PipelineFeatures.new
+                      @doc.newproject(@input, @projectname)
+                      msg_box('Notification', 'Upload successfully completed.')
                     end
-                  }
+                  end
                 }
 
-                vertical_box {
-                  label('Enter URL:'){stretchy false}
-                  @entry = entry {
-                    stretchy false
-                    on_changed do
-                      @url = @entry.text
-                    end
-                  }
-                  @button = button('Upload text from website'){
-                    #stretchy false
+                label('Enter URL:') { stretchy false }
+                @entry = entry {
+                  stretchy false
+                  on_changed do
+                    @url = @entry.text
+                  end
+                }
+                @button = button('Upload text from website'){
+                  stretchy false
 
-                    on_clicked do
-                      @input = @url
-                      if @input == nil
-                        msg_box('ERROR: No URL selected.')
-                      else
-                        @projectname = File.basename(@input, ".*")
-                        @doc = PipelineFeatures.new
-                        puts @input unless @input.nil?
-                        @doc.newproject(@input, @projectname)
-                        msg_box('Notification', 'Upload successfully completed.')
-                      end
+                  on_clicked do
+                    @input = @url
+                    if @input == nil
+                      msg_box('ERROR: No URL selected.')
+                    else
+                      @projectname = File.basename(@input, ".*")
+                      @doc = PipelineFeatures.new
+                      puts @input unless @input.nil?
+                      @doc.newproject(@input, @projectname)
+                      msg_box('Notification', 'Upload successfully completed.')
                     end
-                  }
+                  end
                 }
               }
             }
