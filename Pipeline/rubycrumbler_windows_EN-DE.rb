@@ -113,7 +113,7 @@ module RubyCrumbler
         @text2process = @text2process.gsub('.','').gsub(',','').gsub('!','').gsub('?','').gsub(':','').gsub(';','').gsub('(','').gsub(')','').gsub('[','').gsub(']','').gsub('"','').gsub('„','').gsub('»','').gsub('«','').gsub('›','').gsub('‹','').gsub('–','')
         puts @text2process
         lc =''
-          cons=''
+        cons=''
         if low == true
           lc ='l'
           @text2process = @text2process.downcase
@@ -413,7 +413,7 @@ module RubyCrumbler
 
         shared = @text2process & @stopwords
         textosw = @text2process - shared
-        File.write("#{@projectdir}/#{@filename}_nost.txt", textosw)
+        File.write("#{@projectdir}/#{@filename}_sw.txt", textosw)
       end
     end
 
@@ -513,6 +513,7 @@ module RubyCrumbler
         #text = File.read(text)#.gsub(/Total number of tokens: \d+/, '')
         #text = Kernel.eval(text).join(' ')
 
+
         headings = [['text', 'label']]
         @rows = []
         output = []
@@ -543,6 +544,7 @@ module RubyCrumbler
         File.write("#{@projectdir}/#{@filename}_ner.xml", ner_xml)
       end
     end
+
   end
 end
 
@@ -552,7 +554,6 @@ class CrumblerGUI
   require 'ruby-progressbar'
   progress_bar = ProgressBar.create()
   def launch
-
     ### START of menu bar
     menu('Help') {
       menu_item('About'){
@@ -573,9 +574,9 @@ class CrumblerGUI
                 # image(File.expand_path('img/github.png', __dir__), x: 0, y: 85, width: 45, height: 45)
               }
               button('Go to GitHub Repository') {
-                stretchy true
+                stretchy false
                 on_clicked do
-                  system("open","https://github.com/joh-ga/RubyCrumbler")
+                  `start https://github.com/joh-ga/RubyCrumbler`
                 end
               }
             }
@@ -585,7 +586,7 @@ class CrumblerGUI
 
       menu_item('Documentation'){
         on_clicked do
-          window('Documentation', 400, 600, has_menubar = false) {
+          window('Documentation', 1500, 775, has_menubar = false) {
             on_closing do
               window.destroy
               1
@@ -594,42 +595,41 @@ class CrumblerGUI
             vertical_box {
               area {
                 text {
-                  default_font family: 'Helvetica', size: 12, weight: :normal, italic: :normal, stretch: :normal
-                  string { font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal; "Description of Features\n\n"}
+                  default_font family: 'Helvetica', size: 9, weight: :normal, italic: :normal, stretch: :normal
+                  string { font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Description of Features\n\n"}
                   string("Please find below all the necessary information about the individual features.\n\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Pre-Processing\n" }
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Data cleaning: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Pre-Processing\n" }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Data cleaning: " }
                   string("This includes removing redundant whitespaces, punctuation (redundant dots), special symbols (e.g., line break, new line), hash tags, HTML tags, and URLs.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Normalization: " }
                   string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark).\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (lowercase): " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Normalization (lowercase): " }
                   string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting the text into lowercase.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (contractions): " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Normalization (contractions): " }
                   string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not).\n\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Natural Language Processings – Tasks \n" }
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Tokenization: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Natural Language Processings – Tasks \n" }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Tokenization: " }
                   string("This includes splitting the pre-processed data into individual characters or tokens.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Stopword removal: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Stopword removal: " }
                   string("Stopwords are words that do not carry much meaning but are important grammatically as, for example, “to” or “but”. This feature includes the removal of stopwords.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Stemming: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Stemming: " }
                   string("This includes the reduction of a word to its stem (a character sequence shared by related words) by clipping inflectional and partially derivational suffixes. A word’s stem therefore does not necessarily have to be a semantically meaningful word. Word stems and lemmatized base forms may overlap. Examples: computing - compute, sung - sung, obviously - obvious.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Lemmatization: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Lemmatization: " }
                   string("This includes reduction of a word to its semantic base form according to POS classification. Lemmatized base forms and word stems may overlap. Examples: computing - compute, sung - sing, obviously - obviously.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Part-of-Speech Tagging: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Part-of-Speech Tagging: " }
                   string("This includes identifying and labeling the parts of speech of text data.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Named Entity Recognition: " }
+                  string{ font family: 'Helvetica', size: 9, weight: :bold, italic: :normal, stretch: :normal; "Named Entity Recognition: " }
                   string("This includes labeling the so-called named entities in the data such as persons, organizations, and places.\n\n\n")
-                  string{ font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal; "Information about the File Naming Convention\n\n"}
-                  string("To enable a quick identification and location of your converted document depending on the feature applied, the following file naming convention is used in RubyCrumbler.\nAbbreviations are added to the source file name to indicate the features that have been applied to the document. The suffix of the new file name indicates the ouput file for the corresponding feature. For example, the file named “myfirsttext_cl_nlc_tok.txt” is the output file of the tokenization step.\n\nAbbreviations of the features:\n • Data cleaning = cl\n • Normalization = n \n • Normalization (lowercase) = l\n • Normalization (contractions) = c\n • Tokenization = tok\n • Stopword Removal = sw\n • Stemming = stem\n • Lemmatization = lem\n • Part-of-Speech Tagging = pos\n • Named Entity Recognition = ner\n\nFor each feature step the output format is TXT. POS tagging and NER are additionally saved in CSV and XML output format.\n\n\n")
-                  string{ font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal; "Notes\n\n" }
-
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Information about the File Naming Convention\n\n"}
+                  string("To enable a quick identification and location of your converted document depending on the feature applied, the following file naming convention is used in RubyCrumbler.\nAbbreviations are added to the source file name to indicate the features that have been applied to the document. The suffix of the new file name indicates the ouput file for the corresponding feature. For example, the file named “myfirsttext_cl_nlc_tok.txt” is the output file of the tokenization step.\n\nAbbreviations of the features:\n • Data cleaning = cl\n • Normalization = n\n • Normalization (lowercase) = l\n • Normalization (contractions) = c\n • Tokenization = tok\n • Stopword Removal = sw\n • Stemming = stem\n • Lemmatization = lem\n • Part-of-Speech Tagging = pos\n • Named Entity Recognition = ner\n\nFor each feature step the output format is TXT. POS tagging and NER are additionally saved in CSV and XML output format.\n\n\n")
+                  string{ font family: 'Helvetica', size: 10, weight: :bold, italic: :normal, stretch: :normal; "Notes\n\n" }
                   string("More information and the source code are available on GitHub.")
                 }
               }
               button('Go to GitHub Repository') {
                 stretchy false
                 on_clicked do
-                  system("open","https://github.com/joh-ga/RubyCrumbler")
+                  `start https://github.com/joh-ga/RubyCrumbler`
                 end
               }
             }
@@ -641,12 +641,17 @@ class CrumblerGUI
     @fincount = 0
 
     ### START of main window
-    window('RubyCrumbler', 300, 800) {
+    window('RubyCrumbler', 30, 40) {
 
+      #width(30)
+      #height(40)
+      #content_size 0.1, 600
+      #fullscreen false
       margined true
 
+
       vertical_box {
-        horizontal_box {
+        horizontal_box { ###evtl. auch zu vertical ändern###
 
           vertical_box {
 
@@ -690,7 +695,7 @@ class CrumblerGUI
 
               vertical_box {
                 label("Choose a file(s) or a directory, or specify a URL whose text content should be used to upload.\n" \
-                "Note: Total file size may not exceed 50MB. File type must be TXT.") {stretchy false}
+                "Note: Total file size may not exceed 50MB. File type must be TXT.") { stretchy false}
                 button("Upload from file(s)") {
                   #stretchy false
 
@@ -756,7 +761,7 @@ class CrumblerGUI
                 }
               }
             }
-            }
+          }
 
           vertical_box{
             group('Pre-Processing') {
@@ -916,35 +921,35 @@ class CrumblerGUI
                     end
                   end
 
-                if @normchecked == true && !@normlowchecked && !@normcontchecked
-                  @doc.normalize(false, false)
-                  @fincount += 1
-                  @progressbar.value = (@fincount*100/@count)
-                  if @progressbar.value == 100
-                    @label.text = "Text processing finished!"
-                  end
-                else
-                  if @normlowchecked == true || @normcontchecked == true
-                    @doc.normalize(@normcontchecked, @normlowchecked)
-                    if @normlowchecked == true && @normcontchecked == true
-                      @fincount += 1
-                      if @normchecked == true
-                        @fincount += 1
-                        if @normlowchecked == true && @normcontchecked == true && !@normchecked
-                          @fincount += 1
-                          @progressbar.value = (@fincount*100/@count)
-                          if @progressbar.value == 100
-                            @label.text = "Text processing finished!"
-                          end
-                        end
-                      end
-                    end
+                  if @normchecked == true && !@normlowchecked && !@normcontchecked
+                    @doc.normalize(false, false)
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
-                  end
+                  else
+                    if @normlowchecked == true || @normcontchecked == true
+                      @doc.normalize(@normcontchecked, @normlowchecked)
+                      if @normlowchecked == true && @normcontchecked == true
+                        @fincount += 1
+                        if @normchecked == true
+                          @fincount += 1
+                          if @normlowchecked == true && @normcontchecked == true && !@normchecked
+                            @fincount += 1
+                            @progressbar.value = (@fincount*100/@count)
+                            if @progressbar.value == 100
+                              @label.text = "Text processing finished!"
+                            end
+                          end
+                        end
+                      end
+                      @fincount += 1
+                      @progressbar.value = (@fincount*100/@count)
+                      if @progressbar.value == 100
+                        @label.text = "Text processing finished!"
+                      end
+                    end
                   end
 
                   if @tokchecked == true
@@ -1017,13 +1022,11 @@ class CrumblerGUI
               @label = label("") {
                 stretchy false
               }
-
               button('New Project') {
-                stretchy false
 
                 on_clicked do
                   window.destroy
-                  Kernel.exec("ruby rubycrumbler_macOS_EN-DE.rb")
+                  Kernel.exec("ruby rubycrumbler_windows_EN-DE.rb -restart")
                   #IO.popen("start cmd /C ruby.exe #{$0} #{ARGV.join(' ')}")
                   #sleep 2
                 end
