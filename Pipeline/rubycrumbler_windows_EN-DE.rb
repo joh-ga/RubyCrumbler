@@ -658,8 +658,7 @@ class CrumblerGUI
     @fincount = 0
 
     ### START of main window
-    window('RubyCrumbler', 20, 40){
-      # eure alten Werte (30,40)
+    window('RubyCrumbler', 30, 40){
       margined(true)
       #fullscreen(true) #opens GUI always directly in fullscreen
 
@@ -668,6 +667,7 @@ class CrumblerGUI
           stretchy false
 
           vertical_box {
+            stretchy false
 
             group('Language of Text Input') {
               stretchy false
@@ -774,6 +774,7 @@ class CrumblerGUI
           }
 
           vertical_box{
+            stretchy false
             group('Pre-Processing') {
               stretchy false
 
