@@ -1052,7 +1052,7 @@ class CrumblerGUI
 
                 on_clicked do
                   window.destroy
-                  Kernel.exec("ruby rubycrumbler_windows_EN-DE.rb")
+                  Kernel.exec("ruby rubycrumbler_windows_EN-DE.rb") #-restart
                   #IO.popen("start cmd /C ruby.exe #{$0} #{ARGV.join(' ')}")
                   #sleep 2
                 end
