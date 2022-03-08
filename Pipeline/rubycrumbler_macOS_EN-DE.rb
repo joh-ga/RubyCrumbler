@@ -114,7 +114,7 @@ module RubyCrumbler
     #normalize text (from cleaned text file or raw text file) by choosing lowercasing and/or seperating contractions (both optional)
     #The 5 first lines of the methods open the last processed files (cleantext or just input) and normalize them
     # it's only important, if you process more than 1 file at a time, otherwise it would just normalize the most recent file or every file in the processdir
-    def normalize(contractions=false, low=false)
+    def normalize(contractions=false, language='EN', low=false)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
         puts "working on #{@filename}"
@@ -131,8 +131,8 @@ module RubyCrumbler
           @text2process = @text2process.downcase
         end
         if contractions == true
-          cons ='c'
-          contractions()
+          cons = 'c'
+          contractions(language)
         end
         File.write("#{@projectdir}/#{@filename}_n#{lc}#{cons}.txt",@text2process)
         p @text2process
@@ -141,7 +141,7 @@ module RubyCrumbler
 
 
     # ambigous contractions: the contraction dictionary will, when sth like "you'd" occure chose "you would" over "you had".
-    def contractions()
+    def contractions(language)
 
       # Contractions of English language
       @contractions_en = {
@@ -390,7 +390,7 @@ module RubyCrumbler
         "so'n"=> "so ein",
       }
       @text2process = @text2process.gsub('’','\'')
-      if @lang == "EN"
+      if language == "EN"
         @contractions_en.each { |k, v| @text2process=@text2process.gsub k, v }
       else
         @contractions_de.each { |k, v| @text2process=@text2process.gsub k, v }
@@ -694,14 +694,14 @@ class CrumblerGUI
 
                 combobox {
                   stretchy false
-                  items "English", "German"
-                  selected "English" #default
+                  items 'English', 'German'
+                  selected 'English' #default
 
                   on_selected do |c|
-                    @lang = if c.selected_item == "English"
-                              "EN" #English
+                    @lang = if c.selected_item == 'English'
+                              'EN' #English
                             else
-                              "DE" #German
+                              'DE' #German
                             end
                   end
                 }
@@ -939,7 +939,7 @@ class CrumblerGUI
                   end
 
                   if @normchecked == true && !@normlowchecked && !@normcontchecked
-                    @doc.normalize(false, false)
+                    @doc.normalize(false, @lang, false)
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
@@ -947,7 +947,7 @@ class CrumblerGUI
                     end
                   end
                   if (@normchecked == true && @normlowchecked == true && !@normcontchecked) || (@normchecked == true && @normcontchecked == true && !@normlowchecked)
-                    @doc.normalize(@normcontchecked, @normlowchecked)
+                    @doc.normalize(@normcontchecked, @lang, @normlowchecked)
                     @fincount += 2
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
@@ -955,7 +955,7 @@ class CrumblerGUI
                     end
                   end
                   if @normchecked == true && @normlowchecked == true && @normcontchecked == true
-                    @doc.normalize(@normcontchecked, @normlowchecked)
+                    @doc.normalize(@normcontchecked, @lang, @normlowchecked)
                     @fincount += 3
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
@@ -964,7 +964,7 @@ class CrumblerGUI
                   end
                   if !@normchecked && @normlowchecked == true && @normcontchecked == true
                     @norm.checked = true
-                    @doc.normalize(@normcontchecked, @normlowchecked)
+                    @doc.normalize(@normcontchecked, @lang, @normlowchecked)
                     @count += 1
                     @fincount += 3
                     @progressbar.value = (@fincount*100/@count)
@@ -974,7 +974,7 @@ class CrumblerGUI
                   end
                   if (!@normchecked && @normlowchecked == true && !@normcontchecked) || (!@normchecked && !@normlowchecked && @normcontchecked == true)
                     @norm.checked = true
-                    @doc.normalize(@normcontchecked, @normlowchecked)
+                    @doc.normalize(@normcontchecked, @lang, @normlowchecked)
                     @count += 1
                     @fincount += 2
                     @progressbar.value = (@fincount*100/@count)
