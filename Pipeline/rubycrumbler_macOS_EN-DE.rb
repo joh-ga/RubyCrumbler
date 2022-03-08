@@ -138,7 +138,8 @@ module RubyCrumbler
       end
     end
 
-    #ambigous contractions: the contraction dictionary will, when sth like "you'd" occure chose "you would" over "you had".
+    # Contractions of English language
+    # ambigous contractions: the contraction dictionary will, when sth like "you'd" occure chose "you would" over "you had".
     def contractions()
       @contractions = {
         "ain't"=> "are not",
@@ -376,6 +377,19 @@ module RubyCrumbler
         "You're"=> "You are",
         "You've"=> "You have"
       }
+
+      # Contractions of German language
+      # def contractions()
+      #   @contractions = {
+      #     "zum"=> "zu dem",
+      #     "zur"=> "zu der",
+      #     "im"=> "in dem",
+      #     "ins"=> "in das",
+      #     "durchs"=> "durch das",
+      #     "fürs"=> "für das",
+      #     "unterm"=> "unter dem",
+      #     "so'n"=> "so ein",
+      #   }
       @text2process = @text2process.gsub('’','\'')
       @contractions.each { |k, v| @text2process=@text2process.gsub k, v }
     end
@@ -661,7 +675,7 @@ class CrumblerGUI
     window('RubyCrumbler', 300, 800) {
 
       margined(true)
-      #fullscreen(true) #opens GUI always directly in fullscreen
+      fullscreen(true) #opens GUI always directly in fullscreen
 
       vertical_box {
         horizontal_box {
@@ -684,6 +698,7 @@ class CrumblerGUI
                     puts "New combobox selection: #{c.selected}"
                   end
                 }
+                label
               }
             }
 
