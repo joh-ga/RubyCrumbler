@@ -23,6 +23,7 @@ module RubyCrumbler
       @stopwords = @stopwords.split(',')
       @doc
       @filenumber
+      @lang
     end
 
     #multidir function is automatically called, if a folder is used for input. For each file in the directory the chosen function will be applied.
@@ -138,10 +139,12 @@ module RubyCrumbler
       end
     end
 
-    # Contractions of English language
+
     # ambigous contractions: the contraction dictionary will, when sth like "you'd" occure chose "you would" over "you had".
     def contractions()
-      @contractions = {
+
+      # Contractions of English language
+      @contractions_en = {
         "ain't"=> "are not",
         "aren't"=> "are not",
         "Ain't"=> "Are not",
@@ -377,21 +380,21 @@ module RubyCrumbler
         "You're"=> "You are",
         "You've"=> "You have"
       }
-
       # Contractions of German language
-      # def contractions()
-      #   @contractions = {
-      #     "zum"=> "zu dem",
-      #     "zur"=> "zu der",
-      #     "im"=> "in dem",
-      #     "ins"=> "in das",
-      #     "durchs"=> "durch das",
-      #     "fürs"=> "für das",
-      #     "unterm"=> "unter dem",
-      #     "so'n"=> "so ein",
-      #   }
+      @contractions_de = {
+        "ausm"=> "aus dem",
+        "aus'm"=> "aus dem",
+        "durchs"=> "durch das",
+        "fürs"=> "für das",
+        "unterm"=> "unter dem",
+        "so'n"=> "so ein",
+      }
       @text2process = @text2process.gsub('’','\'')
-      @contractions.each { |k, v| @text2process=@text2process.gsub k, v }
+      if @lang == "EN"
+        @contractions_en.each { |k, v| @text2process=@text2process.gsub k, v }
+      else
+        @contractions_de.each { |k, v| @text2process=@text2process.gsub k, v }
+      end
     end
 
     def tokenizer()
@@ -675,7 +678,7 @@ class CrumblerGUI
     window('RubyCrumbler', 300, 800) {
 
       margined(true)
-      fullscreen(true) #opens GUI always directly in fullscreen
+      #fullscreen(true)
 
       vertical_box {
         horizontal_box {
@@ -691,11 +694,15 @@ class CrumblerGUI
 
                 combobox {
                   stretchy false
-                  items 'English', 'German'
+                  items "English", "German"
+                  selected "English" #default
 
                   on_selected do |c|
-                    # code einfuegen
-                    puts "New combobox selection: #{c.selected}"
+                    @lang = if c.selected_item == "English"
+                              "EN" #English
+                            else
+                              "DE" #German
+                            end
                   end
                 }
                 label

@@ -23,6 +23,7 @@ module RubyCrumbler
       @stopwords = @stopwords.split(',')
       @doc
       @filenumber
+      @lang
     end
 
     #multidir function is automatically called, if a folder is used for input. For each file in the directory the chosen function will be applied.
@@ -378,19 +379,20 @@ module RubyCrumbler
         "You've"=> "You have"
       }
       # Contractions of German language
-      # def contractions()
-      #   @contractions = {
-      #     "zum"=> "zu dem",
-      #     "zur"=> "zu der",
-      #     "im"=> "in dem",
-      #     "ins"=> "in das",
-      #     "durchs"=> "durch das",
-      #     "fürs"=> "für das",
-      #     "unterm"=> "unter dem",
-      #     "so'n"=> "so ein",
-      #   }
+      @contractions_de = {
+        "ausm"=> "aus dem",
+        "aus'm"=> "aus dem",
+        "durchs"=> "durch das",
+        "fürs"=> "für das",
+        "unterm"=> "unter dem",
+        "so'n"=> "so ein",
+      }
       @text2process = @text2process.gsub('’','\'')
-      @contractions.each { |k, v| @text2process=@text2process.gsub k, v }
+      if @lang == "EN"
+        @contractions_en.each { |k, v| @text2process=@text2process.gsub k, v }
+      else
+        @contractions_de.each { |k, v| @text2process=@text2process.gsub k, v }
+      end
     end
 
     def tokenizer()
@@ -689,32 +691,20 @@ class CrumblerGUI
                 label("Please specify the language in which your input text data is written.\n" \
                 "Note: This information is mandatory to run the program.\n") { stretchy false}
 
-                ## Example with language checkboxes
-                # checkbox('English'){
-                #   stretchy false
-                #   on_toggled do |c|
-                #     checked = c.checked?
-                #     c.text = "I am the checkbox (#{checked})"
-                #   end
-                # }
-                # checkbox('German'){
-                #   stretchy false
-                #   on_toggled do |c|
-                #     checked = c.checked?
-                #     c.text = "I am the checkbox (#{checked})"
-                #   end
-                # }
-
-                ## Example with language dropdown menu
                 combobox {
                   stretchy false
-                  items 'English', 'German' # also accepts a single array argument
+                  items "English", "German"
+                  selected "English" #default
 
                   on_selected do |c|
-                    # code einfuegen
-                    puts "New combobox selection: #{c.selected}"
+                    @lang = if c.selected_item == "English"
+                              "EN" #English
+                            else
+                              "DE" #German
+                            end
                   end
                 }
+                label
               }
             }
 
