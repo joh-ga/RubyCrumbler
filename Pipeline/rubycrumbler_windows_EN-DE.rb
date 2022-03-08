@@ -924,6 +924,7 @@ class CrumblerGUI
                 # dann @doc und passende methode aufrufen
 
                 on_clicked do
+                  #pre-processing
                   if @clcbchecked == true
                     @doc.cleantext()
                     @fincount += 1
@@ -978,6 +979,7 @@ class CrumblerGUI
                     end
                   end
 
+                  #nlp-pipeline
                   if @tokchecked == true
                     @doc.tokenizer()
                     @fincount += 1
@@ -987,7 +989,14 @@ class CrumblerGUI
                     end
                   end
 
+                  @autotokchecked = false #variable for automatically checking tokenization
                   if @srchecked == true
+                    if !@tokchecked && !@autotokchecked
+                      @autotokchecked = (@tok.checked = true)
+                      @doc.tokenizer()
+                      @count += 1
+                      @fincount += 1
+                    end
                     @doc.stopwordsclean()
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
@@ -1005,6 +1014,12 @@ class CrumblerGUI
                   #end
                   #
                   if @lemchecked == true
+                    if !@tokchecked && !@autotokchecked
+                      @autotokchecked = (@tok.checked = true)
+                      @doc.tokenizer()
+                      @count += 1
+                      @fincount += 1
+                    end
                     @doc.lemmatizer()
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
@@ -1014,6 +1029,12 @@ class CrumblerGUI
                   end
 
                   if @poschecked == true
+                    if !@tokchecked && !@autotokchecked
+                      @autotokchecked = (@tok.checked = true)
+                      @doc.tokenizer()
+                      @count += 1
+                      @fincount += 1
+                    end
                     @doc.tagger()
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
@@ -1023,6 +1044,12 @@ class CrumblerGUI
                   end
 
                   if @nerchecked == true
+                    if !@tokchecked && !@autotokchecked
+                      @autotokchecked = (@tok.checked = true)
+                      @doc.tokenizer()
+                      @count += 1
+                      @fincount += 1
+                    end
                     @doc.ner()
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)

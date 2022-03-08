@@ -910,7 +910,7 @@ class CrumblerGUI
         horizontal_separator { stretchy false }
 
         horizontal_box {
-        stretchy false
+          stretchy false
           group() {
             #stretchy false
 
@@ -923,6 +923,7 @@ class CrumblerGUI
                 # dann @doc und passende methode aufrufen
 
                 on_clicked do
+                  #pre-processing
                   if @clcbchecked == true
                     @doc.cleantext()
                     @fincount += 1
@@ -932,51 +933,52 @@ class CrumblerGUI
                     end
                   end
 
-                if @normchecked == true && !@normlowchecked && !@normcontchecked
-                  @doc.normalize(false, false)
-                  @fincount += 1
-                  @progressbar.value = (@fincount*100/@count)
-                  if @progressbar.value == 100
-                    @label.text = "Text processing finished!"
+                  if @normchecked == true && !@normlowchecked && !@normcontchecked
+                    @doc.normalize(false, false)
+                    @fincount += 1
+                    @progressbar.value = (@fincount*100/@count)
+                    if @progressbar.value == 100
+                      @label.text = "Text processing finished!"
+                    end
                   end
-                end
-                if (@normchecked == true && @normlowchecked == true && !@normcontchecked) || (@normchecked == true && @normcontchecked == true && !@normlowchecked)
-                  @doc.normalize(@normcontchecked, @normlowchecked)
-                  @fincount += 2
-                  @progressbar.value = (@fincount*100/@count)
-                  if @progressbar.value == 100
-                    @label.text = "Text processing finished!"
+                  if (@normchecked == true && @normlowchecked == true && !@normcontchecked) || (@normchecked == true && @normcontchecked == true && !@normlowchecked)
+                    @doc.normalize(@normcontchecked, @normlowchecked)
+                    @fincount += 2
+                    @progressbar.value = (@fincount*100/@count)
+                    if @progressbar.value == 100
+                      @label.text = "Text processing finished!"
+                    end
                   end
-                end
-                if @normchecked == true && @normlowchecked == true && @normcontchecked == true
-                  @doc.normalize(@normcontchecked, @normlowchecked)
-                  @fincount += 3
-                  @progressbar.value = (@fincount*100/@count)
-                  if @progressbar.value == 100
-                    @label.text = "Text processing finished!"
+                  if @normchecked == true && @normlowchecked == true && @normcontchecked == true
+                    @doc.normalize(@normcontchecked, @normlowchecked)
+                    @fincount += 3
+                    @progressbar.value = (@fincount*100/@count)
+                    if @progressbar.value == 100
+                      @label.text = "Text processing finished!"
+                    end
                   end
-                end
-                if !@normchecked && @normlowchecked == true && @normcontchecked == true
-                  @norm.checked = true
-                  @doc.normalize(@normcontchecked, @normlowchecked)
-                  @count += 1
-                  @fincount += 3
-                  @progressbar.value = (@fincount*100/@count)
-                  if @progressbar.value == 100
-                    @label.text = "Text processing finished!"
+                  if !@normchecked && @normlowchecked == true && @normcontchecked == true
+                    @norm.checked = true
+                    @doc.normalize(@normcontchecked, @normlowchecked)
+                    @count += 1
+                    @fincount += 3
+                    @progressbar.value = (@fincount*100/@count)
+                    if @progressbar.value == 100
+                      @label.text = "Text processing finished!"
+                    end
                   end
-                end
-                if (!@normchecked && @normlowchecked == true && !@normcontchecked) || (!@normchecked && !@normlowchecked && @normcontchecked == true)
-                  @norm.checked = true
-                  @doc.normalize(@normcontchecked, @normlowchecked)
-                  @count += 1
-                  @fincount += 2
-                  @progressbar.value = (@fincount*100/@count)
-                  if @progressbar.value == 100
-                    @label.text = "Text processing finished!"
+                  if (!@normchecked && @normlowchecked == true && !@normcontchecked) || (!@normchecked && !@normlowchecked && @normcontchecked == true)
+                    @norm.checked = true
+                    @doc.normalize(@normcontchecked, @normlowchecked)
+                    @count += 1
+                    @fincount += 2
+                    @progressbar.value = (@fincount*100/@count)
+                    if @progressbar.value == 100
+                      @label.text = "Text processing finished!"
+                    end
                   end
-                end
 
+                  #nlp-pipeline
                   if @tokchecked == true
                     @doc.tokenizer()
                     @fincount += 1
@@ -986,7 +988,14 @@ class CrumblerGUI
                     end
                   end
 
+                  @autotokchecked = false #variable for automatically checking tokenization
                   if @srchecked == true
+                    if !@tokchecked && !@autotokchecked
+                      @autotokchecked = (@tok.checked = true)
+                      @doc.tokenizer()
+                      @count += 1
+                      @fincount += 1
+                    end
                     @doc.stopwordsclean()
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
@@ -1004,6 +1013,12 @@ class CrumblerGUI
                   #end
                   #
                   if @lemchecked == true
+                    if !@tokchecked && !@autotokchecked
+                      @autotokchecked = (@tok.checked = true)
+                      @doc.tokenizer()
+                      @count += 1
+                      @fincount += 1
+                    end
                     @doc.lemmatizer()
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
@@ -1013,6 +1028,12 @@ class CrumblerGUI
                   end
 
                   if @poschecked == true
+                    if !@tokchecked && !@autotokchecked
+                      @autotokchecked = (@tok.checked = true)
+                      @doc.tokenizer()
+                      @count += 1
+                      @fincount += 1
+                    end
                     @doc.tagger()
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
@@ -1022,6 +1043,12 @@ class CrumblerGUI
                   end
 
                   if @nerchecked == true
+                    if !@tokchecked && !@autotokchecked
+                      @autotokchecked = (@tok.checked = true)
+                      @doc.tokenizer()
+                      @count += 1
+                      @fincount += 1
+                    end
                     @doc.ner()
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
