@@ -142,7 +142,7 @@ module RubyCrumbler
     # Contractions of English language
     # ambigous contractions: the contraction dictionary will, when sth like "you'd" occure chose "you would" over "you had".
     def contractions()
-      @contractions = {
+      @contractions_en = {
         "ain't"=> "are not",
         "aren't"=> "are not",
         "Ain't"=> "Are not",
@@ -387,6 +387,7 @@ module RubyCrumbler
         "unterm"=> "unter dem",
         "so'n"=> "so ein",
       }
+
       @text2process = @text2process.gsub('’','\'')
       if @lang == "EN"
         @contractions_en.each { |k, v| @text2process=@text2process.gsub k, v }
