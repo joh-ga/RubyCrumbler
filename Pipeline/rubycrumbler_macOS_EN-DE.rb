@@ -939,29 +939,43 @@ class CrumblerGUI
                   if @progressbar.value == 100
                     @label.text = "Text processing finished!"
                   end
-                else
-                  if @normlowchecked == true || @normcontchecked == true
-                    @doc.normalize(@normcontchecked, @normlowchecked)
-                    if @normlowchecked == true && @normcontchecked == true
-                      @fincount += 1
-                      if @normchecked == true
-                        @fincount += 1
-                        if @normlowchecked == true && @normcontchecked == true && !@normchecked
-                          @fincount += 1
-                          @progressbar.value = (@fincount*100/@count)
-                          if @progressbar.value == 100
-                            @label.text = "Text processing finished!"
-                          end
-                        end
-                      end
-                    end
-                    @fincount += 1
-                    @progressbar.value = (@fincount*100/@count)
-                    if @progressbar.value == 100
-                      @label.text = "Text processing finished!"
-                    end
+                end
+                if (@normchecked == true && @normlowchecked == true && !@normcontchecked) || (@normchecked == true && @normcontchecked == true && !@normlowchecked)
+                  @doc.normalize(@normcontchecked, @normlowchecked)
+                  @fincount += 2
+                  @progressbar.value = (@fincount*100/@count)
+                  if @progressbar.value == 100
+                    @label.text = "Text processing finished!"
                   end
+                end
+                if @normchecked == true && @normlowchecked == true && @normcontchecked == true
+                  @doc.normalize(@normcontchecked, @normlowchecked)
+                  @fincount += 3
+                  @progressbar.value = (@fincount*100/@count)
+                  if @progressbar.value == 100
+                    @label.text = "Text processing finished!"
                   end
+                end
+                if !@normchecked && @normlowchecked == true && @normcontchecked == true
+                  @norm.checked = true
+                  @doc.normalize(@normcontchecked, @normlowchecked)
+                  @count += 1
+                  @fincount += 3
+                  @progressbar.value = (@fincount*100/@count)
+                  if @progressbar.value == 100
+                    @label.text = "Text processing finished!"
+                  end
+                end
+                if (!@normchecked && @normlowchecked == true && !@normcontchecked) || (!@normchecked && !@normlowchecked && @normcontchecked == true)
+                  @norm.checked = true
+                  @doc.normalize(@normcontchecked, @normlowchecked)
+                  @count += 1
+                  @fincount += 2
+                  @progressbar.value = (@fincount*100/@count)
+                  if @progressbar.value == 100
+                    @label.text = "Text processing finished!"
+                  end
+                end
 
                   if @tokchecked == true
                     @doc.tokenizer()
@@ -981,6 +995,14 @@ class CrumblerGUI
                     end
                   end
 
+                  #if @stemchecked == true
+                  #  @doc.()
+                  #  @processbar.value += 2520/@count
+                  #                if @progressbar.value == 2520
+                  #                   @label.text = "Text processing finished!"
+                  #                 end
+                  #end
+                  #
                   if @lemchecked == true
                     @doc.lemmatizer()
                     @fincount += 1
@@ -990,14 +1012,6 @@ class CrumblerGUI
                     end
                   end
 
-                  #if @stemchecked == true
-                  #  @doc.()
-                  #  @processbar.value += 2520/@count
-                  #                if @progressbar.value == 2520
-                  #                   @label.text = "Text processing finished!"
-                  #                 end
-                  #end
-                  #
                   if @poschecked == true
                     @doc.tagger()
                     @fincount += 1
