@@ -673,28 +673,11 @@ class CrumblerGUI
               stretchy false
               vertical_box {
                 label("Please specify the language in which your input text data is written.\n" \
-                "Note: This information is mandatory to run the program.\n") { stretchy false}
+                "Note: This information is mandatory to run the program.\n") { stretchy false }
 
-                ## Example with language checkboxes
-                # checkbox('English'){
-                #   stretchy false
-                #   on_toggled do |c|
-                #     checked = c.checked?
-                #     c.text = "I am the checkbox (#{checked})"
-                #   end
-                # }
-                # checkbox('German'){
-                #   stretchy false
-                #   on_toggled do |c|
-                #     checked = c.checked?
-                #     c.text = "I am the checkbox (#{checked})"
-                #   end
-                # }
-
-                ## Example with language dropdown menu
                 combobox {
                   stretchy false
-                  items 'English', 'German' # also accepts a single array argument
+                  items 'English', 'German'
 
                   on_selected do |c|
                     # code einfuegen
@@ -1058,13 +1041,13 @@ class CrumblerGUI
                   end
                 end
               }
-              button('Cancel') {
-                stretchy false
-
-                on_clicked do
-                  msg_box('Information', 'You clicked the button')
-                end
-              }
+              # button('Cancel') {
+              #   stretchy false
+              #
+              #   on_clicked do
+              #     msg_box('Information', 'You clicked the button')
+              #   end
+              # }
 
               label('Status – Progress bar') { stretchy false }
               @progressbar = progress_bar {

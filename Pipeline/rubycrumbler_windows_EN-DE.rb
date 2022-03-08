@@ -1059,27 +1059,27 @@ class CrumblerGUI
                   end
                 end
               }
-              button('Cancel') {
-                stretchy false
-
-                on_clicked do
-                  # set function count variables to zero, untoggle the checkboxes (they have to be ticked off and on again to choose the step)
-                  @count = 0
-                  @fincount = 0
-                  @clcbchecked = false
-                  @normchecked = false
-                  @normlowchecked = false
-                  @normcontchecked = false
-                  @tokchecked = false
-                  @srchecked = false
-                  @srchecked = false
-                  @stemchecked = false
-                  @lemchecked = false
-                  @poschecked = false
-                  @nerchecked = false
-                  msg_box('Choose new file and Pipeline steps again (untoggle and toggle the checkboxes again')
-                end
-              }
+              # button('Cancel') {
+              #   stretchy false
+              #
+              #   on_clicked do
+              #     # set function count variables to zero, untoggle the checkboxes (they have to be ticked off and on again to choose the step)
+              #     @count = 0
+              #     @fincount = 0
+              #     @clcbchecked = false
+              #     @normchecked = false
+              #     @normlowchecked = false
+              #     @normcontchecked = false
+              #     @tokchecked = false
+              #     @srchecked = false
+              #     @srchecked = false
+              #     @stemchecked = false
+              #     @lemchecked = false
+              #     @poschecked = false
+              #     @nerchecked = false
+              #     msg_box('Choose new file and Pipeline steps again (untoggle and toggle the checkboxes again')
+              #   end
+              # }
 
               label('Status – Progress bar') { stretchy false }
               @progressbar = progress_bar {
