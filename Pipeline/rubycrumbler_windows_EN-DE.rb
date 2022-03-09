@@ -480,7 +480,7 @@ module RubyCrumbler
       }
 
       @text2process = @text2process.gsub('’','\'')
-      if @lang == 'EN'
+      if language == 'EN'
         @contractions_en.each { |k, v| @text2process=@text2process.gsub k, v }
       else
         @contractions_de.each { |k, v| @text2process=@text2process.gsub k, v }
@@ -790,10 +790,8 @@ class CrumblerGUI
                 combobox {
                   stretchy false
                   items 'English', 'German'
-                  # Bug in Windows-GUI: bei selected'English' wird @lang=EN nicht gesetzt + führt Pipeline Funktionen folglich nicht aus
-                  # auf MacOS funktioniert es komischerweise wenn die beiden folgenden Zeilen aktiv sind..
-                  #selected 'English' #default
-                  #@lang = 'EN' #necessary to set @lang wenn default selected is used on MacOS
+                  selected 'English' #default
+                  @lang = 'EN' #necessary to set @lang wenn default selected is used
 
                   on_selected do |c|
                     @lang = if c.selected_item == 'English'
