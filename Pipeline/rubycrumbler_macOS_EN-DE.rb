@@ -19,11 +19,12 @@ module RubyCrumbler
       @filename
       @projectdir
       @en = Spacy::Language.new("en_core_web_lg")
+      @de = Spacy::Language.new("de_core_news_lg")
+      @lang
       @stopwords = @en.Defaults.stop_words.to_s.gsub('\'','"').delete('{}" ').gsub('’','\'')
       @stopwords = @stopwords.split(',')
       @doc
       @filenumber
-      @lang
     end
 
     #multidir function is automatically called, if a folder is used for input. For each file in the directory the chosen function will be applied.
@@ -480,14 +481,14 @@ module RubyCrumbler
         #etc.
       }
       @text2process = @text2process.gsub('’','\'')
-      if language == "EN"
+      if language == 'EN'
         @contractions_en.each { |k, v| @text2process=@text2process.gsub k, v }
       else
         @contractions_de.each { |k, v| @text2process=@text2process.gsub k, v }
       end
     end
 
-    def tokenizer()
+    def tokenizer(language)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
         puts "working on #{@filename}"
@@ -500,7 +501,11 @@ module RubyCrumbler
         #input.close
 
         # tokenization
-        doc = @en.read(@text2process)
+        doc = if language == 'EN'
+                @en.read(@text2process)
+              else
+                @de.read(@text2process)
+              end
         row = []
         count = 0
         doc.each do |token|
@@ -786,6 +791,7 @@ class CrumblerGUI
                   stretchy false
                   items 'English', 'German'
                   selected 'English' #default
+                  @lang = 'EN' #necessary to set @lang wenn default selected is used
 
                   on_selected do |c|
                     @lang = if c.selected_item == 'English'
@@ -1075,7 +1081,7 @@ class CrumblerGUI
 
                   #nlp-pipeline
                   if @tokchecked == true
-                    @doc.tokenizer()
+                    @doc.tokenizer(@lang)
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
@@ -1087,7 +1093,7 @@ class CrumblerGUI
                   if @srchecked == true
                     if !@tokchecked && !@autotokchecked
                       @autotokchecked = (@tok.checked = true)
-                      @doc.tokenizer()
+                      @doc.tokenizer(@lang)
                       @count += 1
                       @fincount += 1
                     end
@@ -1110,7 +1116,7 @@ class CrumblerGUI
                   if @lemchecked == true
                     if !@tokchecked && !@autotokchecked
                       @autotokchecked = (@tok.checked = true)
-                      @doc.tokenizer()
+                      @doc.tokenizer(@lang)
                       @count += 1
                       @fincount += 1
                     end
@@ -1125,7 +1131,7 @@ class CrumblerGUI
                   if @poschecked == true
                     if !@tokchecked && !@autotokchecked
                       @autotokchecked = (@tok.checked = true)
-                      @doc.tokenizer()
+                      @doc.tokenizer(@lang)
                       @count += 1
                       @fincount += 1
                     end
@@ -1140,7 +1146,7 @@ class CrumblerGUI
                   if @nerchecked == true
                     if !@tokchecked && !@autotokchecked
                       @autotokchecked = (@tok.checked = true)
-                      @doc.tokenizer()
+                      @doc.tokenizer(@lang)
                       @count += 1
                       @fincount += 1
                     end
