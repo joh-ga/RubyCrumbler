@@ -21,8 +21,6 @@ module RubyCrumbler
       @en = Spacy::Language.new("en_core_web_lg")
       @de = Spacy::Language.new("de_core_news_lg")
       @lang
-      @stopwords = @en.Defaults.stop_words.to_s.gsub('\'','"').delete('{}" ').gsub('’','\'')
-      @stopwords = @stopwords.split(',')
       @doc
       @filenumber
     end
@@ -524,7 +522,7 @@ module RubyCrumbler
       end
     end
 
-    def stopwordsclean()
+    def stopwordsclean(language)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
         puts "working on #{@filename}"
@@ -534,9 +532,12 @@ module RubyCrumbler
         @text2process.force_encoding("utf-8")
         #.gsub(/Total number of tokens: \d+/, '')
         @text2process = Kernel.eval(@text2process)
-
-
-        shared = @text2process & @stopwords
+        stopwords = if language == 'EN'
+                      @en.Defaults.stop_words.to_s.gsub('\'','"').delete('{}" ').gsub('’','\'').split(',')
+                    else
+                      @de.Defaults.stop_words.to_s.gsub('\'','"').delete('{}" ').gsub('’','\'').split(',')
+                    end
+        shared = @text2process & stopwords
         textosw = @text2process - shared
         File.write("#{@projectdir}/#{@filename}_sw.txt", textosw)
       end
@@ -546,7 +547,7 @@ module RubyCrumbler
     #  @stopwords.insert(0, newsw)
     #end
 
-    def lemmatizer()
+    def lemmatizer(language)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
         puts "working on #{@filename}"
@@ -558,7 +559,11 @@ module RubyCrumbler
         @text2process = @text2process.join(', ').gsub(',','')
 
         # lemmatization
-        doc = @en.read(@text2process)
+        doc = if language == 'EN'
+                @en.read(@text2process)
+              else
+                @de.read(@text2process)
+              end
         rows = []
         output = []
         headings = ["text", "lemma"]
@@ -578,7 +583,7 @@ module RubyCrumbler
     end
 
 
-    def tagger()
+    def tagger(language)
       Dir.glob(@projectdir+"/*.*").reject{|file| file.end_with?("lem.txt")}.max_by(@filenumber){|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
         puts "working on POS #{file}"
@@ -588,7 +593,11 @@ module RubyCrumbler
         @text2process.force_encoding("utf-8")
         @text2process = Kernel.eval(@text2process)
         @text2process = @text2process.join(' ').gsub(',','')#.gsub(/Total number of tokens: \d+/, '')
-        doc = @en.read(@text2process)
+        doc = if language == 'EN'
+                @en.read(@text2process)
+              else
+                @de.read(@text2process)
+              end
         #pos: The simple UPOS part-of-speech tag
         #tag: The detailed part-of-speech tag
         builder = Nokogiri::XML::Builder.new
@@ -625,7 +634,7 @@ module RubyCrumbler
       end
     end
 
-    def ner()
+    def ner(language)
       Dir.glob(@projectdir+"/*.*").reject{|file| file.end_with?("lem.txt") ||file.end_with?("pos.txt")||file.end_with?("pos.csv") ||file.end_with?("pos.xml")}.max_by(@filenumber){|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
         puts "working on NER #{file}"
@@ -635,7 +644,11 @@ module RubyCrumbler
         @text2process.force_encoding("utf-8")
         @text2process = @text2process
         @text2process = Kernel.eval(@text2process).join(' ')#.gsub(/Total number of tokens: \d+/, '')
-        doc = @en.read(@text2process)
+        doc = if language == 'EN'
+                @en.read(@text2process)
+              else
+                @de.read(@text2process)
+              end
         builder = Nokogiri::XML::Builder.new
         #text = File.open(Dir.glob(@projectdir+'/*tok.*').max_by {|f| File.mtime(f)}, 'r')
         #text = File.read(text)#.gsub(/Total number of tokens: \d+/, '')
@@ -1097,7 +1110,7 @@ class CrumblerGUI
                       @count += 1
                       @fincount += 1
                     end
-                    @doc.stopwordsclean()
+                    @doc.stopwordsclean(@lang)
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
@@ -1120,7 +1133,7 @@ class CrumblerGUI
                       @count += 1
                       @fincount += 1
                     end
-                    @doc.lemmatizer()
+                    @doc.lemmatizer(@lang)
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
@@ -1135,7 +1148,7 @@ class CrumblerGUI
                       @count += 1
                       @fincount += 1
                     end
-                    @doc.tagger()
+                    @doc.tagger(@lang)
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
@@ -1150,7 +1163,7 @@ class CrumblerGUI
                       @count += 1
                       @fincount += 1
                     end
-                    @doc.ner()
+                    @doc.ner(@lang)
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
