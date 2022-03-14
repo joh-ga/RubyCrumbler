@@ -7,6 +7,7 @@ require 'csv'
 require 'builder'
 require 'tk'
 require 'terminal-table'
+require 'ruby-progressbar'
 
 module RubyCrumbler
 
@@ -692,7 +693,6 @@ end
 class CrumblerGUI
   include RubyCrumbler
   include Glimmer
-  require 'ruby-progressbar'
   progress_bar = ProgressBar.create()
   def launch
 
@@ -748,14 +748,14 @@ class CrumblerGUI
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (lowercase): " }
                   string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting the text into lowercase.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (contractions): " }
-                  string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not).\n\n")
+                  string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not). Note: German contractions are always converted with the definite article and include only very colloquial contractions (unterm - unter dem). Contractions like „zum“ are not transformed into „zu dem“, because expressions like „zum Beispiel“ usually remain unchanged. The list of contractions can be found in the source code on GitHub and can be customized as needed.\n\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Natural Language Processings – Tasks \n" }
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Tokenization: " }
                   string("This includes splitting the pre-processed data into individual characters or tokens.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Stopword removal: " }
                   string("Stopwords are words that do not carry much meaning but are important grammatically as, for example, “to” or “but”. This feature includes the removal of stopwords.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Stemming: " }
-                  string("This includes the reduction of a word to its stem (a character sequence shared by related words) by clipping inflectional and partially derivational suffixes. A word’s stem therefore does not necessarily have to be a semantically meaningful word. Word stems and lemmatized base forms may overlap. Examples: computing - compute, sung - sung, obviously - obvious.\n")
+                  string("This includes the reduction of a word to its stem (a character sequence shared by related words) by clipping inflectional and partially derivational suffixes. A word’s stem therefore does not necessarily have to be a semantically meaningful word. Word stems and lemmatized base forms may overlap. Examples: computing - comput, sung - sung, obviously - obvious.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Lemmatization: " }
                   string("This includes reduction of a word to its semantic base form according to POS classification. Lemmatized base forms and word stems may overlap. Examples: computing - compute, sung - sing, obviously - obviously.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Part-of-Speech Tagging: " }

@@ -1,9 +1,8 @@
 
 ## <img src="https://github.com/joh-ga/RubyCrumbler/blob/13828a0252549dff68a03cd30bcacc94fa5a6496/Pipeline/icons/rubycrumbler-logo.png" height=75 />
-Ready to crumble your text for common NLP tasks? This repository is home of RubyCrumbler, a simple script to download, that provides a GUI desktop application written in Ruby to apply common Natural Language Processing (NLP) tasks on your text files.
+Ready to crumble your text for common NLP tasks? This repository is home of RubyCrumbler, a simple script to download, that provides a GUI desktop application written in Ruby to apply common Natural Language Processing (NLP) tasks on your English or German text files.
 
 Hier jenachdem dann noch einfügen das entweder als Skript oder als release datei heruntergeladen werden kann.<br>
-Sprachen; Englisch und dann evtl Deutsch<br>
 
 ## Requirements
 wenn User skript nutzt statt release dann<br>
@@ -18,12 +17,12 @@ Hier vorschau vom main window der finalen GUI (Screenshot in Mac, Windows, Linux
 **Data Cleaning:** This includes removing redundant whitespaces, punctuation (redundant dots), special symbols (e.g., line break, new line), hash tags, HTML tags, and URLs.<br>
 **Normalization:** This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark).<br>
 **Normalization (lowercase):** This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting the text into lowercase.<br>
-**Normalization (contractions):** This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not).<br>
+**Normalization (contractions):** This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not). Note: German contractions are always converted with the definite article and include only very colloquial contractions (unterm - unter dem). Contractions like "zum" are not transformed into "zu dem", because expressions like "zum Beispiel" usually remain unchanged. The list of contractions can be found in the source code and can be customized as needed.<br>
 
 ***Natural Language Processing – Tasks***<br>
 **Tokenization:** This includes splitting the pre-processed data into individual characters or tokens.<br>
 **Stopword Removal:** Stopwords are words that do not carry much meaning but are important grammatically as, for example, “to” or “but”. This feature includes the removal of stopwords.<br>
-**Stemming:** This includes the reduction of a word to its stem (a character sequence shared by related words) by clipping inflectional and partially derivational suffixes. A word’s stem therefore does not necessarily have to be a semantically meaningful word. Word stems and lemmatized base forms may overlap. Examples: computing - compute, sung - sung, obviously - obvious.<br>
+**Stemming:** This includes the reduction of a word to its stem (a character sequence shared by related words) by clipping inflectional and partially derivational suffixes. A word’s stem therefore does not necessarily have to be a semantically meaningful word. Word stems and lemmatized base forms may overlap. Examples: computing - comput, sung - sung, obviously - obvious.<br>
 **Lemmatization:** This includes reduction of a word to its semantic base form according to POS classification. Lemmatized base forms and word stems may overlap. Examples: computing - compute, sung - sing, obviously - obviously.<br>
 **Part-of-Speech Tagging (POS):** This includes identifying and labeling the parts of speech of text data.<br>
 **Named Entity Recognition (NER):** This includes labeling the so-called named entities in the data such as persons, organizations, and places.<br>
