@@ -25,7 +25,7 @@ Hier vorschau vom main window der finalen GUI (Screenshot in Mac, Windows, Linux
 **Stemming:** This includes the reduction of a word to its stem (a character sequence shared by related words) by clipping inflectional and partially derivational suffixes. A word’s stem therefore does not necessarily have to be a semantically meaningful word. Word stems and lemmatized base forms may overlap. Examples: computing - comput, sung - sung, obviously - obvious.<br>
 **Lemmatization:** This includes reduction of a word to its semantic base form according to POS classification. Lemmatized base forms and word stems may overlap. Examples: computing - compute, sung - sing, obviously - obviously.<br>
 **Part-of-Speech Tagging (POS):** This includes identifying and labeling the parts of speech of text data.<br>
-**Named Entity Recognition (NER):** This includes labeling the so-called named entities in the data such as persons, organizations, and places. Note: In order to better identify named entities, it is recommended not to convert the text to only lowercase letters during pre-processing (i.e., do not apply "Normalization(lowercase)").<br>
+**Named Entity Recognition (NER):** This includes labeling the so-called named entities in the data such as persons, organizations, and places. Note: In order to better identify named entities, it is recommended not to convert the text to only lowercase letters during pre-processing (i.e., do not apply "Normalization (lowercase)").<br>
 
 ## File Naming Convention
 To enable a quick identification and location of your converted document depending on the feature applied, the following file naming convention is used.<br>
