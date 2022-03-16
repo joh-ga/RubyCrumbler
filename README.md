@@ -10,7 +10,10 @@ wenn User skript nutzt statt release dann<br>
 * Gems in the Gemfile (müssen wir noch erstellen am Ende)
 
 ## GUI
-Hier vorschau vom main window der finalen GUI (Screenshot in Mac, Windows, Linux) einfügen
+Hier vorschau vom main window der finalen GUI (Screenshot oder Gif in Mac, Windows, Linux) einfügen
+Mac | Windows | Linux
+----|---------|------
+![macpreview](https://user-images.githubusercontent.com/72874215/158631583-a8af6c26-ed53-4890-a155-69c2f808af9f.gif)
 
 ## Description of Features
 ***Pre-Processing***<br>
