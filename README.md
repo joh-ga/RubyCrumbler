@@ -13,8 +13,7 @@ wenn User skript nutzt statt release dann<br>
 Hier vorschau vom main window der finalen GUI (Screenshot oder Gif in Mac, Windows, Linux) einfügen
 Mac | Windows | Linux
 ----|---------|------
-https://user-images.githubusercontent.com/72874215/158644363-65a23af8-89fc-48e9-8fac-dc9a213c3d25.mov
-
+![macpreview720](https://user-images.githubusercontent.com/72874215/158647360-07e34fd4-36c8-43e2-be29-5dfdb9c8a721.gif)
 
 ## Description of Features
 ***Pre-Processing***<br>
