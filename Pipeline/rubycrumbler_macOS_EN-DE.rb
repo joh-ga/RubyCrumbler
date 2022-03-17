@@ -421,6 +421,7 @@ module RubyCrumbler
         "ums" => "um das",
         "um's" => "um das",
         "um'n" => "um einen",
+        "umn" => "um einen",
         "unterm" => "unter dem",
         "unter'm" => "unter dem",
         "untern" => "unter den",
