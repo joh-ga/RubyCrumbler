@@ -403,7 +403,7 @@ module RubyCrumbler
         "für'n" => "für den",
         "fürs" => "für das",
         "für's" => "für das",
-        "gegens" => "gegen das",
+        "gegens" => " gegen das ",
         "gegen's" => "gegen das",
         "nebens" => "neben das",
         "neben's" => "neben das",
@@ -425,10 +425,11 @@ module RubyCrumbler
         "'nen" => "einen",
         "ums" => "um das",
         "um's" => "um das",
+        "um'n" => "um einen",
         "unterm" => "unter dem",
         "unter'm" => "unter dem",
         "untern" => "unter den",
-        "unter'n'" => "unter den",
+        "unter'n" => "unter den",
         "unters" => "unter das",
         "unter's" => "unter das",
         "überm" => "über dem",
@@ -440,14 +441,14 @@ module RubyCrumbler
         "so n" => "so ein",
         "so'n" => "so ein",
         "so ne" => "so eine",
-        "so 'ne" => "so eine",
+        "so 'ne " => "so eine",
         "vorm" => "vor dem",
-        "vor'm'" => "vor dem",
+        "vor'm" => "vor dem",
         "vor'n" => "vor den",
         "vors" => "vor das",
         "vor's" => "vor das",
-        "was fürn" => "was für ein",
-        "was für'n" => "was für ein",
+        "fürn" => "für ein",
+        "für'n" => "für ein",
         "zwischens" => "zwischen das",
         "zwischen's" => "zwischen das",
 
@@ -482,7 +483,10 @@ module RubyCrumbler
       if language == 'EN'
         @contractions_en.each { |k, v| @text2process=@text2process.gsub k, v }
       else
-        @contractions_de.each { |k, v| @text2process=@text2process.gsub k, v }
+        #on k a regular expression is used to look before the string if there is the start of sentence or a
+        # non character symbol and to look behind, if there is the sentence ending or a non character symbol
+        # so that it does not replace parts of words
+        @contractions_de.each { |k, v| @text2process=@text2process.gsub /(?<=^|\W)#{k}(?=$|\W)/, v }
       end
     end
 
@@ -508,16 +512,17 @@ module RubyCrumbler
         count = 0
         doc.each do |token|
           count += 1
-          row << token.text
+          if token.text.strip != ""
+            row << token.text
+            end
         end
+
+        #row.map { |word| word.gsub(/\n+/, '') }
 
         # write tokenized content into new output file
         # name = filename.sub(/(?<=.)\..*/, '')
         File.open("#{@projectdir}/#{@filename}_tok.txt", "w") do |f|
           f.write(row)
-          #f.write("\n")
-          #f.write("\n")
-          #f.write("Total number of tokens: #{count}")
           puts ("Total number of tokens: #{count}")
         end
       end
