@@ -3,17 +3,16 @@
 Ready to crumble your text for common NLP tasks? This repository is home of RubyCrumbler, a simple script to download, that provides a GUI desktop application written in Ruby to apply common Natural Language Processing (NLP) tasks on your English or German text files.
 
 Hier jenachdem dann noch einfügen das entweder als Skript oder als release datei heruntergeladen werden kann.<br>
+wenn User skript nutzt statt release dann<br>
 
 ## Requirements
-wenn User skript nutzt statt release dann<br>
 * [Ruby](https://www.ruby-lang.org/en/) 3.03
-* Gems in the Gemfile (müssen wir noch erstellen am Ende)
+* Gems in the Gemfile
 
-## GUI
-Hier vorschau vom main window der finalen GUI (Screenshot oder Gif in Mac, Windows, Linux) einfügen
+## Preview of GUI
 Mac | Windows | Linux
 ----|---------|------
-![macpreview720](https://user-images.githubusercontent.com/72874215/158647360-07e34fd4-36c8-43e2-be29-5dfdb9c8a721.gif)
+![mac_2](https://user-images.githubusercontent.com/72874215/159301398-12cc6337-aa7a-4981-929f-2e117e528564.gif) |
 
 ## Description of Features
 ***Pre-Processing***<br>
@@ -25,7 +24,6 @@ Mac | Windows | Linux
 ***Natural Language Processing – Tasks***<br>
 **Tokenization:** This includes splitting the pre-processed data into individual characters or tokens.<br>
 **Stopword Removal:** Stopwords are words that do not carry much meaning but are important grammatically as, for example, “to” or “but”. This feature includes the removal of stopwords.<br>
-**Stemming:** This includes the reduction of a word to its stem (a character sequence shared by related words) by clipping inflectional and partially derivational suffixes. A word’s stem therefore does not necessarily have to be a semantically meaningful word. Word stems and lemmatized base forms may overlap. Examples: computing - comput, sung - sung, obviously - obvious.<br>
 **Lemmatization:** This includes reduction of a word to its semantic base form according to POS classification. Lemmatized base forms and word stems may overlap. Examples: computing - compute, sung - sing, obviously - obviously.<br>
 **Part-of-Speech Tagging (POS):** This includes identifying and labeling the parts of speech of text data.<br>
 **Named Entity Recognition (NER):** This includes labeling the so-called named entities in the data such as persons, organizations, and places. Note: In order to better identify named entities, it is recommended not to convert the text to only lowercase letters during pre-processing (i.e., do not apply "Normalization (lowercase)").<br>
@@ -40,7 +38,6 @@ Abbreviations are added to the source file name to indicate the features that ha
 * Normalization (contractions) = c
 * Tokenization = tok
 * Stopword Removal = sw
-* Stemming = stem
 * Lemmatization = lem
 * Part-of-Speech Tagging = pos
 * Named Entity Recognition = ner
