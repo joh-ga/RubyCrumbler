@@ -1204,7 +1204,7 @@ class CrumblerGUI
               button('New Project') {
 
                 on_clicked do
-                  pid = Process.spawn("ruby rubycrumbler_windows_EN-DE.rb", :new_pgroup => true)
+                  pid = Process.spawn("ruby rubycrumbler_windows.rb", :new_pgroup => true)
                   Process.detach(pid)
                   parent = Process.ppid
                   system "taskkill /PID #{parent} /F"

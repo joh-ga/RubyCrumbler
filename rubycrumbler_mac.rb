@@ -7,6 +7,7 @@ require 'csv'
 require 'builder'
 require 'tk'
 require 'terminal-table'
+require 'ruby-progressbar'
 
 module RubyCrumbler
 
@@ -19,17 +20,18 @@ module RubyCrumbler
       @filename
       @projectdir
       @en = Spacy::Language.new("en_core_web_lg")
-      @stopwords = @en.Defaults.stop_words.to_s.gsub('\'','"').delete('{}" ').gsub('’','\'')
-      @stopwords = @stopwords.split(',')
+      @de = Spacy::Language.new("de_core_news_lg")
+      @lang
       @doc
       @filenumber
     end
 
-    #multidir function is automatically called, if a folder is used for input. For each file in the directory the chosen function will be applied.
+    # multidir function is automatically called, if a folder is used for input. For each file in the directory the chosen
+    # functions will be applied.
     def multidir (directory)
       directory = @projectdir
       @filenumber = Dir.glob(File.join(directory, '**', '*')).select { |file| File.file?(file) }.count
-      #filenumber is later important for opening the x recent files in the methods
+    #filenumber is later important for opening the x recent files in the methods
       print @filenumber
       Dir.foreach(directory) do |filename|
         next if filename == '.' || filename == '..'
@@ -38,14 +40,18 @@ module RubyCrumbler
         @filename=File.basename(filename, ".*")
         first = Nokogiri::HTML(File.open("#{@projectdir}/#{@filenamein}"))
         doc = first.search('p').map(&:text)
+    #encode doc to correct encoding for german special characters
+        doc = doc.join("").encode("iso-8859-1").force_encoding("utf-8")
         File.write("#{@projectdir}/#{@filename}", doc)
       end
     end
 
 
-    #create a new folder and copy chosen file to it OR copy all files in chosen directory to it OR write file from website into it
-    #use txt-, xml- or html-files
-    #created folder ist called by projectname. Written files will keep their names and are txts.
+    # create a new folder and copy chosen file to it OR copy all files in chosen directory to it OR write file from
+    # website into it.
+    # You can use txt-, xml- or html-files
+    # created folder ist called by projectname (= Name of origin directory or file).
+    # The copied files will keep their names and are txts.
     def newproject (input, projectname)
       @input = input
       @projectname = projectname
@@ -65,6 +71,8 @@ module RubyCrumbler
         first = Nokogiri::HTML(File.open(@input))
         doc = first.search('p').map(&:text)
         @filenumber = 1
+    #encode doc to correct encoding for german special characters
+        doc = doc.join("").encode("iso-8859-1").force_encoding("utf-8")
         File.write("#{@projectdir}/#{@filename}", doc)
       else
         if File.directory?(@input)
@@ -80,8 +88,9 @@ module RubyCrumbler
     end
 
 
-    #clean raw text file from project folder from code, markup, special symbols (latin characters, currency symbols, emojis etc.), urls, digits and additional spaces
-    #output is a txt file with additional _cl for "cleaned" in name
+    # clean raw text file from project folder from code, markup, special symbols (latin characters (if Englisch),
+    # currency symbols, emojis etc.), urls, digits and additional spaces.
+    # output is a txt file with additional _cl for "cleaned" in name
     #
     # The file.open line is universal for using the newest (last processed) file in directory
     def cleantext()
@@ -91,8 +100,8 @@ module RubyCrumbler
         @filename = File.basename(filename, ".*")
         @text2process = File.open(Dir.glob(@projectdir+"/#{@filename}.*").max_by {|f| File.mtime(f)}, 'r')
         #@text2process = File.open(Dir.glob(@projectdir+'/*.*').max_by {|f| File.mtime(f)}, 'r')
-        @text2process = File.read( @text2process)
-        @text2process = @text2process.gsub('\n','').gsub('\r','').gsub(/\\u[a-f0-9]{4}/i,'').gsub(/https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/,'').gsub(/\d/, '').gsub(/[^\w\s\.\'´`]/,'').gsub(/[\.]{2,}/,' ').gsub(/[ ]{2,}/,' ')
+        @text2process = File.read(@text2process)
+        @text2process = @text2process.gsub('\n','').gsub('\r','').gsub(/\\u[a-f0-9]{4}/i,'').gsub(/https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/,'').gsub(/\d/, '').gsub(/[^\w\s\.\'´`äÄöÖüÜß]/,'').gsub(/[\.]{2,}/,' ').gsub(/[ ]{2,}/,' ')
         File.write("#{@projectdir}/#{@filename}_cl.txt", @text2process)
         p @text2process
 
@@ -100,10 +109,11 @@ module RubyCrumbler
     end
 
 
-    #normalize text (from cleaned text file or raw text file) by choosing lowercasing and/or seperating contractions (both optional)
-    #The 5 first lines of the methods open the last processed files (cleantext or just input) and normalize them
-    # it's only important, if you process more than 1 file at a time, otherwise it would just normalize the most recent file or every file in the processdir
-    def normalize(contractions=false, low=false)
+    # normalize text (from cleaned text file or raw text file) by choosing lowercasing and/or seperating contractions (both optional)
+    # The 5 first lines of the methods open the last processed files (cleantext or just input) and normalize them
+    # it's only important, if you process more than 1 file at a time, otherwise it would just normalize the
+    # most recent file or every file in the processdir
+    def normalize(contractions=false, language='EN', low=false)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
         puts "working on #{@filename}"
@@ -112,24 +122,27 @@ module RubyCrumbler
         @text2process = File.read(@text2process)
         @text2process = @text2process.gsub('.','').gsub(',','').gsub('!','').gsub('?','').gsub(':','').gsub(';','').gsub('(','').gsub(')','').gsub('[','').gsub(']','').gsub('"','').gsub('„','').gsub('»','').gsub('«','').gsub('›','').gsub('‹','').gsub('–','')
         puts @text2process
-        lc =''
-          cons=''
+        lc=''
+        cons=''
         if low == true
           lc ='l'
           @text2process = @text2process.downcase
         end
         if contractions == true
-          cons ='c'
-          contractions()
+          cons = 'c'
+          contractions(language)
         end
         File.write("#{@projectdir}/#{@filename}_n#{lc}#{cons}.txt",@text2process)
         p @text2process
       end
     end
 
-    #ambigous contractions: the contraction dictionary will, when sth like "you'd" occure chose "you would" over "you had".
-    def contractions()
-      @contractions = {
+
+    # ambigous contractions: the contraction dictionary will, when something like "you'd" occures
+    # chose "you would" over "you had".
+    def contractions(language)
+      # Contractions of English language
+      @contractions_en = {
         "ain't"=> "are not",
         "aren't"=> "are not",
         "Ain't"=> "Are not",
@@ -365,11 +378,119 @@ module RubyCrumbler
         "You're"=> "You are",
         "You've"=> "You have"
       }
+      # Contractions of German language
+      @contractions_de = {
+        #preposition + article contractions
+        "ans" => "an das",
+        "an's" => "an das",
+        "aufm" => "auf dem",
+        "auf'm" => "auf dem",
+        "aufn" => "auf den",
+        "auf'n" => "auf den",
+        "aufs" => "auf das",
+        "auf's" => "auf das",
+        "ausm" => "aus dem",
+        "aus'm" => "aus dem",
+        "außerm" => "außer dem",
+        "außer'm" => "außer dem",
+        "außers" => "außer das",
+        "außer's" => "außer das",
+        "durchn" => "durch den",
+        "durch'n" => "durch den",
+        "durchs"=> "durch das",
+        "durch's" => "durch das",
+        "fürn" => "für den",
+        "für'n" => "für den",
+        "fürs" => "für das",
+        "für's" => "für das",
+        "gegens" => " gegen das ",
+        "gegen's" => "gegen das",
+        "nebens" => "neben das",
+        "neben's" => "neben das",
+        "hinterm" => "hinter dem",
+        "hinter'm" => "hinter dem",
+        "hintern" => "hinter den",
+        "hinter'n" => "hinter den",
+        "hinters" => "hinter das",
+        "hinter's" => "hinter das",
+        "ins" => "in das",
+        "in's" => "in das",
+        "mitm" => "mit dem",
+        "mit'm" => "mit dem",
+        "nachm" => "nach dem",
+        "nach'm" => "nach dem",
+        "ne" => "eine",
+        "'ne" => "eine",
+        "nen" => "einen",
+        "'nen" => "einen",
+        "ums" => "um das",
+        "um's" => "um das",
+        "um'n" => "um einen",
+        "umn" => "um einen",
+        "unterm" => "unter dem",
+        "unter'm" => "unter dem",
+        "untern" => "unter den",
+        "unter'n" => "unter den",
+        "unters" => "unter das",
+        "unter's" => "unter das",
+        "überm" => "über dem",
+        "über'm" => "über dem",
+        "übern" => "über den",
+        "über'n" => "über den",
+        "übers" => "über das",
+        "über's" => "über das",
+        "so n" => "so ein",
+        "so'n" => "so ein",
+        "so ne" => "so eine",
+        "so 'ne " => "so eine",
+        "vorm" => "vor dem",
+        "vor'm" => "vor dem",
+        "vor'n" => "vor den",
+        "vors" => "vor das",
+        "vor's" => "vor das",
+        "zwischens" => "zwischen das",
+        "zwischen's" => "zwischen das",
+
+        #verbal contractions + dummy subject "es" contractions
+        "darf's" => "darf es",
+        "drüber" => "darüber",
+        "drunter" => "darunter",
+        "dürft's" => "dürft es",
+        "geht's" => "geht es",
+        "gib's" => "gib es",
+        "gibt's" => "gibt es",
+        "ging's" => "ging es",
+        "hab's" => "habe es",
+        "hat's" => "hat es",
+        "lass'" => "lasse",
+        "mach'" => "mache",
+        "mach's" => "mach es",
+        "macht's" => "macht es",
+        "schreib's" => "schreibt es",
+        "schreibt's" => "schreibt es",
+        "steht's" => "steht es",
+        "tu's" => "tu es",
+        "tut's" => "tut es",
+        "will's" => "will es",
+        "wollen's" => "wollen es",
+        "wollten's" => "wollten es",
+        "wollt's" => "wollt es",
+        #etc.
+      }
       @text2process = @text2process.gsub('’','\'')
-      @contractions.each { |k, v| @text2process=@text2process.gsub k, v }
+      if language == 'EN'
+        @contractions_en.each { |k, v| @text2process=@text2process.gsub k, v }
+      else
+    # on k a regular expression is used to look before the string if there is the start of sentence or a
+    # non character symbol and to look behind it, if there is the sentence ending or a non character symbol
+    # so that it does not replace parts of words
+        @contractions_de.each { |k, v| @text2process=@text2process.gsub /(?<=^|\W)#{k}(?=$|\W)/, v }
+      end
     end
 
-    def tokenizer()
+    # tokenize the input text and show number of tokens
+    # essential for following Pipeline steps. Will be automatically executed if these steps are chosen.
+    def tokenizer(language)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
         puts "working on #{@filename}"
@@ -381,7 +502,11 @@ module RubyCrumbler
         #input.close
 
         # tokenization
-        doc = @en.read(@text2process)
+        doc = if language == 'EN'
+                @en.read(@text2process)
+              else
+                @de.read(@text2process)
+              end
         row = []
         count = 0
         doc.each do |token|
@@ -401,27 +526,30 @@ module RubyCrumbler
       end
     end
 
-    def stopwordsclean()
+    # clean input from stopwords (provided by SpaCy)
+    def stopwordsclean(language)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
         puts "working on #{@filename}"
         @file2process = file
         @text2process = File.open(@file2process)
-        @text2process = File.read(@text2process)#.gsub(/Total number of tokens: \d+/, '')
+        @text2process = File.read(@text2process)
+        #.gsub(/Total number of tokens: \d+/, '')
         @text2process = Kernel.eval(@text2process)
-
-
-        shared = @text2process & @stopwords
+        stopwords = if language == 'EN'
+                      @en.Defaults.stop_words.to_s.gsub('\'','"').delete('{}" ').gsub('’','\'').split(',')
+                     else
+                       @de.Defaults.stop_words.to_s.gsub('\'','"').delete('{}" ').gsub('’','\'').split(',')
+                     end
+        shared = @text2process & stopwords
         textosw = @text2process - shared
         File.write("#{@projectdir}/#{@filename}_nost.txt", textosw)
       end
     end
 
-    def add_stopwords(newsw)
-      @stopwords.insert(0, newsw)
-    end
 
-    def lemmatizer()
+    # Convert input tokens to their respective lemma
+    def lemmatizer(language)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
         puts "working on #{@filename}"
@@ -432,7 +560,11 @@ module RubyCrumbler
         @text2process = @text2process.join(', ').gsub(',','')
 
         # lemmatization
-        doc = @en.read(@text2process)
+        doc = if language == 'EN'
+          @en.read(@text2process)
+        else
+          @de.read(@text2process)
+              end
         rows = []
         output = []
         headings = ["text", "lemma"]
@@ -451,8 +583,9 @@ module RubyCrumbler
       end
     end
 
-
-    def tagger()
+    # POS-Tagging for input based on SpaCy POS
+    # output is a txt, csv and a xml file
+    def tagger(language)
       Dir.glob(@projectdir+"/*.*").reject{|file| file.end_with?("lem.txt")}.max_by(@filenumber){|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
         puts "working on POS #{file}"
@@ -461,9 +594,13 @@ module RubyCrumbler
         @text2process = File.read(@text2process)
         @text2process = Kernel.eval(@text2process)
         @text2process = @text2process.join(' ').gsub(',','')#.gsub(/Total number of tokens: \d+/, '')
-        doc = @en.read(@text2process)
-        #pos: The simple UPOS part-of-speech tag
-        #tag: The detailed part-of-speech tag
+        doc = if language == 'EN'
+                @en.read(@text2process)
+              else
+                @de.read(@text2process)
+              end
+      #pos: The simple UPOS part-of-speech tag
+      #tag: The detailed part-of-speech tag
         builder = Nokogiri::XML::Builder.new
         headings = [["text", "pos", "tag"]]
         @rows = []
@@ -498,7 +635,9 @@ module RubyCrumbler
       end
     end
 
-    def ner()
+    # Named Entity Recognition for the input tokens. Also based on Spacy.
+    # output is a txt, csv and a xml file
+    def ner(language)
       Dir.glob(@projectdir+"/*.*").reject{|file| file.end_with?("lem.txt") ||file.end_with?("pos.txt")||file.end_with?("pos.csv") ||file.end_with?("pos.xml")}.max_by(@filenumber){|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
         puts "working on NER #{file}"
@@ -507,7 +646,11 @@ module RubyCrumbler
         @text2process = File.read(@text2process)
         @text2process = @text2process
         @text2process = Kernel.eval(@text2process).join(' ')#.gsub(/Total number of tokens: \d+/, '')
-        doc = @en.read(@text2process)
+        doc = if language == 'EN'
+                @en.read(@text2process)
+              else
+                @de.read(@text2process)
+              end
         builder = Nokogiri::XML::Builder.new
         #text = File.open(Dir.glob(@projectdir+'/*tok.*').max_by {|f| File.mtime(f)}, 'r')
         #text = File.read(text)#.gsub(/Total number of tokens: \d+/, '')
@@ -549,12 +692,13 @@ end
 class CrumblerGUI
   include RubyCrumbler
   include Glimmer
-  require 'ruby-progressbar'
   progress_bar = ProgressBar.create()
   def launch
 
     ### START of menu bar
     menu('Help') {
+
+    # About window with information about the creators and Github-Link to the repo
       menu_item('About'){
         on_clicked do
           window('About RubyCrumbler', 700, 500, has_menubar = false) {
@@ -583,6 +727,7 @@ class CrumblerGUI
         end
       }
 
+    # Documentation window with all the important information
       menu_item('Documentation'){
         on_clicked do
           window('Documentation', 400, 600, has_menubar = false) {
@@ -605,22 +750,22 @@ class CrumblerGUI
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (lowercase): " }
                   string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting the text into lowercase.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Normalization (contractions): " }
-                  string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not).\n\n")
+                  string("This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not). Note: German contractions are always converted with the definite article and include only very colloquial contractions (unterm - unter dem). Contractions like „zum“ are not transformed into „zu dem“, because expressions like „zum Beispiel“ usually remain unchanged. The list of contractions can be found in the source code on GitHub and can be customized as needed.\n\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; underline :single; "Natural Language Processings – Tasks \n" }
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Tokenization: " }
                   string("This includes splitting the pre-processed data into individual characters or tokens.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Stopword removal: " }
                   string("Stopwords are words that do not carry much meaning but are important grammatically as, for example, “to” or “but”. This feature includes the removal of stopwords.\n")
-                  string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Stemming: " }
-                  string("This includes the reduction of a word to its stem (a character sequence shared by related words) by clipping inflectional and partially derivational suffixes. A word’s stem therefore does not necessarily have to be a semantically meaningful word. Word stems and lemmatized base forms may overlap. Examples: computing - compute, sung - sung, obviously - obvious.\n")
+                  #string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Stemming: " }
+                  #string("This includes the reduction of a word to its stem (a character sequence shared by related words) by clipping inflectional and partially derivational suffixes. A word’s stem therefore does not necessarily have to be a semantically meaningful word. Word stems and lemmatized base forms may overlap. Examples: computing - comput, sung - sung, obviously - obvious.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Lemmatization: " }
-                  string("This includes reduction of a word to its semantic base form according to POS classification. Lemmatized base forms and word stems may overlap. Examples: computing - compute, sung - sing, obviously - obviously.\n")
+                  string("This includes reduction of a word to its semantic base form according to POS classification. Examples: computing - compute, sung - sing, obviously - obviously.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Part-of-Speech Tagging: " }
                   string("This includes identifying and labeling the parts of speech of text data.\n")
                   string{ font family: 'Helvetica', size: 12, weight: :bold, italic: :normal, stretch: :normal; "Named Entity Recognition: " }
-                  string("This includes labeling the so-called named entities in the data such as persons, organizations, and places.\n\n\n")
+                  string("This includes labeling the so-called named entities in the data such as persons, organizations, and places. Note: In order to better identify named entities, it is recommended not to convert the text to only lowercase letters during pre-processing (i.e., do not apply „Normalization (lowercase)“)\n\n\n")
                   string{ font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal; "Information about the File Naming Convention\n\n"}
-                  string("To enable a quick identification and location of your converted document depending on the feature applied, the following file naming convention is used in RubyCrumbler.\nAbbreviations are added to the source file name to indicate the features that have been applied to the document. The suffix of the new file name indicates the ouput file for the corresponding feature. For example, the file named “myfirsttext_cl_nlc_tok.txt” is the output file of the tokenization step.\n\nAbbreviations of the features:\n • Data cleaning = cl\n • Normalization = n \n • Normalization (lowercase) = l\n • Normalization (contractions) = c\n • Tokenization = tok\n • Stopword Removal = sw\n • Stemming = stem\n • Lemmatization = lem\n • Part-of-Speech Tagging = pos\n • Named Entity Recognition = ner\n\nFor each feature step the output format is TXT. POS tagging and NER are additionally saved in CSV and XML output format.\n\n\n")
+                  string("To enable a quick identification and location of your converted document depending on the feature applied, the following file naming convention is used in RubyCrumbler.\nAbbreviations are added to the source file name to indicate the features that have been applied to the document. The suffix of the new file name indicates the ouput file for the corresponding feature. For example, the file named “myfirsttext_cl_nlc_tok.txt” is the output file of the tokenization step.\n\nAbbreviations of the features:\n • Data cleaning = cl\n • Normalization = n \n • Normalization (lowercase) = l\n • Normalization (contractions) = c\n • Tokenization = tok\n • Stopword Removal = sw\n • Lemmatization = lem\n • Part-of-Speech Tagging = pos\n • Named Entity Recognition = ner\n\nFor each feature step the output format is TXT. POS tagging and NER are additionally saved in CSV and XML output format.\n\n\n")
                   string{ font family: 'Helvetica', size: 13, weight: :bold, italic: :normal, stretch: :normal; "Notes\n\n" }
 
                   string("More information and the source code are available on GitHub.")
@@ -643,20 +788,119 @@ class CrumblerGUI
     ### START of main window
     window('RubyCrumbler', 300, 800) {
 
-      margined true
+      margined(true)
+      #fullscreen(true)
 
       vertical_box {
         horizontal_box {
+          stretchy false
 
           vertical_box {
+    #Select the language (English or German) in which you want to process the files
+              group('Language of Text Input') {
+                stretchy false
+                vertical_box {
+                  label("Please specify the language in which your input text data is written.\n" \
+                  "Note: This information is mandatory to run the program.\n") { stretchy false }
+
+                  combobox {
+                    stretchy false
+                    items 'English', 'German'
+                    selected 'English' #default
+                    @lang = 'EN' #necessary to set @lang wenn default selected is used
+
+                    on_selected do |c|
+                      @lang = if c.selected_item == 'English'
+                                'EN' #English
+                              else
+                                'DE' #German
+                              end
+                    end
+                  }
+                  label
+                }
+              }
+    # Upload the input data: as txt-, xml- or html-file, as single file, directory or as website
+    # Error will be shown, if no file is chosen
+    # The upload will start the whole pipeline process
+              group('Upload Center') {
+                  stretchy false
+
+                  vertical_box {
+                      label("Choose a file(s) or a directory, or specify a URL whose text content should be used to upload.\n" \
+                      "Note: Total file size may not exceed 50MB. File type must be TXT.\n") { stretchy false }
+                      button("Upload from file(s)") {
+                        stretchy false
+
+                        on_clicked do
+                          file = open_file
+                          if file == nil
+                            msg_box('ERROR: No File selected.')
+                          else
+                            @input = file
+                            @projectname = File.basename(@input, ".*")
+                            @doc = PipelineFeatures.new
+                            puts @input unless file.nil?
+                            @doc.newproject(@input, @projectname)
+                            msg_box('Notification', 'Upload successfully completed.')
+                          end
+                        end
+                      }
+
+                      button("Upload file(s) from directory") {
+                        stretchy false
+
+                        on_clicked do
+                          dir = Tk.chooseDirectory
+                          @input = dir
+                          @projectname = File.basename(@input, ".*")
+                          @projectname = "#{@projectname}_process"
+                          if @projectname == "_process"
+                            msg_box('ERROR: No Folder selected.')
+                          else
+                            @doc = PipelineFeatures.new
+                            @doc.newproject(@input, @projectname)
+                            msg_box('Notification', 'Upload successfully completed.')
+                          end
+                        end
+                      }
+
+                      label("\nEnter URL:") { stretchy false }
+                      @entry = entry {
+                        stretchy false
+                        on_changed do
+                          @url = @entry.text
+                        end
+                      }
+                      @button = button('Upload text from website'){
+                          stretchy false
+
+                          on_clicked do
+                            @input = @url
+                            if @input == nil
+                              msg_box('ERROR: No URL selected.')
+                            else
+                              @projectname = File.basename(@input, ".*")
+                              @doc = PipelineFeatures.new
+                              puts @input unless @input.nil?
+                              @doc.newproject(@input, @projectname)
+                              msg_box('Notification', 'Upload successfully completed.')
+                            end
+                          end
+                        }
+                    }
+                }
+            }
+
+          vertical_box{
             group('Pre-Processing') {
               stretchy false
 
-              # Den checkboxen muss man wohl individuelle Namen geben, damit man
-              # die einzelnen methods aufrufen kann
+    #Choose the Pipeline features you want to use in your file processing
               vertical_box {
 
-                label("Select all or respective features. See the documentation for more information about each feature.\n") { stretchy false}
+                label("Select all or respective features.\n" \
+                "Note: See the documentation for more information about each feature.") { stretchy false}
 
                 @clcb = checkbox('Data cleaning') {
                   stretchy false
@@ -701,29 +945,16 @@ class CrumblerGUI
                     end
                   end
                 }
-
-                # button('Choose all') {
-                #   stretchy false
-                #
-                #   on_clicked do
-                #     msg_box('Information', 'You clicked the button')
-                #   end
-                # }
-                #
-                # button('Reset') {
-                #   stretchy false
-                #
-                #   on_clicked do
-                #     msg_box('Information', 'You clicked the button')
-                #   end
-                # }
               }
             }
+
             group('Natural Language Processing – Tasks') {
-              #stretchy true
+              stretchy false
 
               vertical_box {
-                label("Select all or respective features. See the documentation for more information about each feature.\n") { stretchy false}
+                label("Select all or respective features.\n" \
+                "Note: See the documentation for more information about each feature.") { stretchy false}
+
                 @tok = checkbox('Tokenization') {
                   stretchy false
 
@@ -746,16 +977,16 @@ class CrumblerGUI
                   end
                 }
 
-                @stem = checkbox('Stemming') {
-                  stretchy false
+                #@stem = checkbox('Stemming') {
+                #  stretchy false
 
-                  on_toggled do |c|
-                    @stemchecked = @stem.checked?
-                    if @stem.checked == true
-                      @count +=1
-                    end
-                  end
-                }
+                #  on_toggled do |c|
+                #    @stemchecked = @stem.checked?
+                #    if @stem.checked == true
+                #      @count +=1
+                #    end
+                #  end
+                #}
 
                 @lem = checkbox('Lemmatization') {
                   stretchy false
@@ -789,97 +1020,6 @@ class CrumblerGUI
                     end
                   end
                 }
-
-                # button('Choose all') {
-                #   stretchy false
-                #
-                #   on_clicked do
-                #     msg_box('Information', 'You clicked the button')
-                #   end
-                # }
-                #
-                # button('Reset') {
-                #   stretchy false
-                #
-                #   on_clicked do
-                #     msg_box('Information', 'You clicked the button')
-                #   end
-                # }
-
-              }
-            }
-          }
-
-          vertical_box {
-            group('Upload Center') {
-              #stretchy false
-
-              vertical_box {
-                label("Choose a file(s) or a directory, or specify a URL whose text content should be used to upload.\n" \
-                "Note: Total file size may not exceed 50MB. File type must be TXT.") { stretchy false}
-                button("Upload from file(s)") {
-                  #stretchy false
-
-                  on_clicked do
-                    file = open_file
-                    if file == nil
-                      msg_box('ERROR: No File selected.')
-                    else
-                    @input = file
-                    @projectname = File.basename(@input, ".*")
-                    @doc = PipelineFeatures.new
-                    puts @input unless file.nil?
-                    @doc.newproject(@input, @projectname)
-                    msg_box('Notification', 'Upload successfully completed.')
-                    end
-                    end
-                }
-
-                vertical_box {
-                  button("Upload file(s) from directory") {
-                    #stretchy false
-
-                    on_clicked do
-                      dir = Tk.chooseDirectory
-                      @input = dir
-                      @projectname = File.basename(@input, ".*")
-                      @projectname = "#{@projectname}_process"
-                      if @projectname == "_process"
-                        msg_box('ERROR: No Folder selected.')
-                      else
-                        @doc = PipelineFeatures.new
-                        @doc.newproject(@input, @projectname)
-                        msg_box('Notification', 'Upload successfully completed.')
-                      end
-                    end
-                  }
-                }
-
-                vertical_box {
-                  label('Enter URL:'){
-                  }
-                  @entry = entry {
-                    stretchy false
-                    on_changed do
-                      @url = @entry.text
-                    end
-                  }
-                  @button = button('Upload text from website'){
-
-                    on_clicked do
-                      @input = @url
-                      if @input == nil
-                        msg_box('ERROR: No URL selected.')
-                      else
-                      @projectname = File.basename(@input, ".*")
-                      @doc = PipelineFeatures.new
-                      puts @input unless @input.nil?
-                      @doc.newproject(@input, @projectname)
-                      msg_box('Notification', 'Upload successfully completed.')
-                      end
-                      end
-                  }
-                }
               }
             }
           }
@@ -887,20 +1027,19 @@ class CrumblerGUI
 
         horizontal_separator { stretchy false }
 
-        vertical_box {
+        horizontal_box {
           stretchy false
           group() {
-            stretchy false
+            #stretchy false
 
             vertical_box {
               button('Run') {
                 stretchy false
 
-                #hier geht die action ab
-                # if entsprechende checkbox
-                # dann @doc und passende methode aufrufen
-
+    # action starts here ;-)
+    # if checkbox is toggled than @doc (the input file) will be processed with respective method
                 on_clicked do
+                  #pre-processing
                   if @clcbchecked == true
                     @doc.cleantext()
                     @fincount += 1
@@ -910,39 +1049,54 @@ class CrumblerGUI
                     end
                   end
 
-                if @normchecked == true && !@normlowchecked && !@normcontchecked
-                  @doc.normalize(false, false)
-                  @fincount += 1
-                  @progressbar.value = (@fincount*100/@count)
-                  if @progressbar.value == 100
-                    @label.text = "Text processing finished!"
-                  end
-                else
-                  if @normlowchecked == true || @normcontchecked == true
-                    @doc.normalize(@normcontchecked, @normlowchecked)
-                    if @normlowchecked == true && @normcontchecked == true
-                      @fincount += 1
-                      if @normchecked == true
-                        @fincount += 1
-                        if @normlowchecked == true && @normcontchecked == true && !@normchecked
-                          @fincount += 1
-                          @progressbar.value = (@fincount*100/@count)
-                          if @progressbar.value == 100
-                            @label.text = "Text processing finished!"
-                          end
-                        end
-                      end
-                    end
+                  if @normchecked == true && !@normlowchecked && !@normcontchecked
+                    @doc.normalize(false, @lang, false)
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
                       @label.text = "Text processing finished!"
                     end
                   end
+                  if (@normchecked == true && @normlowchecked == true && !@normcontchecked) || (@normchecked == true && @normcontchecked == true && !@normlowchecked)
+                    @doc.normalize(@normcontchecked, @lang, @normlowchecked)
+                    @fincount += 2
+                    @progressbar.value = (@fincount*100/@count)
+                    if @progressbar.value == 100
+                      @label.text = "Text processing finished!"
+                    end
+                  end
+                  if @normchecked == true && @normlowchecked == true && @normcontchecked == true
+                    @doc.normalize(@normcontchecked, @lang, @normlowchecked)
+                    @fincount += 3
+                    @progressbar.value = (@fincount*100/@count)
+                    if @progressbar.value == 100
+                      @label.text = "Text processing finished!"
+                    end
+                  end
+                  if !@normchecked && @normlowchecked == true && @normcontchecked == true
+                    @norm.checked = true
+                    @doc.normalize(@normcontchecked, @lang, @normlowchecked)
+                    @count += 1
+                    @fincount += 3
+                    @progressbar.value = (@fincount*100/@count)
+                    if @progressbar.value == 100
+                      @label.text = "Text processing finished!"
+                    end
+                  end
+                  if (!@normchecked && @normlowchecked == true && !@normcontchecked) || (!@normchecked && !@normlowchecked && @normcontchecked == true)
+                    @norm.checked = true
+                    @doc.normalize(@normcontchecked, @lang, @normlowchecked)
+                    @count += 1
+                    @fincount += 2
+                    @progressbar.value = (@fincount*100/@count)
+                    if @progressbar.value == 100
+                      @label.text = "Text processing finished!"
+                    end
                   end
 
+                  #nlp-pipeline
                   if @tokchecked == true
-                    @doc.tokenizer()
+                    @doc.tokenizer(@lang)
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
@@ -950,17 +1104,15 @@ class CrumblerGUI
                     end
                   end
 
+                  @autotokchecked = false #variable for automatically checking tokenization
                   if @srchecked == true
-                    @doc.stopwordsclean()
-                    @fincount += 1
-                    @progressbar.value = (@fincount*100/@count)
-                    if @progressbar.value == 100
-                      @label.text = "Text processing finished!"
+                    if !@tokchecked && !@autotokchecked
+                      @autotokchecked = (@tok.checked = true)
+                      @doc.tokenizer(@lang)
+                      @count += 1
+                      @fincount += 1
                     end
-                  end
-
-                  if @lemchecked == true
-                    @doc.lemmatizer()
+                    @doc.stopwordsclean(@lang)
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
@@ -976,8 +1128,29 @@ class CrumblerGUI
                   #                 end
                   #end
                   #
+                  if @lemchecked == true
+                    if !@tokchecked && !@autotokchecked
+                      @autotokchecked = (@tok.checked = true)
+                      @doc.tokenizer(@lang)
+                      @count += 1
+                      @fincount += 1
+                    end
+                    @doc.lemmatizer(@lang)
+                    @fincount += 1
+                    @progressbar.value = (@fincount*100/@count)
+                    if @progressbar.value == 100
+                      @label.text = "Text processing finished!"
+                    end
+                  end
+
                   if @poschecked == true
-                    @doc.tagger()
+                    if !@tokchecked && !@autotokchecked
+                      @autotokchecked = (@tok.checked = true)
+                      @doc.tokenizer(@lang)
+                      @count += 1
+                      @fincount += 1
+                    end
+                    @doc.tagger(@lang)
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
@@ -986,7 +1159,13 @@ class CrumblerGUI
                   end
 
                   if @nerchecked == true
-                    @doc.ner()
+                    if !@tokchecked && !@autotokchecked
+                      @autotokchecked = (@tok.checked = true)
+                      @doc.tokenizer(@lang)
+                      @count += 1
+                      @fincount += 1
+                    end
+                    @doc.ner(@lang)
                     @fincount += 1
                     @progressbar.value = (@fincount*100/@count)
                     if @progressbar.value == 100
@@ -995,14 +1174,14 @@ class CrumblerGUI
                   end
                 end
               }
-              button('Cancel') {
-                stretchy false
-
-                on_clicked do
-                  msg_box('Information', 'You clicked the button')
-                end
-              }
-
+              # button('Cancel') {
+              #   stretchy false
+              #
+              #   on_clicked do
+              #     msg_box('Information', 'You clicked the button')
+              #   end
+              # }
+    # Progessbar to show how processing is going.
               label('Status – Progress bar') { stretchy false }
               @progressbar = progress_bar {
                 stretchy false
@@ -1012,13 +1191,14 @@ class CrumblerGUI
                 stretchy false
               }
 
+    # Start a new project. Due to restrictions in the GUI it does restart the program. It's not possible to
+    # uncheck the checkboxes automatically
               button('New Project') {
+                stretchy false
 
                 on_clicked do
                   window.destroy
-                  Kernel.exec("ruby rubycrumbler_macOS.rb")
-                  #IO.popen("start cmd /C ruby.exe #{$0} #{ARGV.join(' ')}")
-                  #sleep 2
+                  Kernel.exec("ruby rubycrumbler_mac.rb")
                 end
               }
             }
