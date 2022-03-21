@@ -11,7 +11,8 @@ Hier jenachdem dann noch einfügen das entweder als Skript oder als release date
 ## GUI
 MacOS | Windows | Linux
 ----|---------|------
-![mac_2](https://user-images.githubusercontent.com/72874215/159301398-12cc6337-aa7a-4981-929f-2e117e528564.gif) |
+![mac_2](https://user-images.githubusercontent.com/72874215/159301398-12cc6337-aa7a-4981-929f-2e117e528564.gif) |![windows_3](https://user-images.githubusercontent.com/72874215/159338843-e5389c40-646c-4f3b-b7a6-8877f9ef7b79.gif)|
+
 ### Issues & Future Tasks
 General:
 * The GUI window cannot be reduced in width so far. In general, we recommend opening and using in full-screen mode.
