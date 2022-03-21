@@ -12,9 +12,9 @@ Hier jenachdem dann noch einfügen das entweder als Skript oder als release date
 MacOS | Windows | Linux
 ----|---------|------
 ![mac_2](https://user-images.githubusercontent.com/72874215/159301398-12cc6337-aa7a-4981-929f-2e117e528564.gif) |
-### Issues & Futue Tasks
+### Issues & Future Tasks
 * General issues: The GUI window cannot be reduced in width so far. In general, we recommend opening and using in full-screen mode.
-* macOS: The URL in the File Upload area can only be inserted into the field on macOS via right click and "paste". The shortcut "cmd/ctrl + V" does not work.
+* macOS: The URL in the File Upload area can only be inserted into the field via right click and "paste". The shortcut "cmd/ctrl + V" does not work.
 
 ## Description of Features
 ***Pre-Processing***<br>
