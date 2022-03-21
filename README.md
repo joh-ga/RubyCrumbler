@@ -11,7 +11,7 @@ Hier jenachdem dann noch einfügen das entweder als Skript oder als release date
 ## GUI
 MacOS | Windows | Linux
 ----|---------|------
-![mac_2](https://user-images.githubusercontent.com/72874215/159301398-12cc6337-aa7a-4981-929f-2e117e528564.gif) |![windows_3](https://user-images.githubusercontent.com/72874215/159338843-e5389c40-646c-4f3b-b7a6-8877f9ef7b79.gif)|
+![mac_31](https://user-images.githubusercontent.com/72874215/159339948-b7ae1bf2-60c1-4dae-ac1a-4e13a6048ef0.gif)|![windows_3](https://user-images.githubusercontent.com/72874215/159338843-e5389c40-646c-4f3b-b7a6-8877f9ef7b79.gif)|
 
 ### Issues & Future Tasks
 General:
