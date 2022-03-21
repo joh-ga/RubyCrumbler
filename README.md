@@ -13,15 +13,18 @@ MacOS | Windows | Linux
 ----|---------|------
 ![mac_2](https://user-images.githubusercontent.com/72874215/159301398-12cc6337-aa7a-4981-929f-2e117e528564.gif) |
 ### Issues & Future Tasks
-* General issues: The GUI window cannot be reduced in width so far. In general, we recommend opening and using in full-screen mode.
-* macOS: The URL in the File Upload area can only be inserted into the field via right click and "paste". The shortcut "cmd/ctrl + V" does not work.
+General issues:
+* The GUI window cannot be reduced in width so far. In general, we recommend opening and using in full-screen mode.
+* Adding stemming as a feature in the NLP pipeline.<br>
+macOS:
+* The URL in the File Upload area can only be inserted into the field via right click and "paste". The shortcut "cmd/ctrl + V" does not work.
 
 ## Description of Features
 ***Pre-Processing***<br>
 **Data Cleaning:** This includes removing redundant whitespaces, punctuation (redundant dots), special symbols (e.g., line break, new line), hash tags, HTML tags, and URLs.<br>
 **Normalization:** This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark).<br>
 **Normalization (lowercase):** This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting the text into lowercase.<br>
-**Normalization (contractions):** This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not). Note: German contractions are always converted with the definite article and include only very colloquial contractions (unterm - unter dem). Contractions like „zum“ are not transformed into „zu dem“, because expressions like „zum Beispiel“ usually remain unchanged. The list of contractions can be found in the source code and can be customized as needed.<br>
+**Normalization (contractions):** This includes removing punctuation symbols (dot, colon, comma, semicolon, exclamation and question mark) as well as converting contractions (abbreviation for a sequence of words like “don’t”) into their original form (e.g., do not). Note: German contractions are always converted with the definite article and include only very colloquial contractions (unterm - unter dem). Contractions like “zum” are not transformed into “zu dem”, because expressions like “zum Beispiel” usually remain unchanged. The list of contractions can be found in the source code and can be customized as needed.<br>
 
 ***Natural Language Processing – Tasks***<br>
 **Tokenization:** This includes splitting the pre-processed data into individual characters or tokens.<br>
@@ -32,7 +35,7 @@ MacOS | Windows | Linux
 
 ## File Naming Convention
 To enable a quick identification and location of your converted document depending on the feature applied, the following file naming convention is used.<br>
-Abbreviations are added to the source file name to indicate the features that have been applied to the document. The suffix of the new file name indicates the ouput file for the corresponding feature. For example, the file named “myfirsttext_cl_nlc_tok.txt” is the output file of the tokenization step.<br><br>
+Abbreviations are added to the source file name to indicate the features that have been applied to the document. The suffix of the new file name indicates the ouput file for the corresponding feature. For example, the file named "myfirsttext_cl_nlc_tok.txt" is the output file of the tokenization step.<br><br>
 **Overview of the feature abbreviations:**
 * Data cleaning = cl
 * Normalization = n
