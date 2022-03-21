@@ -7,7 +7,7 @@ wenn User skript nutzt statt release dann<br>
 
 ## Requirements
 * [Ruby](https://www.ruby-lang.org/en/) 3.03
-* Gems in the Gemfile
+* Gems in the [Gemfile](https://github.com/joh-ga/RubyCrumbler/blob/6347f845df762466dd0d49e91d671ce2c45c4ca0/Gemfile)
 
 ## Preview of GUI
 Mac | Windows | Linux
