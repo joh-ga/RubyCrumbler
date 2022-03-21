@@ -1,0 +1,35 @@
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title>The life and opinions of Tristram Shandy, Gentleman: TEI
+          edition</title>
+      </titleStmt>
+      <publicationStmt>
+        <publisher>Web Head Press</publisher>
+        <date>2013</date>
+      </publicationStmt>
+      <sourceDesc>
+        <p>Transcribed from the first edition, 1708</p>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <body>
+      <div type="volume" xml:id="TS01">
+        <div type="chapter" xml:id="TS0101">
+          <head>Chap. I</head>
+          <p>I wish either my father or my mother, or indeed both of them, as they were in duty both equally bound to it, had minded what they            were about when they begot me; ...</p>
+          <!-- remainder of chapter 1 here -->
+      </div>
+      <div type="chapter" xml:id="TS0102">
+        <head>Chap. II</head>
+      <p> — Then, positively, there is nothing in the question, that I can see, either good or bad. —      Then let me tell you, Sir, it was a very unseasonable question at least ...</p>
+          <!-- remainder of chapter 2 here -->
+        </div>
+        <!-- remaining chapters of volume 1 here -->
+      </div>
+      <!-- remaining volumes of work here -->
+    </body>
+  </text>
+</TEI>
