@@ -16,6 +16,7 @@ MacOS | Windows | Linux
 ### Issues & Future Tasks
 General:
 * The GUI window cannot be reduced in width so far. In general, we recommend opening and using in full-screen mode.
+* Using [threads](https://ruby-doc.org/core-2.5.0/Thread.html) for multiple execution
 * Adding stemming as a feature in the NLP pipeline.<br>
 
 macOS:
