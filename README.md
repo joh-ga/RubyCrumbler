@@ -6,7 +6,7 @@ Ready to crumble your text for common NLP tasks? This repository is home of Ruby
 * [Ruby](https://www.ruby-lang.org/en/) > 3.02
 * Gems in the [Gemfile](https://github.com/joh-ga/RubyCrumbler/blob/6347f845df762466dd0d49e91d671ce2c45c4ca0/Gemfile)
 
-Note: The script may also run with older Ruby versions. We appreciate your feedback if execution with older versions is also possible.
+Note: The script may also run with older Ruby versions. It was sucessfully tested with Ruby 2.7 on Linux. We appreciate your feedback if execution with other older versions is also possible.
 
 ## GUI
 MacOS | Windows | Linux
@@ -19,9 +19,16 @@ General:
 * Using [threads](https://ruby-doc.org/core-2.5.0/Thread.html) for multiple execution.
 * Adding stemming as a feature in the NLP pipeline.
 * We recommend that texts are encoded in UTF-8.<br>
+* Before using the RubyCrumbler, make sure you have downloaded the respective spacy models .
 
 macOS:
-* The URL in the File Upload area can only be inserted into the field via right click and "paste". The shortcut "cmd/ctrl + V" does not work.
+* The URL in the File Upload area can only be inserted into the field via right click and "paste". The shortcut "cmd/ctrl + V" does not work
+
+Linux:
+* If an error occures while installing tk gem in Linux try this: [tk-dev installation](https://dev.to/kojix2/installing-ruby-tk-on-ubuntu-1d86)
+* If an error occurs while installing ruby-spacy, make sure that you have installed python with spacy library.
+* Make sure that you have installed ruby-dev package.
+
 
 ## Description of Features
 ***Pre-Processing***<br>
