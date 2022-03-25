@@ -3,8 +3,10 @@
 Ready to crumble your text for common NLP tasks? This repository is home of RubyCrumbler, a simple script to download, that provides a GUI desktop application written in Ruby to apply common Natural Language Processing (NLP) tasks on your English or German text files.
 
 ## Requirements
-* [Ruby](https://www.ruby-lang.org/en/) 3.03
+* [Ruby](https://www.ruby-lang.org/en/) > 3.02
 * Gems in the [Gemfile](https://github.com/joh-ga/RubyCrumbler/blob/6347f845df762466dd0d49e91d671ce2c45c4ca0/Gemfile)
+
+Note: The script may also run with older Ruby versions. We appreciate your feedback if execution with older versions is also possible.
 
 ## GUI
 MacOS | Windows | Linux
@@ -15,7 +17,8 @@ MacOS | Windows | Linux
 General:
 * The GUI window cannot be reduced in width so far. In general, we recommend opening and using in full-screen mode.
 * Using [threads](https://ruby-doc.org/core-2.5.0/Thread.html) for multiple execution.
-* Adding stemming as a feature in the NLP pipeline.<br>
+* Adding stemming as a feature in the NLP pipeline.
+* We recommend that texts are encoded in UTF-8.<br>
 
 macOS:
 * The URL in the File Upload area can only be inserted into the field via right click and "paste". The shortcut "cmd/ctrl + V" does not work.
