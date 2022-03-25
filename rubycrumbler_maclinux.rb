@@ -1198,7 +1198,7 @@ class CrumblerGUI
 
                 on_clicked do
                   window.destroy
-                  Kernel.exec("ruby rubycrumbler_mac.rb")
+                  Kernel.exec("ruby rubycrumbler_maclinux.rb")
                 end
               }
             }
