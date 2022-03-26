@@ -40,7 +40,7 @@ Linux:
 ***Natural Language Processing – Tasks***<br>
 **Tokenization:** This includes splitting the pre-processed data into individual characters or tokens.<br>
 **Stopword Removal:** Stopwords are words that do not carry much meaning but are important grammatically as, for example, “to” or “but”. This feature includes the removal of stopwords.<br>
-**Lemmatization:** This includes reduction of a word to its semantic base form according to POS classification. Lemmatized base forms and word stems may overlap. Examples: computing - compute, sung - sing, obviously - obviously.<br>
+**Lemmatization:** This includes reduction of a word to its semantic base form according to POS classification. Lemmatized base forms and word stems may intersect. Examples: computing - compute, sung - sing, obviously - obviously.<br>
 **Part-of-Speech Tagging (POS):** This includes identifying and labeling the parts of speech of text data.<br>
 **Named Entity Recognition (NER):** This includes labeling the so-called named entities in the data such as persons, organizations, and places. Note: In order to better identify named entities, it is recommended not to convert the text to only lowercase letters during pre-processing (i.e., do not apply "Normalization (lowercase)").<br>
 
