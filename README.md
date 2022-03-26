@@ -6,8 +6,8 @@ Ready to crumble your text for common NLP tasks? This repository is home of Ruby
 * [Ruby](https://www.ruby-lang.org/en/) > 3.0.2
 * Gems in the [Gemfile](https://github.com/joh-ga/RubyCrumbler/blob/6347f845df762466dd0d49e91d671ce2c45c4ca0/Gemfile)
 
-The script may also run with older Ruby versions. It was sucessfully tested with Ruby 2.7 on Linux. You are welcome to give us feedback if it is possible to run it with other older versions.<br>
-Note: Before using RubyCrumbler, make sure you have downloaded the respective spaCy models.<br>
+The script may also run with older Ruby versions. It was sucessfully tested with Ruby 2.7 on Linux. You're welcome to give us feedback if it is possible to run it with other older versions.<br>
+Note: Before using RubyCrumbler, make sure you have downloaded the respective spaCy models (EN: [en_core_web_lg](https://spacy.io/models/en), DE: [de_core_news_lg](https://spacy.io/models/de)).<br>
 
 Linux:
 * If an error occurs while installing tk gem in Linux, try this: [tk-dev installation](https://dev.to/kojix2/installing-ruby-tk-on-ubuntu-1d86).
