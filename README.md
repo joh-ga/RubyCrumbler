@@ -6,12 +6,19 @@ Ready to crumble your text for common NLP tasks? This repository is home of Ruby
 * [Ruby](https://www.ruby-lang.org/en/) > 3.02
 * Gems in the [Gemfile](https://github.com/joh-ga/RubyCrumbler/blob/6347f845df762466dd0d49e91d671ce2c45c4ca0/Gemfile)
 
-Note: The script may also run with older Ruby versions. It was sucessfully tested with Ruby 2.7 on Linux. We appreciate your feedback if execution with other older versions is also possible.
+The script may also run with older Ruby versions. It was sucessfully tested with Ruby 2.7 on Linux. You are welcome to give us feedback if it is possible to run it with other older versions.
+Note: Before using RubyCrumbler, make sure you have downloaded the respective spaCy models.<br><br>
+Linux:
+* If an error occures while installing tk gem in Linux, try this: [tk-dev installation](https://dev.to/kojix2/installing-ruby-tk-on-ubuntu-1d86).
+* If an error occurs while installing ruby-spacy, make sure that you have installed python with spacy library.
+* Make sure that you have installed ruby-dev package.
 
 ## GUI
-MacOS | Windows | Linux
-----|---------|------
-![mac_31](https://user-images.githubusercontent.com/72874215/159339948-b7ae1bf2-60c1-4dae-ac1a-4e13a6048ef0.gif)|![windows_3](https://user-images.githubusercontent.com/72874215/159338843-e5389c40-646c-4f3b-b7a6-8877f9ef7b79.gif)|
+MacOS | Windows
+----|---------
+![mac_31](https://user-images.githubusercontent.com/72874215/159339948-b7ae1bf2-60c1-4dae-ac1a-4e13a6048ef0.gif)|![windows_4](https://user-images.githubusercontent.com/72874215/160242473-c38439be-0955-4e89-9f3f-b3d0567531fd.gif)
+ Linux |
+|![rubycrumbler_linux](https://user-images.githubusercontent.com/72874215/160242460-99af1c8c-b43f-458d-bd69-1274a0bd9814.gif)
 
 ### Issues & Future Tasks
 General:
@@ -19,16 +26,9 @@ General:
 * Using [threads](https://ruby-doc.org/core-2.5.0/Thread.html) for multiple execution.
 * Adding stemming as a feature in the NLP pipeline.
 * We recommend that texts are encoded in UTF-8.<br>
-* Before using the RubyCrumbler, make sure you have downloaded the respective spacy models .
 
 macOS:
 * The URL in the File Upload area can only be inserted into the field via right click and "paste". The shortcut "cmd/ctrl + V" does not work
-
-Linux:
-* If an error occures while installing tk gem in Linux try this: [tk-dev installation](https://dev.to/kojix2/installing-ruby-tk-on-ubuntu-1d86)
-* If an error occurs while installing ruby-spacy, make sure that you have installed python with spacy library.
-* Make sure that you have installed ruby-dev package.
-
 
 ## Description of Features
 ***Pre-Processing***<br>
