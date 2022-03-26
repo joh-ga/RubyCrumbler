@@ -11,15 +11,13 @@ Note: Before using RubyCrumbler, make sure you have downloaded the respective sp
 
 Linux:
 * If an error occurs while installing tk gem in Linux, try this: [tk-dev installation](https://dev.to/kojix2/installing-ruby-tk-on-ubuntu-1d86).
-* If an error occurs while installing ruby-spacy, make sure that you have installed python with spacy library.
+* If an error occurs while installing ruby-spacy, make sure that you have installed Python with spaCy library.
 * Make sure that you have installed ruby-dev package.
 
 ## GUI
-MacOS | Windows
-----|---------
-![mac_31](https://user-images.githubusercontent.com/72874215/159339948-b7ae1bf2-60c1-4dae-ac1a-4e13a6048ef0.gif)|![windows_4](https://user-images.githubusercontent.com/72874215/160242473-c38439be-0955-4e89-9f3f-b3d0567531fd.gif)
-Linux |
-![rubycrumbler_linux](https://user-images.githubusercontent.com/72874215/160242460-99af1c8c-b43f-458d-bd69-1274a0bd9814.gif)|
+MacOS | Windows | Linux
+| :---: | :---: | :---:
+![mac_31](https://user-images.githubusercontent.com/72874215/159339948-b7ae1bf2-60c1-4dae-ac1a-4e13a6048ef0.gif)|![windows_4](https://user-images.githubusercontent.com/72874215/160242473-c38439be-0955-4e89-9f3f-b3d0567531fd.gif)|![rubycrumbler_linux](https://user-images.githubusercontent.com/72874215/160242460-99af1c8c-b43f-458d-bd69-1274a0bd9814.gif)
 
 ### Issues & Future Tasks
 General:
