@@ -12,7 +12,7 @@ require 'ruby-progressbar'
 module RubyCrumbler
 
   class PipelineFeatures
-    #initialize globally used variables
+    # initialize globally used variables
     def initialize()
       @input
       @text2process
@@ -30,7 +30,7 @@ module RubyCrumbler
     def multidir (directory)
       directory = @projectdir
       @filenumber = Dir.glob(File.join(directory, '**', '*')).select { |file| File.file?(file) }.count
-    #filenumber is later important for opening the x recent files in the methods
+    # filenumber is later important for opening the x recent files in the methods
       print @filenumber
       Dir.foreach(directory) do |filename|
         next if filename == '.' || filename == '..'
@@ -39,7 +39,7 @@ module RubyCrumbler
         @filename=File.basename(filename, ".*")
         first = Nokogiri::HTML(File.open("#{@projectdir}/#{@filenamein}"))
         doc = first.search('p').map(&:text)
-    #encode doc to correct encoding for german special characters
+    # encode doc to correct encoding for German special characters
         doc = doc.join("").encode("iso-8859-1").force_encoding("utf-8")
         File.write("#{@projectdir}/#{@filename}", doc)
       end
@@ -47,8 +47,8 @@ module RubyCrumbler
 
 
     # create a new folder and copy chosen file to it OR copy all files in chosen directory to it OR write file from website into it
-    # you can use txt-, xml- or html-files
-    # created folder ist called by projectname (= name of origin directory or file)
+    # you can use txt, xml or html files
+    # created folder is called by project name (= name of origin directory or file)
     # the copied files will keep their names and are txts
     def newproject (input, projectname)
       @input = input
@@ -69,7 +69,7 @@ module RubyCrumbler
         first = Nokogiri::HTML(File.open(@input))
         doc = first.search('p').map(&:text)
         @filenumber = 1
-    #encode doc to correct encoding for German specific characters
+    # encode doc to correct encoding for German specific characters
         doc = doc.join("").encode("iso-8859-1").force_encoding("utf-8")
         File.write("#{@projectdir}/#{@filename}", doc)
       else
@@ -86,7 +86,7 @@ module RubyCrumbler
     end
 
 
-    # clean raw text file from project folder from code, markup, special symbols (latin characters (if Englisch), currency symbols, emojis etc.), urls, digits and additional spaces
+    # clean raw text file from project folder from code, markup, special symbols (latin characters (if English), currency symbols, emojis etc.), urls, digits and additional spaces
     # output is a txt file with additional _cl for "cleaned" in name
     # the file.open line is universal for using the latest (last processed) file in directory
     def cleantext()
@@ -104,7 +104,7 @@ module RubyCrumbler
     end
 
 
-    # normalize text (from cleaned text file or raw text file) by choosing lowercasing and/or seperating contractions (both optional)
+    # normalize text (from cleaned text file or raw text file) by choosing lowercasing and/or separating contractions (both optional)
     # The first 5 lines of the methods open the last processed files (cleantext or just input) and normalize them
     # it's only important, if you process more than 1 file at a time, otherwise it would just normalize the
     # most recent file or every file in the processdir
@@ -133,8 +133,7 @@ module RubyCrumbler
     end
 
 
-    # ambigous contractions: the contraction dictionary will, when something like "you'd" occures
-    # chose "you would" over "you had".
+    # ambiguous contractions: the contraction dictionary will choose "you would" instead of "you had" for a word like "you'd".
     def contractions(language)
       # contractions of English language
       @contractions_en = {
@@ -375,7 +374,7 @@ module RubyCrumbler
       }
       # contractions of German language
       @contractions_de = {
-        #preposition + article contractions
+        # preposition + article contractions
         "ans" => "an das",
         "an's" => "an das",
         "aufm" => "auf dem",
@@ -446,7 +445,7 @@ module RubyCrumbler
         "zwischens" => "zwischen das",
         "zwischen's" => "zwischen das",
 
-        #verbal contractions + dummy subject "es" contractions
+        # verbal contractions + dummy subject "es" contractions
         "darf's" => "darf es",
         "drüber" => "darüber",
         "drunter" => "darunter",
@@ -470,7 +469,7 @@ module RubyCrumbler
         "wollen's" => "wollen es",
         "wollten's" => "wollten es",
         "wollt's" => "wollt es",
-        #etc.
+        # etc.
       }
 
       @text2process = @text2process.gsub('’','\'')
@@ -515,7 +514,7 @@ module RubyCrumbler
       end
     end
 
-    # clean input from stopwords (provided by SpaCy)
+    # clean input from stopwords (provided by spaCy)
     def stopwordsclean(language)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
@@ -561,15 +560,15 @@ module RubyCrumbler
           output.append(token.text + ": lemma:" + token.lemma)
         end
 
-        #output in terminal
+        # output in terminal
         table = Terminal::Table.new rows: rows, headings: headings
         puts table
-        #  save to txt
+        # save to txt
         File.write("#{@projectdir}/#{@filename}_lem.txt", output)
       end
     end
 
-    # POS-Tagging for input based on SpaCy POS
+    # POS tagging for input based on spaCy POS
     # output is txt, csv and xml
     def tagger(language)
       Dir.glob(@projectdir+"/*.*").reject{|file| file.end_with?("lem.txt")}.max_by(@filenumber){|f| File.mtime(f)}.each do |file|
@@ -579,14 +578,14 @@ module RubyCrumbler
         @text2process = File.open(@file2process)
         @text2process = File.read(@text2process)
         @text2process = Kernel.eval(@text2process)
-        @text2process = @text2process.join(' ').gsub(',','')#.gsub(/Total number of tokens: \d+/, '')
+        @text2process = @text2process.join(' ').gsub(',','') #.gsub(/Total number of tokens: \d+/, '')
         doc = if language == 'EN'
                 @en.read(@text2process)
               else
                 @de.read(@text2process)
               end
-        #pos: The simple UPOS part-of-speech tag
-        #tag: The detailed part-of-speech tag
+        # pos: The simple UPOS part-of-speech tag
+        # tag: The detailed part-of-speech tag
         builder = Nokogiri::XML::Builder.new
         headings = [["text", "pos", "tag"]]
         @rows = []
@@ -598,14 +597,14 @@ module RubyCrumbler
         end
         p @rows
 
-        #save to csv
+        # save to csv
         File.open("#{@projectdir}/#{@filename}_pos.csv", "w") do |f|
           f.write(headings.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
           f.write(@rows.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
         end
-        #save to txt
+        # save to txt
         File.write("#{@projectdir}/#{@filename}_pos.txt", output)
-        #save to xml
+        # save to xml
         builder.new do |xml|
           xml.root {
             for r in @rows
@@ -621,7 +620,7 @@ module RubyCrumbler
       end
     end
 
-    # Named Entity Recognition for the input tokens. Also based on Spacy.
+    # Named Entity Recognition for the input tokens. Also based on spaCy.
     # output is txt, csv and xml
     def ner(language)
       Dir.glob(@projectdir+"/*.*").reject{|file| file.end_with?("lem.txt") ||file.end_with?("pos.txt")||file.end_with?("pos.csv") ||file.end_with?("pos.xml")}.max_by(@filenumber){|f| File.mtime(f)}.each do |file|
@@ -648,14 +647,14 @@ module RubyCrumbler
           output.append(ent.text + ": label:" + ent.label)
         end
 
-        #save to csv
+        # save to csv
         File.open("#{@projectdir}/#{@filename}_ner.csv", "w") do |f|
           f.write(headings.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
           f.write(@rows.inject([]) { |csv, row| csv << CSV.generate_line(row) }.join(""))
         end
-        #save to txt
+        # save to txt
         File.write("#{@projectdir}/#{@filename}_ner.txt", output)
-        #save to xml
+        # save to xml
         builder.new do |xml|
           xml.root {
             for r in @rows
@@ -680,7 +679,7 @@ class CrumblerGUI
     ### START of menu bar
     menu('Help') {
 
-    # About window with information about the creators and Github-Link to the repo
+    # About window with information about the creators and Github link to the repo
       menu_item('About'){
         on_clicked do
           window('About RubyCrumbler', 700, 500, has_menubar = false) {
@@ -776,7 +775,7 @@ class CrumblerGUI
           stretchy false
 
           vertical_box {
-      #select the language (English or German) in which you want to process the files
+      # select the language (English or German) in which you want to process the files
               group('Language of Text Input') {
                 stretchy false
                 vertical_box {
@@ -876,7 +875,7 @@ class CrumblerGUI
             group('Pre-Processing') {
               stretchy false
 
-    #Choose the Pipeline features you want to use in your file processing
+    # Choose the Pipeline features you want to use in your file processing
               vertical_box {
 
                 label("Select all or respective features.\n" \
