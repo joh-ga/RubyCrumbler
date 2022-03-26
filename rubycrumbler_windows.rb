@@ -26,8 +26,7 @@ module RubyCrumbler
       @filenumber
     end
 
-    # multidir function is automatically called, if a folder is used for input. For each file in the directory the chosen
-    # functions will be applied.
+    # multidir function is automatically called, if a folder is used for input. For each file in the directory the chosen functions will be applied.
     def multidir (directory)
       directory = @projectdir
       @filenumber = Dir.glob(File.join(directory, '**', '*')).select { |file| File.file?(file) }.count
@@ -47,11 +46,10 @@ module RubyCrumbler
     end
 
 
-    # create a new folder and copy chosen file to it OR copy all files in chosen directory to it OR write file from
-    # website into it.
-    # You can use txt-, xml- or html-files
-    # created folder ist called by projectname (= Name of origin directory or file).
-    # The copied files will keep their names and are txts.
+    # create a new folder and copy chosen file to it OR copy all files in chosen directory to it OR write file from website into it
+    # you can use txt-, xml- or html-files
+    # created folder ist called by projectname (= name of origin directory or file)
+    # the copied files will keep their names and are txts
     def newproject (input, projectname)
       @input = input
       @projectname = projectname
@@ -71,7 +69,7 @@ module RubyCrumbler
         first = Nokogiri::HTML(File.open(@input))
         doc = first.search('p').map(&:text)
         @filenumber = 1
-    # encode doc to correct encoding for german special characters
+    # encode doc to correct encoding for German specific characters
         doc = doc.join("").encode("iso-8859-1").force_encoding("utf-8")
         File.write("#{@projectdir}/#{@filename}", doc)
       else
@@ -89,11 +87,9 @@ module RubyCrumbler
     end
 
 
-    # clean raw text file from project folder from code, markup, special symbols (latin characters (if Englisch),
-    # currency symbols, emojis etc.), urls, digits and additional spaces.
+    # clean raw text file from project folder from code, markup, special symbols (latin characters (if Englisch), currency symbols, emojis etc.), urls, digits and additional spaces
     # output is a txt file with additional _cl for "cleaned" in name
-    #
-    # The file.open line is universal for using the newest (last processed) file in directory
+    # the file.open line is universal for using the latest (last processed) file in directory
     def cleantext()
       Dir.foreach(@projectdir) do |filename|
         next if filename == '.' or filename == '..'
@@ -104,13 +100,12 @@ module RubyCrumbler
         @text2process = @text2process.gsub('\n','').gsub('\r','').gsub(/\\u[a-f0-9]{4}/i,'').gsub(/https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}/,'').gsub(/\d/, '').gsub(/[^\w\s\.\'´`äÄöÖüÜß]/,'').gsub(/[\.]{2,}/,' ').gsub(/[ ]{2,}/,' ')
         File.write("#{@projectdir}/#{@filename}_cl.txt", @text2process)
         p @text2process
-
       end
     end
 
 
     # normalize text (from cleaned text file or raw text file) by choosing lowercasing and/or seperating contractions (both optional)
-    # The 5 first lines of the methods open the last processed files (cleantext or just input) and normalize them
+    # the first 5 lines of the methods open the last processed files (cleantext or just input) and normalize them
     # it's only important, if you process more than 1 file at a time, otherwise it would just normalize the
     # most recent file or every file in the processdir
     def normalize(contractions=false, language='EN', low=false)
@@ -137,10 +132,11 @@ module RubyCrumbler
       end
     end
 
-    # Contractions of English language
+
     # ambigous contractions: the contraction dictionary will, when something like "you'd" occures
-    # chose "you would" over "you had".
+    # chose "you would" over "you had"
     def contractions(language)
+      # contractions of English language
       @contractions_en = {
         "ain't"=> "are not",
         "aren't"=> "are not",
@@ -377,7 +373,7 @@ module RubyCrumbler
         "You're"=> "You are",
         "You've"=> "You have"
       }
-    # Contractions of German language
+    # contractions of German language
       @contractions_de = {
       #preposition + article contractions
         "ans" => "an das",
@@ -482,14 +478,14 @@ module RubyCrumbler
         @contractions_en.each { |k, v| @text2process=@text2process.gsub k, v }
       else
     # on k a regular expression is used to look before the string if there is the start of sentence or a
-    # non character symbol and to look behind it, if there is the sentence ending or a non character symbol
-    # so that it does not replace parts of words
+      # non character symbol and to look behind it, if there is the sentence ending or a non character symbol
+      # so that it does not replace parts of words
         @contractions_de.each { |k, v| @text2process=@text2process.gsub /(?<=^|\W)#{k}(?=$|\W)/, v }
       end
     end
 
     # tokenize the input text and show number of tokens
-    # essential for following Pipeline steps. Will be automatically executed if these steps are chosen.
+    # essential for following pipeline steps. Will be automatically executed if these steps are chosen.
     def tokenizer(language)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
@@ -529,7 +525,6 @@ module RubyCrumbler
         @file2process = file
         @text2process = File.open(@file2process)
         @text2process = File.read(@text2process)
-        #.gsub(/Total number of tokens: \d+/, '')
         @text2process = Kernel.eval(@text2process)
         stopwords = if language == 'EN'
                       @en.Defaults.stop_words.to_s.gsub('\'','"').delete('{}" ').gsub('’','\'').split(',')
@@ -542,7 +537,7 @@ module RubyCrumbler
       end
     end
 
-    # Convert input tokens to their respective lemma
+    # convert input tokens to their respective lemma
     def lemmatizer(language)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
@@ -568,17 +563,16 @@ module RubyCrumbler
           output.append(token.text + ": lemma:" + token.lemma)
         end
 
-        #output in Terminal:
+        #output in terminal
         table = Terminal::Table.new rows: rows, headings: headings
         puts table
-
         #  save to txt
         File.write("#{@projectdir}/#{@filename}_lem.txt", output)
       end
     end
 
     # POS-Tagging for input based on SpaCy POS
-    # output is a txt, csv and a xml file
+    # output is txt, csv and xml
     def tagger(language)
       Dir.glob(@projectdir+"/*.*").reject{|file| file.end_with?("lem.txt")}.max_by(@filenumber){|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
@@ -593,8 +587,8 @@ module RubyCrumbler
               else
                 @de.read(@text2process)
               end
-      #pos: The simple UPOS part-of-speech tag
-      #tag: The detailed part-of-speech tag
+        #pos: The simple UPOS part-of-speech tag
+        #tag: The detailed part-of-speech tag
         builder = Nokogiri::XML::Builder.new
         headings = [["text", "pos", "tag"]]
         @rows = []
@@ -630,7 +624,7 @@ module RubyCrumbler
     end
 
     # Named Entity Recognition for the input tokens. Also based on Spacy.
-    # output is a txt, csv and a xml file
+    # output is txt, csv and xml
     def ner(language)
       Dir.glob(@projectdir+"/*.*").reject{|file| file.end_with?("lem.txt") ||file.end_with?("pos.txt")||file.end_with?("pos.csv") ||file.end_with?("pos.xml")}.max_by(@filenumber){|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
@@ -677,7 +671,6 @@ module RubyCrumbler
         File.write("#{@projectdir}/#{@filename}_ner.xml", ner_xml)
       end
     end
-
   end
 end
 
@@ -704,7 +697,7 @@ class CrumblerGUI
                 text {
                   default_font family: 'Helvetica', size: 13, weight: :normal, italic: :normal, stretch: :normal
                   string { font family: 'Helvetica', size: 14, weight: :bold, italic: :normal, stretch: :normal; "RubyCrumbler Version 0.0.1\n\n" }
-                  string("Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.\nsome-email@address.com\nMarch 31, 2022\n\nThis project is open source on GitHub.")
+                  string("Developed by Laura Bernardy, Nora Dirlam, Jakob Engel, and Johanna Garthe.\nMarch 31, 2022\n\nThis project is open source on GitHub.")
                 }
                 # image(File.expand_path('img/github.png', __dir__), x: 0, y: 85, width: 45, height: 45)
               }
@@ -779,7 +772,7 @@ class CrumblerGUI
     ### START of main window
     window('RubyCrumbler', 30, 40){
       margined(true)
-      #fullscreen(true) #opens GUI always directly in fullscreen
+      #fullscreen(true) #opens GUI always directly in fullscreen, but is not working properly for windows
 
       vertical_box {
         horizontal_box {
@@ -788,7 +781,7 @@ class CrumblerGUI
           vertical_box {
             stretchy false
 
-    #Select the language (English or German) in which you want to process the files
+      #select the language (English or German) in which you want to process the files
             group('Language of Text Input') {
               stretchy false
               vertical_box {
@@ -1022,7 +1015,6 @@ class CrumblerGUI
         horizontal_box {
           stretchy false
           group() {
-            #stretchy false
 
             vertical_box {
               button('Run') {
@@ -1113,13 +1105,19 @@ class CrumblerGUI
                   end
 
                   #if @stemchecked == true
-                  #  @doc.()
-                  #  @processbar.value += 2520/@count
-                  #                if @progressbar.value == 2520
-                  #                   @label.text = "Text processing finished!"
-                  #                 end
-                  #end
-                  #
+                  #   if !@tokchecked && !@autotokchecked
+                  #     @autotokchecked = (@tok.checked = true)
+                  #     @doc.tokenizer(@lang)
+                  #     @count += 1
+                  #     @fincount += 1
+                  #   end
+                  #   @doc.stemmer(@lang)
+                  #   @fincount += 1
+                  #   @progressbar.value = (@fincount*100/@count)
+                  #   if @progressbar.value == 100
+                  #     @label.text = "Text processing finished!"
+                  #   end
+                  # end
 
                   if @lemchecked == true
                     if !@tokchecked && !@autotokchecked
@@ -1167,40 +1165,17 @@ class CrumblerGUI
                   end
                 end
               }
-              # button('Cancel') {
-              #   stretchy false
-              #
-              #   on_clicked do
-              #     # set function count variables to zero, untoggle the checkboxes (they have to be ticked off and on again to choose the step)
-              #     @count = 0
-              #     @fincount = 0
-              #     @clcbchecked = false
-              #     @normchecked = false
-              #     @normlowchecked = false
-              #     @normcontchecked = false
-              #     @tokchecked = false
-              #     @srchecked = false
-              #     @srchecked = false
-              #     @stemchecked = false
-              #     @lemchecked = false
-              #     @poschecked = false
-              #     @nerchecked = false
-              #     msg_box('Choose new file and Pipeline steps again (untoggle and toggle the checkboxes again')
-              #   end
-              # }
 
-      # Progessbar to show how processing is going.
+      # progessbar to show how processing is going
               label('Status – Progress bar') { stretchy false }
               @progressbar = progress_bar {
                 stretchy false
-
               }
               @label = label("") {
                 stretchy false
               }
 
-    # Start a new project. Due to restrictions in the GUI it does restart the program. It's not possible to
-    # uncheck the checkboxes automatically
+    # Start a new project. Due to restrictions in the GUI it does restart the program. It's not possible to uncheck the checkboxes automatically
               button('New Project') {
 
                 on_clicked do
