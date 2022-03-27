@@ -61,5 +61,5 @@ For each feature step the output format is TXT. POS tagging and NER are addition
 
 ## Pipeline Structure of RubyCrumbler
 The program is built based on the following pipeline structure.<br>
-![alt text](https://github.com/joh-ga/RubyCrumbler/blob/6f4403aff2992059d96ee15bf3865dd73376caa8/img/rubycumbler_pipeline.png)<br>
+![alt text](https://github.com/joh-ga/RubyCrumbler/blob/43bf06a8dc118f2e5c9eac252f3b7158fb00b5fe/img/rubycrumbler_pipeline.png)<br>
 
