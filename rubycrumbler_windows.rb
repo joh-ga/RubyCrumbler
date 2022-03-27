@@ -483,7 +483,7 @@ module RubyCrumbler
       end
     end
 
-    # tokenize the input text and show number of tokens
+    # tokenize the input text with spaCy and show number of tokens
     # essential for following pipeline steps. Will be automatically executed if these steps are chosen.
     def tokenizer(language)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
@@ -536,7 +536,7 @@ module RubyCrumbler
       end
     end
 
-    # convert input tokens to their respective lemma
+    # convert input tokens to their respective lemma (based on spaCy)
     def lemmatizer(language)
       Dir.glob(@projectdir+"/*.*").max_by(@filenumber) {|f| File.mtime(f)}.each do |file|
         @filename = File.basename(file, ".*")
@@ -1020,9 +1020,9 @@ class CrumblerGUI
                 stretchy false
 
     # action starts here ;-)
-    # if checkbox is toggled than @doc (the input file) will be processed with respective method
+    # if checkbox is toggled then @doc (the input file) will be processed with respective method
                 on_clicked do
-                  #pre-processing
+                  ##pre-processing##
                   if @clcbchecked == true
                     @doc.cleantext()
                     @fincount += 1
@@ -1056,6 +1056,7 @@ class CrumblerGUI
                       @label.text = "Text processing finished!"
                     end
                   end
+                  #check normalization automatically, if normalization (lowercase) and/or normalization (contractions) are checked
                   if !@normchecked && @normlowchecked == true && @normcontchecked == true
                     @norm.checked = true
                     @doc.normalize(@normcontchecked, @lang, @normlowchecked)
@@ -1077,7 +1078,7 @@ class CrumblerGUI
                     end
                   end
 
-                  # nlp pipeline
+                  ##nlp pipeline##
                   if @tokchecked == true
                     @doc.tokenizer(@lang)
                     @fincount += 1
@@ -1087,6 +1088,7 @@ class CrumblerGUI
                     end
                   end
 
+                  #check tokenization automatically, if any other nlp-pipeline step is checked
                   @autotokchecked = false #variable for automatically checking tokenization
                   if @srchecked == true
                     if !@tokchecked && !@autotokchecked
