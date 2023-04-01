@@ -6,7 +6,7 @@ GEM
     chunky_png (1.4.0)
     color (1.8)
     csv (3.2.2)
-    date (3.2.2)
+    date (3.3.3)
     equalizer (0.0.11)
     facets (3.1.0)
     fileutils (1.6.0)
@@ -22,7 +22,9 @@ GEM
       os (>= 1.0.0, < 2.0.0)
       perfect-shape (~> 1.0.1)
     libui (0.0.15)
-    nokogiri (1.13.3-x86_64-darwin)
+    mini_portile2 (2.8.1)
+    nokogiri (1.13.3)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     numpy (0.4.0)
       pycall (>= 1.2.0.beta1)
@@ -43,7 +45,7 @@ GEM
     stringio (3.0.1)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
-    time (0.2.0)
+    time (0.2.2)
       date
     tk (0.4.0)
     unicode-display_width (2.1.0)
@@ -51,6 +53,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-20
+  x86_64-linux
 
 DEPENDENCIES
   builder
