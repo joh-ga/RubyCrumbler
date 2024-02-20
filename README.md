@@ -1,5 +1,7 @@
+⚠️ Note: This project was archived in February 2024 and is no longer maintained.
 
 ## <img src="https://github.com/joh-ga/RubyCrumbler/blob/c453cbd6f3c14aad586b3d82af7e0147261dbd68/img/rubycrumbler_logo_wbg.png" height=75 />
+
 Ready to crumble your text for common NLP tasks? This repository is home of RubyCrumbler, a simple script to download, that provides a GUI desktop application written in Ruby to apply common Natural Language Processing (NLP) tasks on your English or German text files.
 
 ## Requirements
